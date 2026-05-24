@@ -1,0 +1,14 @@
+@use "./_settings" as *;
+@use "./components/header";
+
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-sizing: border-box;
+
+}
+
+body {
+    background: $color-marron;
+}

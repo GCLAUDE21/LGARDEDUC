@@ -1,0 +1,51 @@
+// COLORS
+
+$color-marron: rgb(102, 61, 3);
+$color-black: rgb(23, 23, 23);
+$color-white: rgb(226, 226, 226);
+$color-beige: rgb(255, 206, 133);
+
+//FONTS 
+
+@font-face {
+    font-family: 'Playfair';
+    src: url('../assets/fonts/Playfair_Display_SC/PlayfairDisplaySC-Bold.ttf');
+    font-style: normal;
+    font-weight: bold;
+}
+@font-face {
+    font-family: 'Playfair';
+    src: url('../assets/fonts/Playfair_Display_SC/PlayfairDisplaySC-Regular.ttf');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../assets/fonts/Lato/Lato-Bold.ttf');
+    font-style: normal;
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../assets/fonts/Lato/Lato-Light.ttf');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../assets/fonts/Lato/Lato-Italic.ttf');
+    font-style: italic;
+    font-weight: normal;
+}
+
+$font-title: 'Playfair', serif;
+$font-body: 'Lato', sans-serif;
+
+$font-thin: 300;
+$font-regular: 400;
+$font-bold: 700;
+
+
