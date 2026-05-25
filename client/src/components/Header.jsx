@@ -9,20 +9,22 @@ const Header = () => {
     return (
         <header>
                 <div className='Menu-container'>
-                    <div className="bouton" onClick={() => setMenu(!menu)}>
-                        <span> ----</span>
-                        <span> ----</span>
-                        <span> ----</span>
+                    <div className="bouton">
+                    <button className={`hamburger hamburger--spin ${menu ? 'is-active' : ''}`} type="button" onClick={() => setMenu(!menu)}>
+  <span className="hamburger-box">
+    <span className="hamburger-inner"></span>
+  </span>
+</button>
                     </div>
                     <div  className={ menu ? "menu-open" : "menu-close"}>
                     <ul>
-                        <Link to={"/"} id='indexLi'>Index</Link>
-                        <Link to={"/lgardeduc"} id='lgardeducLi'>L Gard'Educ</Link>
-                        <Link to={"/prestations"} id='prestationsLi'>Prestations</Link>
-                        <Link to={"/contact"} id='contactLi'>Contact</Link>
-                        <Link to={"/reservations"} id='reservationLi'>Mes Réservations</Link >
-                        <Link to={"/profil"} id='profilLi'>Mon Profil</Link>
-                        <Link to={"/auth"} id='authLi'>Connexion / Déconnexion</Link >
+                        <Link onClick={() => setMenu(false)} to={"/"} id='indexLi'>Index</Link>
+                        <Link onClick={() => setMenu(false)} to={"/lgardeduc"} id='lgardeducLi'>L Gard'Educ</Link>
+                        <Link onClick={() => setMenu(false)} to={"/prestations"} id='prestationsLi'>Prestations</Link>
+                        <Link onClick={() => setMenu(false)} to={"/contact"} id='contactLi'>Contact</Link>
+                        <Link onClick={() => setMenu(false)} to={"/reservations"} id='reservationLi'>Mes Réservations</Link >
+                        <Link onClick={() => setMenu(false)} to={"/profil"} id='profilLi'>Mon Profil</Link>
+                        <Link onClick={() => setMenu(false)} to={"/auth"} id='authLi'>Connexion / Déconnexion</Link >
                     </ul>
                     </div>
                 </div>

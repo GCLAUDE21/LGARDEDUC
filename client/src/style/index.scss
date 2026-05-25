@@ -1,5 +1,6 @@
 @use "./_settings" as *;
 @use "./components/header";
+@use "./pages/index";
 
 * {
     padding: 0;
@@ -12,3 +13,4 @@
 body {
     background: $color-marron;
 }
+

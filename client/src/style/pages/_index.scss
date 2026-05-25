@@ -1,0 +1,102 @@
+@use "../settings" as *;
+
+.hero {
+  width: 100%;
+  height: 100vh;
+  background: url('../../assets/img/LGardEduc-1-780x470.jpg') center/cover no-repeat;
+  height: calc(100vh - 204px);
+  
+  
+  &-overlay {
+    width: 100%;
+    height: 100%;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $color-white;
+    font-family: $font-title;
+    
+    h1 {
+      font-size: 2.5rem;
+    }
+    
+    p {
+      font-size: 1rem;
+      font-family: $font-body;
+    }
+  }
+}
+
+.presentation {
+
+  border-top: 2px solid $color-marron;
+
+  & .intro {
+    display: grid;
+    grid-template-columns: 60% 40%;
+
+    & .left-part {
+      background: $color-white;
+      padding: 15px;
+
+      & h2 {
+        font-family: $font-title;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      & p {
+        font-size: 0.8rem;
+        margin-top: 5px;
+        font-family: $font-body;
+        letter-spacing: 1px;
+        text-align: justify;
+        padding: 5px;
+      }
+    }
+
+    & .right-part {
+      background: url(../../assets/img/492368621_122228702102074373_5334183638493572639_n.jpg) center/cover;
+      border-left: 1px solid $color-marron;
+    }
+  }
+
+  .services {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    border-top: 1px solid $color-marron;
+
+    & .left-part {
+      background: url(../../assets/img/label_france_petsitters_large-300x300.png) center/cover;
+      background-size: 100%;
+      background-repeat: no-repeat;
+    }
+
+    & .right-part {
+      background: $color-white;
+      padding: 10px;
+
+      & h2 {
+        font-family: $font-title;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      & p {
+        font-size: 0.8rem;
+        margin-top: 5px;
+        font-family: $font-body;
+        letter-spacing: 1px;
+        text-align: justify;
+        padding: 10px;
+      }
+
+    }
+
+  }
+
+
+
+}
