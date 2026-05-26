@@ -1,6 +1,8 @@
 @use "./_settings" as *;
-@use "./components/header";
+@use "./components/_header";
+@use "./components/_service";
 @use "./pages/index";
+@use "./pages/auth";
 
 * {
     padding: 0;

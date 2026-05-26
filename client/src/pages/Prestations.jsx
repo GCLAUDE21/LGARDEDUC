@@ -1,5 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { Link } from "react-router-dom";
+import Service from '../components/ServiceCard';
 
 
 const prestations = () => {
@@ -29,9 +30,12 @@ useEffect(() => {
     
 
     return (
-        <div>
-            <h1>PRESTATIONS</h1>
-        </div>
+        <section>
+            <h2>Nos Prestations</h2>
+            {services.map((service) => (
+                <Service key={service._id}  service={service} />
+            ))}
+        </section>
     );
 };
 

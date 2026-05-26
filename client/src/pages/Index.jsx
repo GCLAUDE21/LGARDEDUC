@@ -12,6 +12,7 @@ const index = () => {
 <section className="presentation">
   <div className="intro">
     <div className="left-part">
+      <div className="left-part-container">
       <h2>Bienvenue chez LGard'Educ !</h2>
 <p>  
 Je suis Laura, éducatrice canine, pet sitter et gestionnaire de pension canine.
@@ -23,6 +24,7 @@ Mon approche : j’accompagne les chiens et leurs humains avec bienveillance, pa
 <br /><br />
 Que ce soit pour résoudre des problèmes de comportement, apprendre les bases de l’éducation ou simplement offrir un cadre sécurisant et stimulant pendant votre absence, chaque chien est considéré selon sa personnalité, son âge et ses besoins spécifiques.
 </p>
+</div>
     </div>
     <div className="right-part"></div>
 
@@ -30,7 +32,8 @@ Que ce soit pour résoudre des problèmes de comportement, apprendre les bases d
 <div className="services">
   <div className="left-part"></div>
   <div className="right-part">
-    <h2>
+    <div className="right-part-container">
+<h2>
 Mes services
 </h2>
 <p>
@@ -46,6 +49,9 @@ Mon objectif est simple : le bien-être de votre chien et la sérénité de sa f
 <br />
 Que vous ayez besoin d’une éducation solide, d’une garde ponctuelle ou d’un véritable « home away from home » pendant vos vacances, je m’engage à prendre soin de votre fidèle compagnon comme s’il était le mien.
 </p>
+
+    </div>
+    
   </div>
   
 </div>

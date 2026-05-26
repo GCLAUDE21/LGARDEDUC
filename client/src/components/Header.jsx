@@ -1,39 +1,46 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import {FiLogOut} from 'react-icons/fi';
 
 const Header = () => {
+    const [menu, setMenu] = useState(false);
 
-    const [menu, setMenu] = useState(false)
+    const tokenUser = localStorage.getItem("token");
 
     return (
-        <header>
-                <div className='Menu-container'>
-                    <div className="bouton">
-                    <button className={`hamburger hamburger--spin ${menu ? 'is-active' : ''}`} type="button" onClick={() => setMenu(!menu)}>
-  <span className="hamburger-box">
-    <span className="hamburger-inner"></span>
-  </span>
-</button>
-                    </div>
-                    <div  className={ menu ? "menu-open" : "menu-close"}>
-                    <ul>
-                        <Link onClick={() => setMenu(false)} to={"/"} id='indexLi'>Index</Link>
-                        <Link onClick={() => setMenu(false)} to={"/lgardeduc"} id='lgardeducLi'>L Gard'Educ</Link>
-                        <Link onClick={() => setMenu(false)} to={"/prestations"} id='prestationsLi'>Prestations</Link>
-                        <Link onClick={() => setMenu(false)} to={"/contact"} id='contactLi'>Contact</Link>
-                        <Link onClick={() => setMenu(false)} to={"/reservations"} id='reservationLi'>Mes Réservations</Link >
-                        <Link onClick={() => setMenu(false)} to={"/profil"} id='profilLi'>Mon Profil</Link>
-                        <Link onClick={() => setMenu(false)} to={"/auth"} id='authLi'>Connexion / Déconnexion</Link >
-                    </ul>
-                    </div>
-                </div>
-                <div className="banniere">
-                    <div className="logo"></div>
-                    <h1>L Gard'Educ</h1>
+        <header className={menu ? 'menu-open' : 'menu-close'}>
+            <div className='Menu-container'>
+
+                <div className="bouton">
+                    <button
+                        className={`hamburger hamburger--spin ${menu ? 'is-active' : ''}`}
+                        type="button"
+                        onClick={() => setMenu(!menu)}
+                    >
+                        <span className="hamburger-box">
+                            <span className="hamburger-inner"></span>
+                        </span>
+                    </button>
                 </div>
 
-            </header>    
+                <div className="logo"></div>
+
+                <ul>
+                    <Link onClick={() => setMenu(false)} to="/">Index</Link>
+                    <Link onClick={() => setMenu(false)} to="/lgardeduc">L Gard'Educ</Link>
+                    <Link onClick={() => setMenu(false)} to="/prestations">Prestations</Link>
+                    <Link onClick={() => setMenu(false)} to="/contact">Contact</Link>
+                   { tokenUser && <Link onClick={() => setMenu(false)} to="/reservations">Mes Réservations</Link>}
+                   { tokenUser && <Link onClick={() => setMenu(false)} to="/profil">Mon Profil</Link>}
+                    <Link onClick={() => setMenu(false)} to="/auth">Authentification</Link>
+                { tokenUser && <FiLogOut onClick={() => {
+                    localStorage.removeItem("token");
+                window.location.reload()}}  className='logout-icon' />}
+                </ul>
+
+
+            </div>
+        </header>
     );
 };
 

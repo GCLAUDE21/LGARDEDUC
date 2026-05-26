@@ -1,0 +1,48 @@
+@use "../settings" as *;
+
+h2 {
+   font-family: $font-title;
+   color: $color-black;
+   font-size: 2rem;
+   text-align: center;
+   background: $color-white;
+   width: 70%;
+   margin: 0 auto -10px;
+   border-radius: 20px;
+   padding: 10px;
+
+}
+
+
+.service {
+   margin: 20px 0px 10px 0px;
+   background: $color-white;
+   border: 1px solid $color-black;
+   display: flex;
+   flex-direction: column;
+    & img {
+    width: 100%;
+    margin: 0 auto 10px;
+   }
+    & h3 {
+      font-family: $font-title;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+
+    & p {
+      font-family: $font-body;
+      letter-spacing: 1px;
+      text-align: justify;
+      padding: 20px;
+    }
+
+    & span {
+      font-family: $font-body;
+      letter-spacing: 1px;
+      text-align: justify;
+      padding: 20px;
+
+    }
+
+}
