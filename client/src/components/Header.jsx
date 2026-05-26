@@ -32,7 +32,7 @@ const Header = () => {
                     <Link onClick={() => setMenu(false)} to="/contact">Contact</Link>
                    { tokenUser && <Link onClick={() => setMenu(false)} to="/reservations">Mes Réservations</Link>}
                    { tokenUser && <Link onClick={() => setMenu(false)} to="/profil">Mon Profil</Link>}
-                    <Link onClick={() => setMenu(false)} to="/auth">Authentification</Link>
+                    { !tokenUser && <Link onClick={() => setMenu(false)} to="/auth">Authentification</Link>}
                 { tokenUser && <FiLogOut onClick={() => {
                     localStorage.removeItem("token");
                 window.location.reload()}}  className='logout-icon' />}
