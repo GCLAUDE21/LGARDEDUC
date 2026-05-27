@@ -1,11 +1,12 @@
 import express from "express";
 import DogModel from "../models/dogModel.js";
+import authMiddleware from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
-    const dog = new DogModel(req.body);
+    const dog = new DogModel({ ...req.body, owner: req.user.id });
 
     await dog.save();
 

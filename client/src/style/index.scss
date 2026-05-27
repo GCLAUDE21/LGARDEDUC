@@ -1,8 +1,10 @@
 @use "./_settings" as *;
 @use "./components/_header";
 @use "./components/_service";
+@use "./components/_dogCard";
 @use "./pages/index";
 @use "./pages/auth";
+@use "./pages/profil";
 
 * {
     padding: 0;
@@ -13,6 +15,6 @@
 }
 
 body {
-    background: $color-marron;
+    background: #f5ede0;
 }
 

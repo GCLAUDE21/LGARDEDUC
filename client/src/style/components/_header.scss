@@ -62,18 +62,48 @@ ul {
     position: absolute;
     top: 80px;
     left: 0;
-    bottom: -100vh; // s'étend jusqu'en bas
+    height: calc(100vh - 80px);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 4px 0 24px rgba(0,0,0,0.4);
     padding: 0.75rem 0;
 
-    & .logout-icon {
-    color: rgba(245, 233, 208, 0.65);
-    font-size: 1.5rem;
-    cursor: pointer;
-    margin-left: 23px;
-    margin-top: 5px;
+    & .user-card {
+
+    margin-top: auto;
+    border-top: 1px solid rgba(201, 146, 42, 0.3);
+    background: rgba(201, 146, 42, 0.08);
+    padding: 12px 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+        
+        & .user-pseudo {
+        font-family: $font-body;
+        color: rgba(245, 233, 208, 0.65);
+        text-decoration: none;
+        text-align: left;
+        font-weight: 400;
+        padding: 11px 1.5rem;
+        transition: background 0.18s ease, color 0.18s ease;
+        border-left: 2px solid transparent;
+        font-size: 14px;
+        letter-spacing: 0.02em;
+        z-index: 1;
+
         }
+        & .logout-icon {
+        color: rgba(245, 233, 208, 0.65);
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin-left: 23px;
+        margin-top: 5px;
+             &:hover {
+            color: #f5e9d0;
+             }  
+        }
+    }
+
 
     &::before {
         content: '';

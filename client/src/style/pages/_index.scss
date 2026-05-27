@@ -2,96 +2,152 @@
 
 .hero {
   width: 100%;
-  height: 100vh;
-  background: url('../../assets/img/LGardEduc-1-780x470.jpg') center/cover no-repeat;
   height: calc(100vh - 80px);
   margin-top: 80px;
-  
-  
+  background: url('../../assets/img/LGardEduc-1-780x470.jpg') center/cover no-repeat;
+  position: relative;
+
   &-overlay {
     width: 100%;
     height: 100%;
-    background:radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     color: $color-white;
-    font-family: $font-title;
-    
+    gap: 12px;
+
     h1 {
-      font-size: 2.5rem;
+      font-family: $font-title;
+      font-size: 3.2rem;
+      letter-spacing: 0.08em;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
     }
-    
+
     p {
-      font-size: 1rem;
       font-family: $font-body;
+      font-size: 1rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      // petit trait décoratif autour
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      &::before, &::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 1px;
+        background: rgba(255,255,255,0.4);
+      }
     }
   }
 }
 
 .presentation {
+  background: #f5ede0;
 
-  border-top: 2px solid $color-marron;
-    & h2 {
-        font-family: $font-title;
-        text-align: center;
-        padding: 10px;
-      }
-
-    & p {
-        font-size: 0.8rem;
-        font-family: $font-body;
-        letter-spacing: 1px;
-        text-align: justify;
-        padding: 15px;
-      }
-
-  & .intro {
+  // ---- Intro ----
+  .intro {
     display: grid;
     grid-template-columns: 60% 40%;
+    min-height: 420px;
 
-    & .left-part {
-      background: $color-white;
-      padding: 15px;
+    .left-part {
+      padding: 3rem 2.5rem;
+      display: flex;
+      align-items: center;
 
-      & .left-part-container {
-        border: 1px dashed $color-marron;
+      .left-part-container {
+        border-left: 3px solid #c9922a;
+        padding-left: 1.5rem;
+
+        h2 {
+          font-family: $font-title;
+          font-size: 1.6rem;
+          color: #2e1f0a;
+          margin-bottom: 1rem;
+          letter-spacing: 0.03em;
+        }
+
+        p {
+          font-family: $font-body;
+          font-size: 0.85rem;
+          line-height: 1.9;
+          color: rgba(46,31,10,0.75);
+          letter-spacing: 0.02em;
+        }
       }
-      
-
-     
     }
 
-    & .right-part {
+    .right-part {
       background: url(../../assets/img/492368621_122228702102074373_5334183638493572639_n.jpg) center/cover;
-      border-left: 1px solid $color-marron;
+      position: relative;
+
+      // dégradé gauche pour fondre avec le texte
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, #f5ede0 0%, transparent 35%);
+      }
     }
   }
 
+  // ---- Services ----
   .services {
     display: grid;
     grid-template-columns: 40% 60%;
-    border-top: 1px solid $color-marron;
+    min-height: 420px;
+    border-top: 1px solid rgba(46,31,10,0.1);
 
-    & .left-part {
-      background: url(../../assets/img/label_france_petsitters_large-300x300.png) center/cover;
-      background-size: 100%;
-      background-repeat: no-repeat;
-    }
+    .left-part {
+      background: url(../../assets/img/label_france_petsitters_large-300x300.png) center/contain no-repeat;
+      background-color: #ede3d4;
+      position: relative;
 
-    & .right-part {
-      background: $color-white;
-      padding: 15px;
-
-      & .right-part-container {
-        border: 1px dashed $color-marron;
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to left, #f5ede0 0%, transparent 35%);
       }
-
     }
 
+    .right-part {
+      padding: 3rem 2.5rem;
+      display: flex;
+      align-items: center;
+
+      .right-part-container {
+        border-left: 3px solid #c9922a;
+        padding-left: 1.5rem;
+
+        h2 {
+          font-family: $font-title;
+          font-size: 1.6rem;
+          color: #2e1f0a;
+          margin-bottom: 1rem;
+          letter-spacing: 0.03em;
+        }
+
+        p {
+          font-family: $font-body;
+          font-size: 0.85rem;
+          line-height: 1.9;
+          color: rgba(46,31,10,0.75);
+          letter-spacing: 0.02em;
+        }
+      }
+    }
   }
+}
 
-
-
+footer {
+  background: #2e1f0a;
+  height: 60px;
+  // à compléter plus tard
 }

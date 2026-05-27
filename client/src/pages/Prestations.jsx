@@ -30,7 +30,7 @@ useEffect(() => {
     
 
     return (
-        <section>
+        <section className='prestations'>
             <h2>Nos Prestations</h2>
             {services.map((service) => (
                 <Service key={service._id}  service={service} />

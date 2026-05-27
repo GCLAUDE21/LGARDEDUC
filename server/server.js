@@ -25,7 +25,6 @@ app.use("/api/service", serviceRouter);
 app.use("/api/reservations", resaRouter);
 app.use("/api/dogs", dogRouter);
 app.use("/api/user", userRouter);
-
 app.listen(PORT, () => {
   console.log("Server is running on port :" + PORT);
 });

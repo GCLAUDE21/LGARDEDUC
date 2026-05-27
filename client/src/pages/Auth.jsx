@@ -83,13 +83,13 @@ const Auth = () => {
                  <h3> Pas encore inscris ?</h3>
                 <form action="">
                     <label id='pseudo' >Pseudo</label>
-                    <input onChange={(e) => setPseudoIn(e.target.value)}  type="text" placeholder='Entrez un pseudo' id='pseudo' />
+                    <input onChange={(e) => setPseudoIn(e.target.value)}  type="text" placeholder='Choisissez votre pseudo' id='pseudo' />
                     <label id='email-inscription' >Email</label>
                     <input onChange={(e) => setMailIn(e.target.value)} type="text" placeholder='Entrez votre email' id='email-inscription' />
                     <label id='motdepasse-inscription' >Choisissez un mot de passe</label>
                     <input onChange={(e) => setPasseIn(e.target.value)} type="password" placeholder='Entrez votre mot de passe' id='motdepasse-inscription' />
                     <label id='motdepasse-validation' >Confirmez le mot de passe</label>
-                    <input onChange={(e) => setPasseCon(e.target.value)} type="password" placeholder='Entrez votre mot de passe' id='motdepasse-validation' />
+                    <input onChange={(e) => setPasseCon(e.target.value)} type="password" placeholder='Confirmez votre mot de passe' id='motdepasse-validation' />
                     <button type="button" onClick={() => handleIn()}>S'inscrire</button>
 
                 </form>
