@@ -2,6 +2,7 @@ import express from "express";
 import UserModel from "../models/userModel.js";
 import authMiddleware from "../middlewares/auth.js";
 import DogModel from "../models/dogModel.js";
+import ResaModel from "../models/resaModel.js";
 
 const router = express.Router();
 
@@ -20,6 +21,18 @@ router.get("/dogs", authMiddleware, async (req, res) => {
     const chiensUser = await DogModel.find({ owner: req.user.id });
 
     res.send(chiensUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get("/reservations", authMiddleware, async (req, res) => {
+  try {
+    const resasUser = await ResaModel.find({ owner: req.user.id }).populate(
+      "dog",
+    );
+
+    res.send(resasUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
