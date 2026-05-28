@@ -1,4 +1,6 @@
 import React from 'react';
+import Carousel from '../components/Carousel';
+import Footer from '../components/Footer';
 
 const index = () => {
     return (
@@ -55,14 +57,14 @@ Que vous ayez besoin d’une éducation solide, d’une garde ponctuelle ou d’
   </div>
   
 </div>
-
 <div className="avis">
-
+<h2>Ils parlent de nous...</h2>
+< Carousel />
 </div>
 </section>
 
 
-<footer></footer>
+< Footer />
 
 
 </>

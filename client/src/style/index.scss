@@ -2,9 +2,11 @@
 @use "./components/_header";
 @use "./components/_service";
 @use "./components/_dogCard";
+@use "./components/_footer";
 @use "./pages/index";
 @use "./pages/auth";
 @use "./pages/profil";
+@use "./pages/contact";
 @use "./pages/reservations";
 
 * {

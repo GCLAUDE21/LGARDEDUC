@@ -87,6 +87,11 @@
       background: url(../../assets/img/492368621_122228702102074373_5334183638493572639_n.jpg) center/cover;
       position: relative;
 
+     @media (min-width: 960px ) {
+      background-position: center 15%;
+        
+      }
+
       // dégradé gauche pour fondre avec le texte
       &::before {
         content: '';
@@ -146,8 +151,112 @@
   }
 }
 
-footer {
-  background: #2e1f0a;
-  height: 60px;
-  // à compléter plus tard
+.avis {
+  padding: 3rem 1.25rem;
+  text-align: center;
+  background: #f5ede0;
+
+  h2 {
+    font-family: $font-title;
+    font-size: 1.6rem;
+    color: #2e1f0a;
+    margin-bottom: 2rem;
+    letter-spacing: 0.04em;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 2px;
+      background: #c9922a;
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+  }
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+
+  .visu {
+    flex: 1;
+    background: #2e1f0a;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    // guillemet décoratif
+    &::after {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      font-family: $font-title;
+      font-size: 8rem;
+      color: rgba(201,146,42,0.1);
+      line-height: 1;
+      z-index: 0;
+    }
+
+    h3 {
+      font-family: $font-title;
+      font-size: 1.1rem;
+      color: #e0b96a;
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    p {
+      font-family: $font-body;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: rgba(245,233,208,0.7);
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  // boutons navigation
+  button {
+    background: rgba(201,146,42,0.15);
+    border: 1px solid rgba(201,146,42,0.3);
+    color: #c9922a;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(201,146,42,0.25);
+      border-color: #c9922a;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
 }

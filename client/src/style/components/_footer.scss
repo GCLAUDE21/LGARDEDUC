@@ -1,0 +1,103 @@
+@use "../settings" as *;
+
+.footer {
+    background: #1e130a;
+    color: rgba(245,233,208,0.6);
+    font-family: $font-body;
+    padding: 2.5rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    & > * { position: relative; z-index: 1; }
+
+    &__brand {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    &__logo {
+        width: 54px;
+        height: 54px;
+        background: url('../../assets/img/logo_rond2.png') center/contain no-repeat;
+        margin: 0 auto 0.75rem;
+        opacity: 0.8;
+    }
+
+    &__name {
+        font-family: $font-title;
+        font-size: 1.3rem;
+        color: $color-white;
+        letter-spacing: 0.06em;
+
+        span { color: #e0b96a; }
+    }
+
+    &__subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(245,233,208,0.35);
+        margin-top: 4px;
+    }
+
+    .middle-div {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 1.75rem;}
+
+    &__contact,
+    &__social {
+        margin-bottom: 1.75rem;
+
+        p, a {
+            display: block;
+            font-size: 0.85rem;
+            line-height: 1.9;
+            color: rgba(245,233,208,0.6);
+            text-decoration: none;
+
+            &:hover { color: #e0b96a; }
+        }
+    }
+
+    &__section-label {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #c9922a;
+        margin-bottom: 0.6rem;
+    }
+
+    &__social a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        &::before {
+            content: '→';
+            color: #c9922a;
+            font-size: 0.75rem;
+        }
+    }
+
+    &__bottom {
+        border-top: 1px solid rgba(255,255,255,0.07);
+        padding: 1rem 0;
+        text-align: center;
+
+        p {
+            font-size: 0.75rem;
+            color: rgba(245,233,208,0.25);
+        }
+    }
+}

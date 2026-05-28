@@ -71,7 +71,6 @@ const Header = () => {
 
                 <ul>
                     <Link className={location.pathname === "/" ? "active" : "" } onClick={() => setMenu(false)} to="/">Index</Link>
-                    <Link className={location.pathname === "/lgardeduc" ? "active" : "" } onClick={() => setMenu(false)} to="/lgardeduc">L Gard'Educ</Link>
                     <Link className={location.pathname === "/prestations" ? "active" : "" } onClick={() => setMenu(false)} to="/prestations">Prestations</Link>
                     <Link className={location.pathname === "/contact" ? "active" : "" } onClick={() => setMenu(false)} to="/contact">Contact</Link>
                    { tokenUser && <Link className={location.pathname === "/reservations" ? "active" : "" } onClick={() => setMenu(false)} to="/reservations">Mes Réservations</Link>}

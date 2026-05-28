@@ -90,7 +90,7 @@ const Profil = () => {
             <span>{dataUser.email}</span>
             </div>
             <div className="chiens">
-            <h3>Mes chiens</h3>
+            <h3> {chiensUser.length > 1 ? "Mes chiens" : "Mon chien"}</h3>
             {chiensUser.map((dog) => (
                 < DogCard key={dog._id} dog={dog}  />
             ))}
