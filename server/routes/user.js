@@ -38,4 +38,16 @@ router.get("/reservations", authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/reservations", authMiddleware, async (req, res) => {
+  try {
+    const resasUser = new ResaModel({ ...req.body, owner: req.user.id });
+
+    await resasUser.save();
+
+    res.send(resasUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default router;
