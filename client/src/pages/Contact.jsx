@@ -55,6 +55,7 @@ const Contact = () => {
                     <input onChange={(e) => setMail(e.target.value)} placeholder='votre@mail.fr' id='email' type="text" />
                     <label htmlFor="objet">Objet du Message</label>
                     <input onChange={(e) => setObjet(e.target.value)} id='objet' placeholder='Motif de votre message' type="text" />
+                    <label htmlFor="message">Votre message</label>
                     <textarea onChange={(e) => setMessage(e.target.value)} placeholder='Ecrivez votre message' id='message' type="text" />
                     <button onClick={() => handleSend()} type='button'>Envoyer le message</button>
                    {success && <p>Message Envoyé !</p> } 

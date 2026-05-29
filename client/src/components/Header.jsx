@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {FiLogOut} from 'react-icons/fi';
+import { AiOutlineHome } from 'react-icons/ai';
+import { FiUser, FiGrid, FiMail, FiCalendar, FiSettings, FiLogOut } from 'react-icons/fi';
+import { FaDog } from 'react-icons/fa';
 
 const Header = () => {
     const [menu, setMenu] = useState(false);
@@ -70,12 +72,12 @@ const Header = () => {
                 <div className="logo"></div>
 
                 <ul>
-                    <Link className={location.pathname === "/" ? "active" : "" } onClick={() => setMenu(false)} to="/">Index</Link>
-                    <Link className={location.pathname === "/prestations" ? "active" : "" } onClick={() => setMenu(false)} to="/prestations">Prestations</Link>
-                    <Link className={location.pathname === "/contact" ? "active" : "" } onClick={() => setMenu(false)} to="/contact">Contact</Link>
-                   { tokenUser && <Link className={location.pathname === "/reservations" ? "active" : "" } onClick={() => setMenu(false)} to="/reservations">Mes Réservations</Link>}
-                   { tokenUser && <Link className={location.pathname === "/profil" ? "active" : "" } onClick={() => setMenu(false)} to="/profil">Mon Profil</Link>}
-                    { !tokenUser && <Link className={location.pathname === "/auth" ? "active" : "" } onClick={() => setMenu(false)} to="/auth">Authentification</Link>}
+                    <Link className={location.pathname === "/" ? "active" : "" } onClick={() => setMenu(false)} to="/"> <AiOutlineHome /> Index</Link>
+                    <Link className={location.pathname === "/prestations" ? "active" : "" } onClick={() => setMenu(false)} to="/prestations"> <FiGrid /> Prestations</Link>
+                    <Link className={location.pathname === "/contact" ? "active" : "" } onClick={() => setMenu(false)} to="/contact"> <FiMail /> Contact</Link>
+                   { tokenUser && <Link className={location.pathname === "/reservations" ? "active" : "" } onClick={() => setMenu(false)} to="/reservations"> <FiCalendar /> Mes Réservations</Link>}
+                   { tokenUser && <Link className={location.pathname === "/profil" ? "active" : "" } onClick={() => setMenu(false)} to="/profil"> <FaDog /> Mon Profil</Link>}
+                    { !tokenUser && <Link className={location.pathname === "/auth" ? "active" : "" } onClick={() => setMenu(false)} to="/auth"> <FiLogOut /> Authentification</Link>}
                 { tokenUser && <div className="user-card">
                     <span className="user-pseudo">{dataUser.pseudo}</span>
                     <FiLogOut onClick={() => {
