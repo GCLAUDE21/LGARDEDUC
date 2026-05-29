@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineHome } from 'react-icons/ai';
 import { FiUser, FiGrid, FiMail, FiCalendar, FiSettings, FiLogOut } from 'react-icons/fi';
 import { FaDog } from 'react-icons/fa';
@@ -7,6 +7,7 @@ import { FaDog } from 'react-icons/fa';
 const Header = () => {
     const [menu, setMenu] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
     const handleClickOutside = (e) => {
@@ -82,7 +83,7 @@ const Header = () => {
                     <span className="user-pseudo">{dataUser.pseudo}</span>
                     <FiLogOut onClick={() => {
                     localStorage.removeItem("token");
-                window.location.reload()}}  className='logout-icon' />
+                navigate('/');}}  className='logout-icon' />
                 
                 </div>}
                 </ul>
