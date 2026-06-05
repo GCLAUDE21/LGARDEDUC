@@ -18,7 +18,7 @@ Site web fullstack pour une éducatrice canine, permettant la présentation des 
 
 ## Démo
 
-[lgardeduc.fr](https://lgardeduc.fr)
+[https://lgardeduc.vercel.app/](https://lgardeduc.vercel.app/)
 
 ## Auteur
 
