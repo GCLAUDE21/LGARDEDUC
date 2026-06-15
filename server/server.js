@@ -8,6 +8,7 @@ import dogRouter from "./routes/dogs.js";
 import contactRouter from "./routes/contact.js";
 import userRouter from "./routes/user.js";
 import cors from "cors";
+import adminRouter from "./routes/admin.js";
 
 import { mongoDb } from "./config/db.js";
 
@@ -27,6 +28,7 @@ app.use("/api/reservations", resaRouter);
 app.use("/api/dogs", dogRouter);
 app.use("/api/user", userRouter);
 app.use("/api/contact", contactRouter);
+app.use("/api/admin", adminRouter);
 app.listen(PORT, () => {
   console.log("Server is running on port :" + PORT);
 });

@@ -8,16 +8,15 @@
 @use "./pages/profil";
 @use "./pages/contact";
 @use "./pages/reservations";
+@use "./pages/admin";
 
 * {
     padding: 0;
     margin: 0;
     list-style: none;
     box-sizing: border-box;
-
 }
 
 body {
-    background: #f5ede0;
+    background: $color-bg-page;
 }
-

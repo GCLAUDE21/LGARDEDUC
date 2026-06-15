@@ -3,14 +3,14 @@
 .contact {
     margin-top: 80px;
     min-height: calc(100vh - 80px);
-    background: #f5ede0;
+    background: $color-bg-page;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem 1.25rem;
 
     .container {
-        background: #2e1f0a;
+        background: $color-bg-card;
         border-radius: 12px;
         padding: 2rem 1.75rem;
         width: 100%;
@@ -19,6 +19,7 @@
         position: relative;
         overflow: hidden;
 
+        // texture diagonale
         &::before {
             content: '';
             position: absolute;
@@ -31,11 +32,11 @@
         h2 {
             font-family: $font-title;
             font-size: 1.6rem;
-            color: #e0b96a;
+            color: $color-gold-light;
             letter-spacing: 0.05em;
             margin-bottom: 1.25rem;
             padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(201,146,42,0.25);
+            border-bottom: 1px solid $color-border-strong;
             position: relative;
             z-index: 1;
         }
@@ -51,7 +52,7 @@
         label {
             font-family: $font-body;
             font-size: 0.75rem;
-            color: rgba(245,233,208,0.5);
+            color: $color-text-muted;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             margin-top: 0.4rem;
@@ -59,18 +60,18 @@
 
         input, textarea {
             background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(201,146,42,0.2);
+            border: 1px solid $color-border;
             border-radius: 6px;
             padding: 10px 14px;
             font-family: $font-body;
             font-size: 0.9rem;
-            color: #f5e9d0;
+            color: $color-text;
             outline: none;
             width: 100%;
             transition: border-color 0.2s ease;
 
             &::placeholder { color: rgba(245,233,208,0.25); }
-            &:focus { border-color: #c9922a; }
+            &:focus { border-color: $color-gold; }
         }
 
         textarea {
@@ -80,8 +81,8 @@
 
         button {
             margin-top: 0.75rem;
-            background: #c9922a;
-            color: #f5e9d0;
+            background: $color-gold;
+            color: $color-text;
             border: none;
             border-radius: 6px;
             padding: 11px;
@@ -92,7 +93,7 @@
             cursor: pointer;
             transition: background 0.2s ease;
 
-            &:hover { background: #e0b96a; color: #2e1f0a; }
+            &:hover { background: $color-gold-light; color: $color-bg-card; }
         }
 
         // message succès
@@ -101,7 +102,7 @@
             text-align: center;
             font-family: $font-body;
             font-size: 0.85rem;
-            color: #e0b96a;
+            color: $color-gold-light;
             padding: 8px;
             border: 1px solid rgba(201,146,42,0.3);
             border-radius: 6px;

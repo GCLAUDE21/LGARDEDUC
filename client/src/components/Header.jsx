@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineHome } from 'react-icons/ai';
 import { FiUser, FiGrid, FiMail, FiCalendar, FiSettings, FiLogOut } from 'react-icons/fi';
 import { FaDog } from 'react-icons/fa';
+import { jwtDecode } from 'jwt-decode';
 
 const Header = () => {
     const [menu, setMenu] = useState(false);
@@ -25,6 +26,7 @@ const Header = () => {
 
     const tokenUser = localStorage.getItem("token");
 
+       const isAdmin = tokenUser ? jwtDecode(tokenUser).admin : false;
        const [dataUser, setDataUser] = useState({})
     
         useEffect( () => {
@@ -79,6 +81,11 @@ const Header = () => {
                    { tokenUser && <Link className={location.pathname === "/reservations" ? "active" : "" } onClick={() => setMenu(false)} to="/reservations"> <FiCalendar /> Mes Réservations</Link>}
                    { tokenUser && <Link className={location.pathname === "/profil" ? "active" : "" } onClick={() => setMenu(false)} to="/profil"> <FaDog /> Mon Profil</Link>}
                     { !tokenUser && <Link className={location.pathname === "/auth" ? "active" : "" } onClick={() => setMenu(false)} to="/auth"> <FiLogOut /> Authentification</Link>}
+                    { isAdmin && (
+                    <Link className={location.pathname === "/admin" ? "active" : ""} onClick={() => setMenu(false)} to="/admin">
+                    <FiSettings /> Administration
+                    </Link>
+                    )}
                 { tokenUser && <div className="user-card">
                     <span className="user-pseudo">{dataUser.pseudo}</span>
                     <FiLogOut onClick={() => {

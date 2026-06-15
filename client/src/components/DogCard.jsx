@@ -1,4 +1,5 @@
 import React from 'react';
+import defaultDog from '../assets/img/stylish-black-and-white-dog-illustration-png.webp';
 
 const DogCard = ({dog}) => {    
     const anneeNaissance = new Date(dog.dateDeNaissance).getFullYear()
@@ -9,7 +10,7 @@ const DogCard = ({dog}) => {
 
     return (
         <div className="dogcard">
-            <div className="photo"><img src={dog.photo ? dog.photo : "https://imgs.search.brave.com/gbDWhEpbP3Vpm0zsPo7jlP-qMWr0XKniT-kYOrI9lVU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNTIv/NjU3LzQxNy9zbWFs/bC9zdHlsaXNoLWJs/YWNrLWFuZC13aGl0/ZS1kb2ctaWxsdXN0/cmF0aW9uLXBuZy5w/bmc" } alt="PHOTO" /></div>
+            <div className="photo"><img src={dog.photo ? dog.photo : defaultDog } alt="PHOTO" /></div>
             <div className="infodog">
                 <h4>{dog.nom}</h4>
                 <span>Age: {age} ans </span>

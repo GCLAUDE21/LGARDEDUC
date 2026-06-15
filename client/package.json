@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "hamburgers": "^1.2.1",
+    "jwt-decode": "^4.0.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-icons": "^5.6.0",

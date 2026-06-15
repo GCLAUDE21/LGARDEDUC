@@ -1,0 +1,153 @@
+@use "../settings" as *;
+
+.admin {
+  margin-top: 80px;
+  min-height: calc(100vh - 80px);
+  background: $color-bg-page;
+  padding: 2rem 1.25rem 3rem;
+
+  // titre principal
+  h1 {
+    font-family: $font-title;
+    font-size: 2rem;
+    color: $color-bg-card;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+    text-align: center;
+  }
+
+  // sous-titre section
+  h2 {
+    font-family: $font-title;
+    font-size: 1.2rem;
+    color: $color-bg-card;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.25rem;
+    opacity: 0.5;
+    text-align: center;
+    position: relative;
+
+    // trait décoratif sous le titre
+    &::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 2px;
+      background: $color-gold;
+      margin: 8px auto 0;
+      border-radius: 2px;
+    }
+  }
+
+  // liste des cartes
+  .admin-list {
+    margin-top: 1.5rem;
+  }
+
+  // filtre select
+.admin-filtre {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: $font-body;
+    font-size: 0.85rem;
+    color: $color-text;
+    outline: none;
+    margin-bottom: 1.25rem;
+    cursor: pointer;
+
+    &:focus { border-color: $color-gold; }
+
+    option { background: $color-bg-card; color: $color-text; }
+}
+
+// onglets
+.admin-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    justify-content: center;
+
+    button {
+        background: $color-bg-card;
+        border: 1px solid $color-border;
+        color: $color-text-muted !important;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-family: $font-body;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            border-color: $color-gold;
+            color: $color-text !important;
+        }
+
+        &.active {
+            background: rgba(201,146,42,0.15);
+            border-color: $color-gold;
+            color: $color-gold-light !important;
+        }
+    }
+}
+
+// carte utilisateur
+.admin-user-card {
+    background: $color-bg-card;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+
+    // texture diagonale
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    &__pseudo {
+        font-family: $font-title;
+        font-size: 1rem;
+        color: $color-gold-light;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__email {
+        font-family: $font-body;
+        font-size: 0.82rem;
+        color: $color-text-muted;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__badge {
+        font-family: $font-body;
+        font-size: 0.75rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 1px solid;
+        position: relative;
+        z-index: 1;
+        background: rgba(201,146,42,0.15);
+        color: $color-gold-light;
+        border-color: rgba(201,146,42,0.3);
+    }
+}
+
+}
+
+
+
+

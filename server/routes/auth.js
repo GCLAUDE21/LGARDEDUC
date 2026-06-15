@@ -17,8 +17,6 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  console.log(req.body);
-
   try {
     const user = await UserModel.findOne({ email: req.body.email });
     if (!user) {
@@ -27,9 +25,13 @@ router.post("/signin", async (req, res) => {
 
     const isValid = await user.isValidPassword(req.body.password);
     if (isValid) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "48h",
-      });
+      const token = jwt.sign(
+        { id: user._id, admin: user.admin },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "48h",
+        },
+      );
 
       res.json({ token });
     } else {
