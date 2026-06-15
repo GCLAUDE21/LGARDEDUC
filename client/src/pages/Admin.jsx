@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminResaCard from '../components/AdminResaCard';
+import AdminUserCard from '../components/AdminUserCard';
 
 const Admin = () => {
     const [reservations, setReservations] = useState([]);
@@ -70,13 +71,7 @@ const Admin = () => {
                 <div className="admin-list">
                     <h2>Utilisateurs ({users.length})</h2>
                     {users.map((user) => (
-                        <div key={user._id} className="admin-user-card">
-                            <span className="admin-user-card__pseudo">{user.pseudo}</span>
-                            <span className="admin-user-card__email">{user.email}</span>
-                            <span className="admin-user-card__badge">
-                                {user.admin ? 'Admin' : 'User'}
-                            </span>
-                        </div>
+                        < AdminUserCard key={user._id} user={user} />
                     ))}
                 </div>
             )}

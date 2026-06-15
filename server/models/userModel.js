@@ -19,6 +19,9 @@ const UserSchema = new mongoose.Schema({
   adresse: {
     type: String,
   },
+  telephone: {
+    type: String,
+  },
   admin: {
     type: Boolean,
     default: false,

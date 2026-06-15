@@ -93,20 +93,15 @@
     }
 }
 
-// carte utilisateur
 .admin-user-card {
     background: $color-bg-card;
     border-radius: 12px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
     position: relative;
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 
-    // texture diagonale
     &::before {
         content: '';
         position: absolute;
@@ -116,36 +111,85 @@
         z-index: 0;
     }
 
-    &__pseudo {
-        font-family: $font-title;
-        font-size: 1rem;
-        color: $color-gold-light;
+    section {
         position: relative;
         z-index: 1;
-    }
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid $color-border;
 
-    &__email {
-        font-family: $font-body;
-        font-size: 0.82rem;
-        color: $color-text-muted;
-        position: relative;
-        z-index: 1;
-    }
+        &:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
 
-    &__badge {
-        font-family: $font-body;
-        font-size: 0.75rem;
-        padding: 3px 10px;
-        border-radius: 20px;
-        border: 1px solid;
-        position: relative;
-        z-index: 1;
-        background: rgba(201,146,42,0.15);
-        color: $color-gold-light;
-        border-color: rgba(201,146,42,0.3);
+        h3 {
+            font-family: $font-title;
+            font-size: 0.8rem;
+            color: $color-gold;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+        }
+
+        h4 {
+            font-family: $font-body;
+            font-size: 0.78rem;
+            color: $color-text-muted;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 0.5rem 0 0.25rem;
+        }
+
+        span {
+            display: block;
+            font-family: $font-body;
+            font-size: 0.88rem;
+            color: $color-text;
+            margin-bottom: 0.2rem;
+        }
+
+        // grille chiens
+        .chiens-grid {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+
+            .chien-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.3rem;
+
+                img {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 2px solid $color-gold;
+                }
+
+                span {
+                    font-size: 0.75rem;
+                    color: $color-text-muted;
+                    margin: 0;
+                }
+            }
+        }
+
+        // item réservation
+        .resa-item {
+            font-family: $font-body;
+            font-size: 0.85rem;
+            color: $color-text;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+
+            &:last-child { border-bottom: none; }
+        }
     }
 }
-
 }
 
 
