@@ -11,7 +11,6 @@ const ResaSchema = new mongoose.Schema({
   },
   dateFin: {
     type: Date,
-    required: true,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

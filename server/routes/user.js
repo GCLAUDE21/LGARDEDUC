@@ -3,6 +3,7 @@ import UserModel from "../models/userModel.js";
 import authMiddleware from "../middlewares/auth.js";
 import DogModel from "../models/dogModel.js";
 import ResaModel from "../models/resaModel.js";
+import transporter from "../utils/mailer.js";
 
 const router = express.Router();
 
@@ -44,8 +45,17 @@ router.post("/reservations", authMiddleware, async (req, res) => {
 
     await resasUser.save();
 
+    await transporter.sendMail({
+      from: "Guillaume <guillaumeclaude@icloud.com>",
+      to: process.env.LAURA_EMAIL,
+      subject: "Nouvelle demande de réservation",
+      text: `Une nouvelle réservation a été faite.\n\nType : ${resasUser.type}\nDate début : ${new Date(resasUser.dateDebut).toLocaleDateString("fr-FR")}\nDate fin : ${resasUser.dateFin ? new Date(resasUser.dateFin).toLocaleDateString("fr-FR") : "-"}`,
+    });
+    console.log("mail envoyé");
+
     res.send(resasUser);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
   }
 });
