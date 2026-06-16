@@ -13,6 +13,7 @@ const Reservation = () => {
         const [dateFin, setDateFin] = useState("");
         const [notes, setNotes] = useState("");
         const [dog, setDog] = useState([]);
+        const [erreurBilan, setErreurBilan] = useState([]);
 
     
 
@@ -67,6 +68,33 @@ const Reservation = () => {
         }, [])
 
         const handleCreateResa = () => {
+
+            if (type === "pension" || type === "education" && dog.length === 0) {
+                setErreurBilan(["Vous devez séléctionner au moins un chien"])
+            return;
+            }
+            
+            if (!dateDebut) {
+                setErreurBilan(["Merci de selectionner une date"])
+            return;
+            }
+
+            if ((type === "pension" || type === "pet sitting") && !dateFin) {
+                setErreurBilan(["Merci de selectionner une date de fin"])
+            return;
+            }
+
+            if (type === "pension") {
+                const sansBilan = dog.filter(d => !d.bilan);
+                if (sansBilan.length > 0) {
+                    setErreurBilan(
+                        sansBilan.map((dog) => (
+                            dog.nom + " doit faire un bilan comportemental."
+                        ))
+                    )
+                    return;
+                }
+            }
             const resaCreateFetch = async () => {
             try {
                 const response = await fetch(`${API_URL}/api/user/reservations`, {
@@ -117,18 +145,20 @@ const Reservation = () => {
                     
                     
                     <label htmlFor="dateDebut">Date</label>
-                    <input onChange={(e) => setDateDebut(e.target.value)} id='dateDebut' type="date" />
+                    <input style={{ borderColor: !dateDebut ? "darkred" : "green" }} onChange={(e) => setDateDebut(e.target.value)} id='dateDebut' type="date" />
 
                     { type == "pension" && 
                     <>
                     <label htmlFor="dateFin">Date de Fin</label>
-                    <input onChange={(e) => setDateFin(e.target.value)} id='dateFin' type="date" />
+                    <input style={{ borderColor: !dateFin ? "darkred" : "green" }} onChange={(e) => setDateFin(e.target.value)} id='dateFin' type="date" min={dateDebut} />
                     <label htmlFor="dog">Pour :</label>
                     <div className="chiensResa">
-                        <select onChange={(e) => {
+                        <select style={{ borderColor: dog.length === 0 ? "darkred" : "green" }} value="" onChange={(e) => {
                             const chienChoisi = chiensUser.find(c => c._id === e.target.value)
-                           setDog([...dog, chienChoisi]) 
+                            if (chienChoisi && !dog.find(d => d._id === chienChoisi._id)) {setDog([...dog, chienChoisi])
+                            } 
                         }}  id="dog">
+                            <option value="" disabled>Choisissez au moins un chien</option>
                         {chiensUser.map((dog) =>  (
                             <option key={dog._id} value={dog._id}>{dog.nom}</option>
                         ))}                       
@@ -149,9 +179,7 @@ const Reservation = () => {
                     { type == "pet sitting" && 
                     <>
                     <label htmlFor="dateFin">Date de Fin</label>
-                    <input onChange={(e) => setDateFin(e.target.value)} id='dateFin' type="date" />
-                    <label htmlFor="passage">Nombre de passages par jour</label>
-                    <input min={1} type="number" />
+                    <input style={{ borderColor: !dateFin ? "darkred" : "green" }} onChange={(e) => setDateFin(e.target.value)} id='dateFin' type="date" min={dateDebut} />
                     
                     </>
                     }
@@ -159,10 +187,12 @@ const Reservation = () => {
                     <>
                     <label htmlFor="dog">Pour :</label>
                     <div className="chiensResa">
-                        <select onChange={(e) => {
-                            const chienChoisi = chiensUser.find(c => c._id === e.target.value)
-                           setDog([...dog, chienChoisi]) 
+                        <select style={{ borderColor: dog.length === 0 ? "darkred" : "green" }} value="" onChange={(e) => {
+                            const chienChoisi = chiensUser.find(c => c._id === e.target.value) 
+                            if (chienChoisi && !dog.find(d => d._id === chienChoisi._id)) {setDog([...dog, chienChoisi])
+                            }  
                         }}  id="dog">
+                            <option value="" disabled>Choisissez au moins un chien</option>
                         {chiensUser.map((dog) =>  (
                             <option key={dog._id} value={dog._id}>{dog.nom}</option>
                         ))}                       
@@ -182,6 +212,10 @@ const Reservation = () => {
 
                     <label htmlFor="notes">Notes</label>
                     <textarea placeholder='Merci de donner des indications sur vos attentes' onChange={(e) => setNotes(e.target.value)} value={notes}  id="notes"></textarea>
+
+                    {erreurBilan.map((msg, index) => (
+                        <p style={{color: "red"}} key={index}>{msg}</p>
+                    ))}
 
                     <button onClick={() => handleCreateResa()} type='button'>Valider la demande de réservation</button>                    
 

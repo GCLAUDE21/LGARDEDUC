@@ -38,7 +38,9 @@ const ResaCard = ({resa}) => {
         <div className="resa-card">
             <div className="resa-card__header">
                 <span className="resa-card__type">{resa.type}</span>
-                <span className="resa-card__statut">{resa.statut}</span>
+                <span className={`resa-card__statut ${resa.statut === "En attente" ? "en-attente" : resa.statut === "Validée" ? "validee" : "refusee"}`}>
+                        {resa.statut}
+                </span>
             </div>
             <div className="resa-card__body">
                 <div className="resa-card__chiens">

@@ -31,6 +31,10 @@ const DogSchema = new mongoose.Schema({
   notes: {
     type: String,
   },
+  bilan: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const DogModel = mongoose.model("Dog", DogSchema);
