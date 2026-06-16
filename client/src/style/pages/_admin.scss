@@ -190,6 +190,179 @@
         }
     }
 }
+
+.AdminServiceCard {
+    background: $color-bg-card;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    img {
+        width: 100%;
+        max-height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid $color-border;
+        margin-bottom: 0.75rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    h3 {
+        font-family: $font-title;
+        font-size: 1rem;
+        color: $color-gold-light;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.4rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    span {
+        display: block;
+        font-family: $font-body;
+        font-size: 0.88rem;
+        color: $color-text;
+        margin-bottom: 0.3rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        position: relative;
+        z-index: 1;
+
+        button {
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-family: $font-body;
+            font-size: 0.82rem;
+            cursor: pointer;
+            border: 1px solid $color-border;
+            transition: all 0.2s ease;
+
+            &:first-child {
+                background: rgba(201,146,42,0.15);
+                border-color: $color-gold;
+                color: $color-gold-light;
+                &:hover { background: rgba(201,146,42,0.25); }
+            }
+
+            &:last-child {
+                background: rgba(180,40,40,0.15);
+                border-color: rgba(180,40,40,0.4);
+                color: #e07070;
+                &:hover { background: rgba(180,40,40,0.25); }
+            }
+        }
+    }
+
+    .edit-form {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+
+        input, textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid $color-border;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: $font-body;
+            font-size: 0.85rem;
+            color: $color-text;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+            &:focus { border-color: $color-gold; }
+        }
+
+        textarea { min-height: 100px; resize: vertical; }
+    }
+}
+
+.admin-add-btn {
+    display: block;
+    margin: 0 auto 1.5rem;
+    padding: 8px 20px;
+    background: $color-bg-card;
+    border: 1px solid $color-gold;
+    border-radius: 6px;
+    font-family: $font-body;
+    font-size: 0.85rem;
+    color: $color-gold-light;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover { background: rgba(201,146,42,0.25); }
+}
+
+.admin-add-form {
+    background: $color-bg-card;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+
+    label {
+        font-family: $font-body;
+        font-size: 0.78rem;
+        color: $color-gold;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    input, textarea {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid $color-border;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-family: $font-body;
+        font-size: 0.85rem;
+        color: $color-text;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:focus { border-color: $color-gold; }
+    }
+
+    textarea { min-height: 100px; resize: vertical; }
+
+    button[type='button'] {
+        align-self: flex-start;
+        padding: 8px 20px;
+        background: rgba(201,146,42,0.15);
+        border: 1px solid $color-gold;
+        border-radius: 6px;
+        font-family: $font-body;
+        font-size: 0.85rem;
+        color: $color-gold-light;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover { background: rgba(201,146,42,0.25); }
+    }
+}
 }
 
 
