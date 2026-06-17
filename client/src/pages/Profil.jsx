@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DogCard from '../components/DogCard';
+import Loader from '../components/Loader';
 
 const Profil = () => {
 
@@ -13,6 +14,7 @@ const Profil = () => {
     const [datDog, setDateDog] = useState("");
     const [raceDog, setRaceDog] = useState("");
     const [photoDog, setPhotoDog] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const handleAddDog = async () => {
         try {
@@ -54,7 +56,8 @@ const Profil = () => {
             } catch (err) {
                 console.log(err);
                 
-            }
+            } finally {setLoading(false);
+                }
         }
 
         fetchUser()
@@ -77,12 +80,14 @@ const Profil = () => {
                   
             } catch (err) {
                 console.log(err)
-            }
+            } finally {setLoading(false);
+                }
 
         }
         fetchDogs()
     }, [])
 
+    if (loading) return <Loader />;
     return (
         <section className='profil'>
             <div className="entete">

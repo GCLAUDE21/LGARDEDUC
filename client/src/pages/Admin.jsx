@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AdminResaCard from '../components/AdminResaCard';
 import AdminUserCard from '../components/AdminUserCard';
 import AdminServiceCard from '../components/AdminServiceCard';
+import Loader from '../components/Loader';
 
 const Admin = () => {
     const [reservations, setReservations] = useState([]);
@@ -12,6 +13,7 @@ const Admin = () => {
     const [filtre, setFiltre] = useState('tous');
     const [services, setServices] = useState([]);
     const [showForm, setShowForm] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [newService, setNewService] = useState({
             type: "",
@@ -44,23 +46,27 @@ const Admin = () => {
 
 
     useEffect(() => {
+    Promise.all([
         fetch(`${API_URL}/api/admin/reservations`, {
             headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => res.json())
-        .then((data) => setReservations(data));
+        }).then(res => res.json()),
 
         fetch(`${API_URL}/api/admin/users`, {
             headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => res.json())
-        .then((data) => setUsers(data));
+        }).then(res => res.json()),
 
-        fetch(`${API_URL}/api/service`)
-        .then((res) => res.json())
-        .then((data) => setServices(data))
-    }, []);
+        fetch(`${API_URL}/api/service`).then(res => res.json())
+    ])
+    .then(([resas, users, services]) => {
+        setReservations(resas);
+        setUsers(users);
+        setServices(services);
+    })
+    .catch(err => console.log(err))
+    .finally(() => setLoading(false));
+}, []);
 
+    if (loading) return <Loader />;
     return (
         <div className="admin">
             <h1>Panel Admin</h1>

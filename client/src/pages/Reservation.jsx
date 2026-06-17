@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ResaCard from '../components/ResaCard';
+import Loader from '../components/Loader';
 
 
 const Reservation = () => {
@@ -14,6 +15,7 @@ const Reservation = () => {
         const [notes, setNotes] = useState("");
         const [dog, setDog] = useState([]);
         const [erreurBilan, setErreurBilan] = useState([]);
+        const [loading, setLoading] = useState(true);
 
     
 
@@ -38,10 +40,9 @@ const Reservation = () => {
 
             }catch (err) {
             console.log(err);
-        } 
-            
+        } finally {setLoading(false);
+                }
         }
-
         resaUserFetch();
     }, [])
 
@@ -124,7 +125,7 @@ const Reservation = () => {
 
         resaCreateFetch();
         }
-
+    if (loading) return <Loader />;
     return (
         <section className='reservations'>
             <div className="mes-reservations">

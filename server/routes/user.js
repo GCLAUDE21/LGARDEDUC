@@ -46,12 +46,11 @@ router.post("/reservations", authMiddleware, async (req, res) => {
     await resasUser.save();
 
     await transporter.sendMail({
-      from: "Guillaume <guillaumeclaude@icloud.com>",
+      from: "RESA LGARD'EDUC <guillaumeclaude@icloud.com>",
       to: process.env.LAURA_EMAIL,
       subject: "Nouvelle demande de réservation",
       text: `Une nouvelle réservation a été faite.\n\nType : ${resasUser.type}\nDate début : ${new Date(resasUser.dateDebut).toLocaleDateString("fr-FR")}\nDate fin : ${resasUser.dateFin ? new Date(resasUser.dateFin).toLocaleDateString("fr-FR") : "-"}`,
     });
-    console.log("mail envoyé");
 
     res.send(resasUser);
   } catch (err) {

@@ -29,7 +29,11 @@ const Contact = () => {
                 const data = await response.json();
 
                 setSuccess(true)
-
+                setName("");
+                setNum("");
+                setMail("");
+                setObjet("");
+                setMessage("");
 
 
             } catch (err) {
@@ -48,15 +52,15 @@ const Contact = () => {
                 <h2>Contact</h2>
                 <form>
                     <label htmlFor="nom">Votre nom :</label>
-                    <input onChange={(e) => setName(e.target.value)}  id='nom' type="text" />
+                    <input value={name} onChange={(e) => setName(e.target.value)}  id='nom' type="text" />
                     <label htmlFor="tel">Votre numéro</label>
-                    <input onChange={(e) => setNum(e.target.value)} placeholder='06XXXXXXXX' id='tel' type="text" />
+                    <input value={num} onChange={(e) => setNum(e.target.value)} placeholder='06XXXXXXXX' id='tel' type="text" />
                     <label htmlFor="email">Votre Mail</label>
-                    <input onChange={(e) => setMail(e.target.value)} placeholder='votre@mail.fr' id='email' type="text" />
+                    <input value={mail} onChange={(e) => setMail(e.target.value)} placeholder='votre@mail.fr' id='email' type="text" />
                     <label htmlFor="objet">Objet du Message</label>
-                    <input onChange={(e) => setObjet(e.target.value)} id='objet' placeholder='Motif de votre message' type="text" />
+                    <input value={objet} onChange={(e) => setObjet(e.target.value)} id='objet' placeholder='Motif de votre message' type="text" />
                     <label htmlFor="message">Votre message</label>
-                    <textarea onChange={(e) => setMessage(e.target.value)} placeholder='Ecrivez votre message' id='message' type="text" />
+                    <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder='Ecrivez votre message' id='message' type="text" />
                     <button onClick={() => handleSend()} type='button'>Envoyer le message</button>
                    {success && <p>Message Envoyé !</p> } 
 

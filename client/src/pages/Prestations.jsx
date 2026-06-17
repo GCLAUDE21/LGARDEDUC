@@ -1,10 +1,12 @@
 import React, { useEffect, useState} from 'react';
 import { Link } from "react-router-dom";
 import Service from '../components/ServiceCard';
+import Loader from '../components/Loader';
 
 
 const prestations = () => {
 const [services, setServices] = useState([]);
+const [loading, setLoading] = useState(true);
 
 useEffect(() => {
     const fetchServices = async () => {
@@ -22,13 +24,15 @@ useEffect(() => {
             console.log("✅ Services récupérés :", data);
         } catch (error) {
             console.error("Erreur lors de la récupération des services :", error);
-        }
+        } finally {setLoading(false);
+                }
     };
 
     fetchServices();
 }, []);
     
 
+    if (loading) return <Loader />;
     return (
         <section className='prestations'>
             <h2>Nos Prestations</h2>
