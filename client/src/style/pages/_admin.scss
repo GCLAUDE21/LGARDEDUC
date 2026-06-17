@@ -150,6 +150,39 @@
             margin-bottom: 0.2rem;
         }
 
+        textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid $color-border;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: $font-body;
+            font-size: 0.85rem;
+            color: $color-text;
+            outline: none;
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+
+            &:focus { border-color: $color-gold; }
+            &::placeholder { color: $color-text-muted; }
+        }
+
+        button {
+            margin-top: 0.5rem;
+            padding: 6px 16px;
+            background: rgba(201,146,42,0.15);
+            border: 1px solid $color-gold;
+            border-radius: 6px;
+            font-family: $font-body;
+            font-size: 0.82rem;
+            color: $color-gold-light;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover { background: rgba(201,146,42,0.25); }
+        }
+
         // grille chiens
         .chiens-grid {
             display: flex;

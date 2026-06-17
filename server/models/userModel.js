@@ -1,35 +1,53 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-const UserSchema = new mongoose.Schema({
-  pseudo: {
-    type: String,
-    required: true,
-    unique: true,
+const UserSchema = new mongoose.Schema(
+  {
+    pseudo: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    nom: {
+      type: String,
+    },
+    prenom: {
+      type: String,
+    },
+    dateDeNaissance: {
+      type: String,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    rue: {
+      type: String,
+    },
+    codePostal: {
+      type: String,
+    },
+    ville: {
+      type: String,
+    },
+    telephone: {
+      type: String,
+    },
+    admin: {
+      type: Boolean,
+      default: false,
+    },
+    notes: {
+      type: String,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  adresse: {
-    type: String,
-  },
-  telephone: {
-    type: String,
-  },
-  admin: {
-    type: Boolean,
-    default: false,
-  },
-  notes: {
-    type: String,
-  },
-});
+  { timestamps: true },
+);
 
 // Pré Hook - Avant d'enregistrer dans Mongo
 

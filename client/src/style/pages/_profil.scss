@@ -147,4 +147,40 @@
             &:hover { background: $color-gold-light; color: $color-bg-card; }
         }
     }
+    .basicForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-width: 400px;
+    margin: 0 auto;
+
+    input {
+        background: rgba(46, 31, 10, 0.06);
+        border: 1px solid $color-border;
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-family: $font-body;
+        font-size: 0.9rem;
+        color: $color-bg-card;
+        outline: none;
+        width: 100%;
+
+        &::placeholder { color: rgba(46, 31, 10, 0.3); }
+        &:focus { border-color: $color-gold; }
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+}
 }

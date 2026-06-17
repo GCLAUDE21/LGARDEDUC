@@ -17,6 +17,56 @@ router.get("/profil", authMiddleware, async (req, res) => {
   }
 });
 
+router.put("/profil", authMiddleware, async (req, res) => {
+  try {
+    const {
+      pseudo,
+      email,
+      nom,
+      prenom,
+      dateDeNaissance,
+      telephone,
+      rue,
+      codePostal,
+      ville,
+    } = req.body;
+    const existingPseudo = await UserModel.findOne({
+      pseudo,
+      _id: { $ne: req.user.id },
+    });
+    if (existingPseudo) {
+      return res.status(400).json({ message: "Ce pseudo est déjà pris." });
+    }
+
+    const existingEmail = await UserModel.findOne({
+      email,
+      _id: { $ne: req.user.id },
+    });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Cet email est déjà utilisé." });
+    }
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id,
+      {
+        pseudo,
+        email,
+        nom,
+        prenom,
+        dateDeNaissance,
+        telephone,
+        rue,
+        codePostal,
+        ville,
+      },
+      { new: true },
+    ).select("-password");
+
+    res.send(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.get("/dogs", authMiddleware, async (req, res) => {
   try {
     const chiensUser = await DogModel.find({ owner: req.user.id });

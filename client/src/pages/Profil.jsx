@@ -15,6 +15,19 @@ const Profil = () => {
     const [raceDog, setRaceDog] = useState("");
     const [photoDog, setPhotoDog] = useState("");
     const [loading, setLoading] = useState(true);
+    const [enEdition, setEnEdition] = useState(false);
+    const [form, setForm] = useState({
+    pseudo: "",
+    nom: "",
+    prenom: "",
+    email: "",
+    rue: "",
+    codePostal: "",
+    ville: "",
+    dateDeNaissance: "",
+    telephone: "",
+    inscription: "",
+    }); 
 
     const handleAddDog = async () => {
         try {
@@ -37,6 +50,27 @@ const Profil = () => {
             } 
             };
 
+    const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })}
+
+    const handleSaveProfil = async () => {
+        fetch(API_URL + "/api/user/profil", {
+             method: "PUT",
+             headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${tokenUser}`,
+             },
+            body: JSON.stringify(form),
+        }).then(async (res) => {
+            if (!res.ok) {
+        const data = await res.json();
+        alert(data.message);
+        return;
+        }
+         window.location.reload();
+        })
+    }
+
     useEffect( () => {
         const fetchUser = async () => {
             try {
@@ -50,9 +84,18 @@ const Profil = () => {
                 } 
                 const json = await response.json()
                 setDataUser(json);
+                setForm({
+                    pseudo: json.pseudo || "",
+                    nom: json.nom || "",
+                    prenom: json.prenom || "",
+                    email: json.email || "",
+                    rue: json.rue || "",
+                    codePostal: json.codePostal || "",
+                    ville: json.ville || "",
+                    dateDeNaissance: json.dateDeNaissance || "",
+                    telephone: json.telephone || "",
+                });
 
-                                
-                
             } catch (err) {
                 console.log(err);
                 
@@ -91,8 +134,34 @@ const Profil = () => {
     return (
         <section className='profil'>
             <div className="entete">
-            <h2>{dataUser.pseudo}</h2>
-            <span>{dataUser.email}</span>
+                {enEdition === true && 
+                <div className="editForm">
+                    <input placeholder='Pseudo' name="pseudo" value={form.pseudo} onChange={handleChange} />
+                    <input placeholder='Nom' name="nom" value={form.nom} onChange={handleChange} />
+                    <input placeholder='Prénom' name="prenom" value={form.prenom} onChange={handleChange} />
+                    <input placeholder='Email' name="email" value={form.email} onChange={handleChange} />
+                    <input placeholder='XX rue ....' name="rue" value={form.rue} onChange={handleChange} /> 
+                    <input placeholder='30XXX' name="codePostal" value={form.codePostal} onChange={handleChange} /> 
+                    <input placeholder='ville' name="ville" value={form.ville} onChange={handleChange} /> 
+                    <input type='date' name="dateDeNaissance" value={form.dateDeNaissance} onChange={handleChange} />
+                    <input placeholder='06XXXXXXXX' name="telephone" value={form.telephone} onChange={handleChange} />
+                <div className="btn-row">
+                <button onClick={handleSaveProfil}>Enregistrer</button> <button onClick={() => setEnEdition(false)}>Annuler</button></div>
+                </div>
+                }
+
+                {enEdition === false &&
+                <div className="basicForm">
+                <h2>Informations personelles</h2>
+                <h3>{dataUser.pseudo}</h3>
+                <span>{dataUser.prenom} {dataUser.nom}</span>
+                <span>{dataUser.dateDeNaissance && <span>{new Date(dataUser.dateDeNaissance).toLocaleDateString('fr-FR')}</span>}</span>
+                <span>{dataUser.email}</span>
+                <span>{dataUser.telephone}</span>
+                <span>{dataUser.rue}, {dataUser.codePostal} {dataUser.ville}</span> 
+                <button onClick={() => setEnEdition(true)}>Modifier le profil</button>
+                </div>               
+                }
             </div>
             <div className="chiens">
             <h3> {chiensUser.length > 1 ? "Mes chiens" : "Mon chien"}</h3>

@@ -47,4 +47,19 @@ router.get("/users", async (req, res) => {
   }
 });
 
+//MAJ UserNotes
+router.put("/users/:id/notes", async (req, res) => {
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      { notes: req.body.notes },
+      { new: true },
+    ).select("-password");
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default router;
