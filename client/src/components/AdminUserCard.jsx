@@ -1,4 +1,5 @@
 import React from 'react';
+import defaultDog from '../assets/img/stylish-black-and-white-dog-illustration-png.webp';
 
 const AdminUserCard = ({user}) => {
 
@@ -44,7 +45,7 @@ const AdminUserCard = ({user}) => {
                 <div className="chiens-grid">
                 {user.chiens.map((dog) => (
                 <div key={dog._id} className="chien-item">
-                <img src={dog.photo} alt={dog.nom} />
+                <img src={dog.photo || defaultDog } alt={dog.nom} />
                 <span>{dog.nom}</span>
                 </div>
                  ))}

@@ -31,6 +31,7 @@ const Header = () => {
     
         useEffect( () => {
             const fetchUser = async () => {
+                if (!tokenUser) return;
                 try {                 
                     const API_URL = import.meta.env.VITE_API_URL;
         
