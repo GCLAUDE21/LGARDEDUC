@@ -4,6 +4,7 @@ import { AiOutlineHome } from 'react-icons/ai';
 import { FiUser, FiGrid, FiMail, FiCalendar, FiSettings, FiLogOut } from 'react-icons/fi';
 import { FaDog } from 'react-icons/fa';
 import { jwtDecode } from 'jwt-decode';
+import fetchWithAuth from '../utils/fetchWithAuth';
 
 const Header = () => {
     const [menu, setMenu] = useState(false);
@@ -35,11 +36,9 @@ const Header = () => {
                 try {                 
                     const API_URL = import.meta.env.VITE_API_URL;
         
-                    const response = await fetch (`${API_URL}/api/user/profil`, {
-                        method: "get",
-                        headers: {
-                            Authorization: `Bearer ${tokenUser}`,
-                        }});
+                    const response = await fetchWithAuth (`${API_URL}/api/user/profil`, {
+                        method: "get",});
+                        if (!response) return;
                         if (!response.ok) {
                         throw new Error(`Erreur HTTP : ${response.status}`);
                     } 

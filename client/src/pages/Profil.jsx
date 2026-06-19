@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import DogCard from '../components/DogCard';
 import Loader from '../components/Loader';
+import fetchWithAuth from '../utils/fetchWithAuth';
 
 const Profil = () => {
 
     const [addDog, setAddDog] = useState(false)
     const [dataUser, setDataUser] = useState({})
     const [chiensUser, setChiensUser] = useState([])
-    const tokenUser = localStorage.getItem('token');
     const API_URL = import.meta.env.VITE_API_URL;
 
     const [nameDog, setNameDog] = useState("");
@@ -31,15 +31,12 @@ const Profil = () => {
 
     const handleAddDog = async () => {
         try {
-            const response = await fetch (`${API_URL}/api/dogs`, {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${tokenUser}`,},
+            const response = await fetchWithAuth (`${API_URL}/api/dogs`, {
                     method: "POST",
                     body: JSON.stringify({"nom": nameDog, "dateDeNaissance": datDog, "race": raceDog, "photo": photoDog}),
                     
                 });
+                if (!response) return;
                 if (!response.ok) {
                 throw new Error(`Erreur HTTP : ${response.status}`);
             }
@@ -54,14 +51,11 @@ const Profil = () => {
     setForm({ ...form, [e.target.name]: e.target.value })}
 
     const handleSaveProfil = async () => {
-        fetch(API_URL + "/api/user/profil", {
+        fetchWithAuth(API_URL + "/api/user/profil", {
              method: "PUT",
-             headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${tokenUser}`,
-             },
             body: JSON.stringify(form),
         }).then(async (res) => {
+            if(!res) return;
             if (!res.ok) {
         const data = await res.json();
         alert(data.message);
@@ -74,11 +68,10 @@ const Profil = () => {
     useEffect( () => {
         const fetchUser = async () => {
             try {
-                const response = await fetch (`${API_URL}/api/user/profil`, {
+                const response = await fetchWithAuth (`${API_URL}/api/user/profil`, {
                     method: "get",
-                    headers: {
-                        Authorization: `Bearer ${tokenUser}`,
-                    }});
+                    });
+                    if (!response) return;
                     if (!response.ok) {
                     throw new Error(`Erreur HTTP : ${response.status}`);
                 } 
@@ -110,11 +103,10 @@ const Profil = () => {
     useEffect(() => {
         const fetchDogs = async () => {
             try {
-                const response = await fetch(`${API_URL}/api/user/dogs`, {
+                const response = await fetchWithAuth(`${API_URL}/api/user/dogs`, {
                     method: "get",
-                    headers: {
-                        Authorization: `Bearer ${tokenUser}`,
-                    }});
+                    });
+                    if (!response) return;
                     if (!response.ok) {
                     throw new Error(`Erreur HTTP : ${response.status}`);
                 } 
@@ -166,7 +158,9 @@ const Profil = () => {
             <div className="chiens">
             <h3> {chiensUser.length > 1 ? "Mes chiens" : "Mon chien"}</h3>
             {chiensUser.map((dog) => (
-                < DogCard key={dog._id} dog={dog}  />
+                < DogCard key={dog._id} dog={dog}
+                onDelete={(id) => setChiensUser(chiensUser.filter(d => d._id !== id))} 
+                onUpdate={(updated) => setChiensUser(chiensUser.map(d => d._id === updated._id ? updated : d))}  />
             ))}
             </div>
             {addDog ? <button onClick={() => setAddDog(false)}>Masquer le formulaire</button>  : <button onClick={() => setAddDog(true)}>Ajouter un chien</button> }

@@ -62,4 +62,50 @@ router.put("/users/:id/notes", async (req, res) => {
   }
 });
 
+// Bilan Laura
+router.put("/reservations/:id/bilan", async (req, res) => {
+  try {
+    const resa = await ResaModel.findByIdAndUpdate(
+      req.params.id,
+      { bilanLaura: req.body.bilanLaura },
+      { new: true },
+    );
+    if (!resa)
+      return res.status(404).json({ message: "Réservation introuvable" });
+    res.json(resa);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Ajouter un événement
+router.post("/reservations/:id/evenements", async (req, res) => {
+  try {
+    const resa = await ResaModel.findById(req.params.id);
+    if (!resa)
+      return res.status(404).json({ message: "Réservation introuvable" });
+    resa.evenements.push(req.body);
+    await resa.save();
+    res.json(resa);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Supprimer un événement
+router.delete("/reservations/:id/evenements/:evenementId", async (req, res) => {
+  try {
+    const resa = await ResaModel.findById(req.params.id);
+    if (!resa)
+      return res.status(404).json({ message: "Réservation introuvable" });
+    resa.evenements = resa.evenements.filter(
+      (e) => e._id.toString() !== req.params.evenementId,
+    );
+    await resa.save();
+    res.json(resa);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default router;

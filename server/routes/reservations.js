@@ -1,5 +1,6 @@
 import express from "express";
 import ResaModel from "../models/resaModel.js";
+import transporter from "../utils/mailer.js";
 
 const router = express.Router();
 
@@ -54,10 +55,26 @@ router.put("/:id", async (req, res) => {
   try {
     const resa = await ResaModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-    });
-    if (!resa) {
-      res.status(404).json();
-    } else res.send(resa);
+    })
+      .populate("owner")
+      .populate("dog");
+
+    if (!resa) return res.status(404).json();
+
+    // Email à l'user si le statut change
+    if (req.body.statut) {
+      const statutLabel = req.body.statut === "Validée" ? "validée" : "refusée";
+      const emoji = req.body.statut === "Validée" ? "✅" : "❌";
+
+      await transporter.sendMail({
+        from: "L'Gard'Educ <guillaumeclaude@icloud.com>",
+        to: resa.owner.email,
+        subject: `${emoji} Votre réservation a été ${statutLabel}`,
+        text: `Bonjour ${resa.owner.prenom || resa.owner.pseudo},\n\nVotre demande de réservation (${resa.type}) du ${new Date(resa.dateDebut).toLocaleDateString("fr-FR")}${resa.dateFin ? ` au ${new Date(resa.dateFin).toLocaleDateString("fr-FR")}` : ""} a été ${statutLabel}.\n\nÀ bientôt,\nLaura`,
+      });
+    }
+
+    res.send(resa);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

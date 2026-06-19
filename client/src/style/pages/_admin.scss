@@ -93,6 +93,275 @@
     }
 }
 
+// ---- AdminResaCard extras ----
+.resa-card {
+    & .resa-card__refus {
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        border-top: 1px solid $color-border;
+
+        & label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: $color-gold;
+        }
+
+        & textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid $color-border;
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: $color-text;
+            font-family: $font-body;
+            font-size: 0.82rem;
+            width: 100%;
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        & .btn-row {
+            display: flex;
+            gap: 8px;
+
+            & button {
+                padding: 6px 14px;
+                border-radius: 6px;
+                font-family: $font-body;
+                font-size: 0.8rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:first-child {
+                    background: rgba(180,40,40,0.15);
+                    border: 1px solid rgba(180,40,40,0.4);
+                    color: #e07070;
+                    &:hover { background: rgba(180,40,40,0.25); }
+                }
+
+                &:last-child {
+                    background: transparent;
+                    border: 1px solid $color-border;
+                    color: $color-text-muted;
+                    &:hover { border-color: $color-gold; color: $color-text; }
+                }
+            }
+        }
+    }
+
+    & .resa-card__bilan {
+        padding: 0.75rem 1.25rem;
+        border-top: 1px solid $color-border;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        & h5 {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: $color-gold;
+            margin: 0;
+        }
+
+        & p {
+            font-size: 0.82rem;
+            color: $color-text-muted;
+            line-height: 1.5;
+        }
+
+        & textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid $color-border;
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: $color-text;
+            font-family: $font-body;
+            font-size: 0.82rem;
+            width: 100%;
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        & button {
+            align-self: flex-start;
+            padding: 5px 12px;
+            background: rgba(201,146,42,0.15);
+            border: 1px solid $color-gold;
+            border-radius: 6px;
+            font-family: $font-body;
+            font-size: 0.78rem;
+            color: $color-gold-light;
+            cursor: pointer;
+            &:hover { background: rgba(201,146,42,0.25); }
+        }
+
+        & .btn-row {
+            display: flex;
+            gap: 8px;
+
+            & button {
+                &:last-child {
+                    background: transparent;
+                    border-color: $color-border;
+                    color: $color-text-muted;
+                    &:hover { border-color: $color-gold; color: $color-text; }
+                }
+            }
+        }
+    }
+
+    & .resa-card__evenements {
+        padding: 0.75rem 1.25rem;
+        border-top: 1px solid $color-border;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        & h5 {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: $color-gold;
+            margin: 0;
+        }
+
+        & > button {
+            align-self: flex-start;
+            padding: 5px 12px;
+            background: rgba(201,146,42,0.15);
+            border: 1px solid $color-gold;
+            border-radius: 6px;
+            font-family: $font-body;
+            font-size: 0.78rem;
+            color: $color-gold-light;
+            cursor: pointer;
+            &:hover { background: rgba(201,146,42,0.25); }
+        }
+    }
+
+    & .evenement-admin {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid $color-border;
+        border-radius: 8px;
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        &__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            & span {
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: $color-gold;
+            }
+        }
+
+        & p { font-size: 0.82rem; color: $color-text-muted; line-height: 1.4; }
+
+        & img {
+            width: 100%;
+            border-radius: 6px;
+            object-fit: cover;
+            max-height: 150px;
+        }
+
+        & .btn-delete-small {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            &:hover { color: #e74c3c; }
+        }
+
+        & strong { color: $color-gold-light; font-size: 0.75rem; }
+    }
+
+    & .evenement-form {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        & label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: $color-gold-light;
+        }
+
+        & input, & textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid $color-border;
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: $color-text;
+            font-family: $font-body;
+            font-size: 0.82rem;
+            width: 100%;
+            resize: vertical;
+        }
+
+        & textarea { min-height: 60px; }
+
+        & .btn-row {
+            display: flex;
+            gap: 8px;
+
+            & button {
+                padding: 5px 12px;
+                border-radius: 6px;
+                font-family: $font-body;
+                font-size: 0.78rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:first-child {
+                    background: rgba(201,146,42,0.15);
+                    border: 1px solid $color-gold;
+                    color: $color-gold-light;
+                    &:hover { background: rgba(201,146,42,0.25); }
+                }
+
+                &:last-child {
+                    background: transparent;
+                    border: 1px solid $color-border;
+                    color: $color-text-muted;
+                    &:hover { border-color: $color-gold; color: $color-text; }
+                }
+            }
+        }
+    }
+
+    & .resa-card__motif {
+    padding: 0.5rem 0;
+    border-top: 1px solid $color-border;
+    margin-top: 4px;
+
+    & span {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #e07070;
+    }
+
+    & p {
+        font-size: 0.82rem;
+        color: $color-text-muted;
+        line-height: 1.5;
+        margin-top: 4px;
+    }
+}
+}
+
 .admin-user-card {
     background: $color-bg-card;
     border-radius: 12px;

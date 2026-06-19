@@ -1,0 +1,226 @@
+@use "../settings" as *;
+
+.resa-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.resa-modal {
+    background: $color-bg-card;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+
+    & button {
+        background: transparent;
+        border: 1px solid rgba(201,146,42,0.4);
+        color: $color-gold;
+        border-radius: 6px;
+        padding: 7px 14px;
+        font-family: $font-body;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: rgba(201,146,42,0.1);
+            border-color: $color-gold;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: none;
+        border: none;
+        color: #999;
+        font-size: 18px;
+        cursor: pointer;
+        z-index: 2;
+        padding: 0;
+
+        &:hover {
+            color: #e74c3c;
+            background: none;
+        }
+    }
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1.5rem 1rem;
+        gap: 8px;
+        border-bottom: 1px solid $color-border-strong;
+
+        & h3 {
+            font-family: $font-title;
+            font-size: 1.6rem;
+            color: $color-gold-light;
+            letter-spacing: 0.04em;
+            text-transform: capitalize;
+            margin: 0;
+        }
+    }
+
+    &__dates {
+        font-family: $font-body;
+        font-size: 0.82rem;
+        color: $color-text-muted;
+    }
+
+    &__content {
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-family: $font-body;
+        font-size: 0.82rem;
+        color: $color-text-muted;
+
+        & .section-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: $color-gold;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            border-bottom: 1px solid $color-border-strong;
+            padding-bottom: 4px;
+        }
+
+        & .notes-text {
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        & .empty {
+            font-style: italic;
+            opacity: 0.5;
+            font-size: 0.78rem;
+        }
+
+        & textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid $color-border-strong;
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: $color-text-muted;
+            font-family: $font-body;
+            font-size: 0.82rem;
+            width: 100%;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        & .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        & .btn-small {
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            align-self: flex-start;
+        }
+    }
+
+    &__chiens {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    &__chien {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        & img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid $color-gold;
+        }
+
+        & span { font-size: 0.82rem; }
+    }
+
+    &__evenements {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 4px;
+    }
+
+    & .btn-danger {
+    border-color: rgba(239,68,68,0.4);
+    color: #f87171;
+    margin-top: 8px;
+
+    &:hover {
+        background: rgba(239,68,68,0.1);
+        border-color: #f87171;
+    }
+}
+}
+
+.evenement {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid $color-border-strong;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &__date {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: $color-gold;
+    }
+
+    &__photo {
+        width: 100%;
+        border-radius: 6px;
+        object-fit: cover;
+        max-height: 180px;
+    }
+
+    &__desc {
+        font-size: 0.82rem;
+        line-height: 1.5;
+    }
+
+    &__row {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        & span {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: $color-gold-light;
+        }
+
+        & p {
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+    }
+}

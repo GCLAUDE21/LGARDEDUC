@@ -3,12 +3,12 @@ import AdminResaCard from '../components/AdminResaCard';
 import AdminUserCard from '../components/AdminUserCard';
 import AdminServiceCard from '../components/AdminServiceCard';
 import Loader from '../components/Loader';
+import fetchWithAuth from '../utils/fetchWithAuth';
 
 const Admin = () => {
     const [reservations, setReservations] = useState([]);
     const [users, setUsers] = useState([]);
     const [onglet, setOnglet] = useState('reservations');
-    const token = localStorage.getItem("token");
     const API_URL = import.meta.env.VITE_API_URL;
     const [filtre, setFiltre] = useState('tous');
     const [services, setServices] = useState([]);
@@ -28,16 +28,14 @@ const Admin = () => {
         }
 
     // FETCH AJOUT SERVICE
-    const handleAdd = () => {
-    fetch(API_URL + "/api/service", {
+    const handleAdd = async () => {
+    const res = await fetchWithAuth(API_URL + "/api/service", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
         body: JSON.stringify(newService)
-    }).then(() => window.location.reload())
-}
+    });
+    if (!res) return;
+    window.location.reload();
+};
 
     // réservations filtrées
     const resasFiltrees = filtre === 'tous'
@@ -45,25 +43,30 @@ const Admin = () => {
          : reservations.filter(r => r.statut === filtre);        
 
 
-    useEffect(() => {
-    Promise.all([
-        fetch(`${API_URL}/api/admin/reservations`, {
-            headers: { Authorization: `Bearer ${token}` },
-        }).then(res => res.json()),
-
-        fetch(`${API_URL}/api/admin/users`, {
-            headers: { Authorization: `Bearer ${token}` },
-        }).then(res => res.json()),
-
-        fetch(`${API_URL}/api/service`).then(res => res.json())
-    ])
-    .then(([resas, users, services]) => {
-        setReservations(resas);
-        setUsers(users);
-        setServices(services);
-    })
-    .catch(err => console.log(err))
-    .finally(() => setLoading(false));
+useEffect(() => {
+    const fetchAll = async () => {
+        try {
+            const [resResas, resUsers, resServices] = await Promise.all([
+                fetchWithAuth(`${API_URL}/api/admin/reservations`),
+                fetchWithAuth(`${API_URL}/api/admin/users`),
+                fetchWithAuth(`${API_URL}/api/service`),
+            ]);
+            if (!resResas || !resUsers || !resServices) return;
+            const [resas, users, services] = await Promise.all([
+                resResas.json(),
+                resUsers.json(),
+                resServices.json(),
+            ]);
+            setReservations(resas);
+            setUsers(users);
+            setServices(services);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchAll();
 }, []);
 
     if (loading) return <Loader />;

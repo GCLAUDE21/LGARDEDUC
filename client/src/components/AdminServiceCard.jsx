@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import fetchWithAuth from '../utils/fetchWithAuth';
 
 const AdminServiceCard = ({presta}) => {
-
+    const API_URL = import.meta.env.VITE_API_URL;
     const [enEdition, SetEnEdition] = useState(false);
     const [form, setForm] = useState({
         type: presta.type,
@@ -15,33 +16,22 @@ const AdminServiceCard = ({presta}) => {
     setForm({ ...form, [e.target.name]: e.target.value })
     }
 
-    const handleSave = () => {
-        const API_URL = import.meta.env.VITE_API_URL;
-        const token = localStorage.getItem("token");
-
-        fetch(API_URL + "/api/service/" + presta._id, {
+    const handleSave = async () => {
+        const res = await fetchWithAuth(API_URL + "/api/service/" + presta._id, {
              method: "PUT",
-             headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-             },
             body: JSON.stringify(form),
-        }).then(() => window.location.reload());
+        });
+        if (!res) return;
+        window.location.reload();
     };
 
-    const handleDelete = (e) => {
+    const handleDelete = async () => {
         if (!window.confirm("Supprimer cette prestation ?")) return;
-
-        const API_URL = import.meta.env.VITE_API_URL;
-        const token = localStorage.getItem("token");
-
-        fetch(API_URL + "/api/service/" + presta._id, {
+        const res = await fetchWithAuth(API_URL + "/api/service/" + presta._id, {
              method: "DELETE",
-             headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-             },
-        }).then(() => window.location.reload());
+        });
+        if (!res) return;
+        window.location.reload();
     }
 
     return (

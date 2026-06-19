@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import defaultDog from '../assets/img/stylish-black-and-white-dog-illustration-png.webp';
+import fetchWithAuth from '../utils/fetchWithAuth';
 
 const AdminUserCard = ({user}) => {
     const aujourd_hui = new Date();
     const API_URL = import.meta.env.VITE_API_URL;
-    const token = localStorage.getItem("token");
     const [note, setNote] = useState(user.notes || "");
 
     const passees = (user.reservations || []).filter(r => aujourd_hui > new Date(r.dateFin));
     const enCours = (user.reservations || []).filter(r => aujourd_hui > new Date(r.dateDebut) && aujourd_hui < new Date(r.dateFin));
     const aVenir = (user.reservations || []).filter(r => aujourd_hui < new Date(r.dateDebut));
 
-    const handleSaveNote = () => {
-        fetch(`${API_URL}/api/admin/users/${user._id}/notes`, {
+    const handleSaveNote = async () => {
+        const res = await fetchWithAuth(`${API_URL}/api/admin/users/${user._id}/notes`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
             body: JSON.stringify({ notes: note }),
-        }).then(() => alert("Note sauvegardée"));
+        });
+        if (!res) return;
+         alert("Note sauvegardée");
     };
 
     return (

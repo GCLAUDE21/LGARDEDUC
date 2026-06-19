@@ -40,25 +40,31 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
-    const dog = await DogModel.findByIdAndDelete(req.params.id);
-    if (!dog) {
-      res.status(404).json();
-    } else res.send("Chien Supprimé !");
+    const dog = await DogModel.findById(req.params.id);
+    if (!dog) return res.status(404).json({ message: "Chien introuvable" });
+    if (dog.owner.toString() !== req.user.id)
+      return res.status(403).json({ message: "Non autorisé" });
+
+    await DogModel.findByIdAndDelete(req.params.id);
+    res.send("Chien Supprimé !");
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const dog = await DogModel.findByIdAndUpdate(req.params.id, req.body, {
+    const dog = await DogModel.findById(req.params.id);
+    if (!dog) return res.status(404).json({ message: "Chien introuvable" });
+    if (dog.owner.toString() !== req.user.id)
+      return res.status(403).json({ message: "Non autorisé" });
+
+    const updated = await DogModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
-    if (!dog) {
-      res.status(404).json();
-    } else res.send(dog);
+    res.send(updated);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

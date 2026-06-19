@@ -14,7 +14,6 @@
     margin-bottom: 1.25rem;
     position: relative;
 
-    // trait décoratif sous le titre
     &::after {
       content: '';
       display: block;
@@ -26,12 +25,21 @@
     }
   }
 
-  // ---- Liste des réservations ----
+  h3 {
+    font-family: $font-body;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $color-gold;
+    margin: 1.25rem 0 0.5rem;
+    padding-bottom: 4px;
+    border-bottom: 1px solid $color-border-strong;
+  }
+
   .mes-reservations {
     margin-bottom: 2.5rem;
   }
 
-  // ---- Formulaire nouvelle résa ----
   .new-reservation {
     background: $color-bg-card;
     border-radius: 12px;
@@ -40,7 +48,6 @@
     position: relative;
     overflow: hidden;
 
-    // texture diagonale
     &::before {
       content: '';
       position: absolute;
@@ -54,7 +61,6 @@
       color: $color-gold-light;
       z-index: 1;
       position: relative;
-
       &::after { background: rgba(201,146,42,0.4); }
     }
 
@@ -89,22 +95,16 @@
 
       &::placeholder { color: rgba(245,233,208,0.25); }
       &:focus { border-color: $color-gold; }
-
       option { background: $color-bg-card; color: $color-text; }
     }
 
-    // icône calendrier dorée
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
       cursor: pointer;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
+    textarea { resize: vertical; min-height: 90px; }
 
-    // chiens sélectionnés
     .chiensChoisis {
       display: flex;
       flex-wrap: wrap;
@@ -131,13 +131,11 @@
           font-size: 0.9rem;
           padding: 0;
           line-height: 1;
-
           &:hover { color: $color-gold-light; }
         }
       }
     }
 
-    // bouton valider
     & > form > button {
       margin-top: 1rem;
       background: $color-gold;
@@ -151,13 +149,11 @@
       letter-spacing: 0.03em;
       cursor: pointer;
       transition: background 0.2s ease;
-
       &:hover { background: $color-gold-light; color: $color-bg-card; }
     }
   }
 }
 
-// ---- ResaCard ----
 .resa-card {
   background: $color-bg-card;
   border-radius: 12px;
@@ -165,8 +161,14 @@
   margin-bottom: 1rem;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   position: relative;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 
-  // texture diagonale
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -202,25 +204,22 @@
     letter-spacing: 0.05em;
     border: 1px solid;
 
-    // statuts colorés
     &.en-attente {
-        background: rgba(201,146,42,0.15);
-        color: $color-gold-light;
-        border-color: rgba(201,146,42,0.3);
+      background: rgba(201,146,42,0.15);
+      color: $color-gold-light;
+      border-color: rgba(201,146,42,0.3);
     }
-
     &.validee {
-        background: rgba(34,197,94,0.15);
-        color: #4ade80;
-        border-color: rgba(34,197,94,0.3);
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+      border-color: rgba(34,197,94,0.3);
     }
-
     &.refusee {
-        background: rgba(239,68,68,0.15);
-        color: #f87171;
-        border-color: rgba(239,68,68,0.3);
+      background: rgba(239,68,68,0.15);
+      color: #f87171;
+      border-color: rgba(239,68,68,0.3);
     }
-}
+  }
 
   &__body {
     padding: 0.85rem 1.25rem;
@@ -266,52 +265,9 @@
     }
   }
 
-  &__note {
-    font-family: $font-body;
-    font-size: 0.82rem;
-    color: $color-text-muted;
-    font-style: italic;
-    margin-top: 4px;
-  }
-
-  &__textarea {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid $color-border;
-    border-radius: 6px;
-    padding: 10px 14px;
-    font-family: $font-body;
-    font-size: 0.85rem;
-    color: $color-text;
-    outline: none;
-    resize: vertical;
-    min-height: 80px;
-    width: 100%;
-    margin-top: 6px;
-
-    &::placeholder { color: rgba(245,233,208,0.25); }
-    &:focus { border-color: $color-gold; }
-  }
-
-  &__actions {
-    padding: 0.75rem 1.25rem 1rem;
-    position: relative;
-    z-index: 1;
-
-    button {
-      background: transparent;
-      border: 1px solid rgba(201,146,42,0.4);
-      color: $color-gold;
-      border-radius: 6px;
-      padding: 7px 14px;
-      font-family: $font-body;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: rgba(201,146,42,0.1);
-        border-color: $color-gold;
-      }
-    }
-  }
+  &.annulee {
+    background: rgba(156,163,175,0.15);
+    color: #9ca3af;
+    border-color: rgba(156,163,175,0.3);
+}
 }
