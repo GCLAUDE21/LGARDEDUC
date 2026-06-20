@@ -39,7 +39,7 @@ const Auth = () => {
             }
 
             // Fetch immédiat pour mettre à jour le contexte
-            const meRes = await fetch(`${API_URL}/api/auth/me`, {
+            const meRes = await fetch(`/api/auth/me`, {
                 credentials: "include",
             });
             if (meRes.ok) {

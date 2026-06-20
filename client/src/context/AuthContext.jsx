@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchMe = async () => {
             try {
-                const res = await fetch(`${API_URL}/api/auth/me`, {
+                const res = await fetch(`/api/auth/me`, {
                     credentials: "include",
                 });
                 if (res.ok) {
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = async () => {
-        await fetch(`${API_URL}/api/auth/logout`, {
+        await fetch(`/api/auth/logout`, {
             method: "POST",
             credentials: "include",
         });
