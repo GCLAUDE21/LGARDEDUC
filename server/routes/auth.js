@@ -57,6 +57,14 @@ router.post("/signup", async (req, res) => {
     });
   } catch (err) {
     console.log("ERREUR signup:", err);
+    if (err.code === 11000) {
+      const champ = Object.keys(err.keyPattern)[0];
+      const message =
+        champ === "email"
+          ? "Cette adresse email est déjà utilisée."
+          : "Ce pseudo est déjà pris.";
+      return res.status(400).json({ message });
+    }
     res.status(400).json({ message: err.message });
   }
 });
@@ -113,9 +121,9 @@ router.post("/signin", async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
-      maxAge: 48 * 60 * 60 * 1000, // 48h
+      maxAge: 48 * 60 * 60 * 1000,
     });
 
     res.json({ message: "Connexion réussie" });
@@ -128,7 +136,7 @@ router.post("/signin", async (req, res) => {
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "none",
   });
   res.json({ message: "Déconnecté" });
