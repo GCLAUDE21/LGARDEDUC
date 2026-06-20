@@ -1,6 +1,6 @@
 import express from "express";
 import MessageModel from "../models/messageModel.js";
-import transporter from "../utils/mailer.js";
+import { sendMail } from "../utils/mailer.js";
 
 const router = express.Router();
 
@@ -10,11 +10,14 @@ router.post("/", async (req, res) => {
     const newMessage = new MessageModel(req.body);
     await newMessage.save();
 
-    await transporter.sendMail({
-      from: "CONTACT LGARD'EDUC <guillaumeclaude@icloud.com>",
+    await sendMail({
       to: process.env.LAURA_EMAIL,
       subject: `${nom} - ${objet}`,
-      text: `De la part de : ${nom}\nTél : ${tel}\nMail : ${mail}\n\nObjet : ${objet}\n\n${message}`,
+      html: `<p><strong>De :</strong> ${nom}<br>
+        <strong>Tél :</strong> ${tel}<br>
+        <strong>Mail :</strong> ${mail}</p>
+        <p><strong>Objet :</strong> ${objet}</p>
+        <p>${message}</p>`,
     });
 
     res.send(newMessage);
