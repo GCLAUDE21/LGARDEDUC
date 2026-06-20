@@ -21,7 +21,7 @@ const Auth = () => {
     const handleCo = async () => {
         setErreurCo("");
         try {
-            const response = await fetch(`${API_URL}/api/auth/signin`, {
+            const response = await fetch(`/api/auth/signin`, {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",

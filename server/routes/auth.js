@@ -102,11 +102,9 @@ router.post("/signin", async (req, res) => {
     }
 
     if (!user.isVerified) {
-      return res
-        .status(403)
-        .json({
-          message: "Veuillez confirmer votre email avant de vous connecter.",
-        });
+      return res.status(403).json({
+        message: "Veuillez confirmer votre email avant de vous connecter.",
+      });
     }
 
     const isValid = await user.isValidPassword(req.body.password);
@@ -127,7 +125,7 @@ router.post("/signin", async (req, res) => {
       maxAge: 48 * 60 * 60 * 1000,
     });
 
-    res.json({ message: "Connexion réussie" });
+    res.json({ message: "Connexion réussie", token });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
