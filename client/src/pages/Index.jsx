@@ -2,6 +2,7 @@ import React from 'react';
 import Carousel from '../components/Carousel';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
+import labelImg from '../assets/img/label_france_petsitters_large-300x300.png'
 
 const index = () => {
     return (
@@ -107,7 +108,7 @@ const index = () => {
                 {/* LABEL FRANCE PETSITTERS */}
                   <div className="label-section">
                       <img
-                          src="/src/assets/img/label_france_petsitters_large-300x300.png"
+                          src={labelImg}
                           alt="Label France Petsitters"
                           className="label-badge"
                       />
