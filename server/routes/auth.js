@@ -146,12 +146,4 @@ router.get("/me", authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/fix-users", async (req, res) => {
-  await UserModel.updateMany(
-    { isVerified: { $exists: false } },
-    { isVerified: true },
-  );
-  res.json({ message: "Users patchés" });
-});
-
 export default router;
