@@ -11,11 +11,13 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Admin from './pages/Admin';
 import AdminRoute from './components/AdminRoute';
 import ConfirmerEmail from './pages/ConfirmerEmail';
+import { AuthProvider } from './context/AuthContext';
 
 
 const App = () => {
   return (
    <BrowserRouter>
+   <AuthProvider>
    < Header/>
       <Routes>
         <Route path="/" element={< Index/>}></Route>
@@ -29,6 +31,7 @@ const App = () => {
         <Route path="/admin" element={<AdminRoute>< Admin/></AdminRoute>}></Route>
         <Route path="*" element={<h1>Not Found 404</h1>}></Route>
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 };

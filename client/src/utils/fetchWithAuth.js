@@ -1,21 +1,16 @@
-import { useNavigate } from "react-router-dom";
-
 const fetchWithAuth = async (url, options = {}) => {
-  const token = localStorage.getItem("token");
-
   const response = await fetch(url, {
     ...options,
+    credentials: "include", // envoie les cookies automatiquement
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       ...options.headers,
-      Authorization: `Bearer ${token}`,
     },
   });
 
   if (response.status === 401) {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
+    window.location.href = "/auth";
     return null;
   }
 

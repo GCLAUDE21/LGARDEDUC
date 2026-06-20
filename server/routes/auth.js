@@ -3,6 +3,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import transporter from "../utils/mailer.js";
+import authMiddleware from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -110,9 +111,38 @@ router.post("/signin", async (req, res) => {
       { expiresIn: "48h" },
     );
 
-    res.json({ token });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      maxAge: 48 * 60 * 60 * 1000, // 48h
+    });
+
+    res.json({ message: "Connexion réussie" });
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+// --- Déconnexion ---
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+  });
+  res.json({ message: "Déconnecté" });
+});
+
+// --- Vérifier si connecté ---
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.id).select("-password");
+    if (!user)
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

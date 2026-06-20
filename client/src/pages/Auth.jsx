@@ -25,6 +25,7 @@ const Auth = () => {
                     "Content-Type": "application/json",
                 },
                 method: "POST",
+                credentials: "include", // important pour recevoir le cookie
                 body: JSON.stringify({ email: mailCo, password: passCo }),
             });
 
@@ -35,7 +36,6 @@ const Auth = () => {
                 return;
             }
 
-            localStorage.setItem("token", data.token);
             navigate("/profil");
         } catch (err) {
             setErreurCo("Une erreur est survenue, réessayez.");

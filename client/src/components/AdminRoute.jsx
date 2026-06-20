@@ -1,15 +1,13 @@
 import { Navigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '../context/AuthContext';
 
 const AdminRoute = ({ children }) => {
-    const token = localStorage.getItem('token');
-    
-    if (!token) return <Navigate to="/auth" />;
+    const { user } = useAuth();
 
-    const decoded = jwtDecode(token);
-    
-    if (!decoded.admin) return <Navigate to="/" />;
-    
+    if (user === undefined) return null; // encore en chargement
+    if (!user) return <Navigate to="/auth" />;
+    if (!user.admin) return <Navigate to="/" />;
+
     return children;
 };
 
