@@ -18,10 +18,9 @@ export default async function handler(req, res) {
 
   res.setHeader(
     "Set-Cookie",
-    `token=${data.token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${48 * 60 * 60}`,
+    `token=${data.token}; Path=/; HttpOnly; Secure; SameSite=Lax; Domain=lgardeduc.vercel.app; Max-Age=${48 * 60 * 60}`,
   );
 
-  // Fetch user data pour le renvoyer au front
   const meResponse = await fetch("https://lgardeduc.onrender.com/api/auth/me", {
     headers: { Authorization: `Bearer ${data.token}` },
   });
