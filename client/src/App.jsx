@@ -10,6 +10,7 @@ import Header from './components/Header'
 import ProtectedRoute from './components/ProtectedRoute';
 import Admin from './pages/Admin';
 import AdminRoute from './components/AdminRoute';
+import ConfirmerEmail from './pages/ConfirmerEmail';
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/reservations" element={<ProtectedRoute>< Reservation/></ProtectedRoute>}></Route>
         <Route path="/profil" element={<ProtectedRoute>< Profil/></ProtectedRoute>}></Route>
         <Route path="/auth" element={< Auth/>}></Route>
+        <Route path="/confirmer-email" element={< ConfirmerEmail/>}></Route>
         <Route path="/admin" element={<AdminRoute>< Admin/></AdminRoute>}></Route>
         <Route path="*" element={<h1>Not Found 404</h1>}></Route>
       </Routes>

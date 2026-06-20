@@ -7,20 +7,17 @@ import AdminResaModal from './AdminResaModal';
 const AdminUserModal = ({ user, onClose }) => {
     const API_URL = import.meta.env.VITE_API_URL;
 
-    // --- State notes ---
     const [note, setNote] = useState(user.notes || "");
     const [noteSaved, setNoteSaved] = useState(false);
-
-    // --- State modales par dessus ---
     const [dogSelectionne, setDogSelectionne] = useState(null);
     const [resaSelectionnee, setResaSelectionnee] = useState(null);
-
-    // --- State chiens (pour mise à jour locale après edit) ---
     const [chiens, setChiens] = useState(user.chiens || []);
+
+    // --- États loading ---
+    const [loadingNote, setLoadingNote] = useState(false);
 
     const today = new Date();
 
-    // --- Filtrage réservations ---
     const resasEnAttente = (user.reservations || []).filter(r => r.statut === "En attente");
     const resasEnCours = (user.reservations || []).filter(r =>
         r.statut === "Validée" &&
@@ -35,35 +32,50 @@ const AdminUserModal = ({ user, onClose }) => {
         (r.statut === "Validée" && new Date(r.dateFin || r.dateDebut) < today)
     );
 
-    // --- Sauvegarde note ---
     const handleSaveNote = async () => {
+        if (loadingNote) return;
+        setLoadingNote(true);
         const res = await fetchWithAuth(`${API_URL}/api/admin/users/${user._id}/notes`, {
             method: "PUT",
             body: JSON.stringify({ notes: note }),
         });
+        setLoadingNote(false);
         if (!res) return;
         setNoteSaved(true);
         setTimeout(() => setNoteSaved(false), 2000);
     };
 
-    // --- Mise à jour chien après edit dans DogModal ---
+     const handleClickDog = (dog) => {
+        setDogSelectionne(dog);
+    };
+
+    const handleClickResa = (resa) => {
+        setResaSelectionnee(resa);
+    };
+
     const handleUpdateDog = (dogMaj) => {
         setChiens(prev => prev.map(d => d._id === dogMaj._id ? dogMaj : d));
         setDogSelectionne(dogMaj);
     };
 
-    // --- Suppression chien ---
     const handleDeleteDog = (dogId) => {
         setChiens(prev => prev.filter(d => d._id !== dogId));
         setDogSelectionne(null);
     };
 
-    // --- Formatage date ---
     const formatDate = (date) => new Date(date).toLocaleDateString('fr-FR');
 
-    // --- Rendu d'une ligne de réservation ---
+    const labelStyle = {
+        fontSize: '0.72rem',
+        textTransform: 'uppercase',
+        letterSpacing: '0.08em',
+        color: 'var(--color-gold)',
+        marginBottom: '0.25rem',
+        marginTop: '0.5rem'
+    };
+
     const ResaItem = ({ resa }) => (
-        <div className="resa-item clickable" onClick={() => setResaSelectionnee(resa)}>
+        <div className="resa-item clickable" onClick={() => handleClickResa(resa)}>
             <span className="resa-item__type">{resa.type}</span>
             <span className="resa-item__date">
                 {formatDate(resa.dateDebut)}
@@ -71,18 +83,18 @@ const AdminUserModal = ({ user, onClose }) => {
             </span>
             <span className={`resa-card__statut ${
                 { "En attente": "en-attente", "Validée": "validee", "Refusée": "refusee", "Annulée": "refusee", "Contre-proposition": "contre-proposition" }[resa.statut]
-            }`}>{resa.statut}</span>
+            }`}>
+                {resa.statut}
+            </span>
         </div>
     );
 
     return (
         <>
-            {/* Modale principale utilisateur */}
             <div className="modal-overlay" onClick={onClose}>
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <button className="modal-close" onClick={onClose}>×</button>
 
-                    {/* En-tête identité */}
                     <div className="modal-resa-header">
                         <div>
                             <h2>{user.prenom} {user.nom}</h2>
@@ -95,7 +107,6 @@ const AdminUserModal = ({ user, onClose }) => {
                         )}
                     </div>
 
-                    {/* Infos de contact */}
                     <div className="modal-resa-section">
                         <h4>Contact</h4>
                         <p>{user.email}</p>
@@ -103,7 +114,7 @@ const AdminUserModal = ({ user, onClose }) => {
                         {user.rue && <p>{user.rue}, {user.codePostal} {user.ville}</p>}
                     </div>
 
-                    {/* Chiens */}
+                    {/* Chiens cliquables */}
                     <div className="modal-resa-section">
                         <h4>Chiens ({chiens.length})</h4>
                         {chiens.length === 0
@@ -114,7 +125,7 @@ const AdminUserModal = ({ user, onClose }) => {
                                         <div
                                             key={dog._id}
                                             className="chien-item clickable"
-                                            onClick={() => setDogSelectionne(dog)}
+                                            onClick={() => handleClickDog(dog)}
                                         >
                                             <img src={dog.photo || defaultDog} alt={dog.nom} />
                                             <span>{dog.nom}</span>
@@ -130,22 +141,22 @@ const AdminUserModal = ({ user, onClose }) => {
                         <h4>Réservations</h4>
 
                         {resasEnAttente.length > 0 && <>
-                            <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold)', marginBottom: '0.25rem' }}>En attente</p>
+                            <p style={labelStyle}>En attente</p>
                             {resasEnAttente.map(r => <ResaItem key={r._id} resa={r} />)}
                         </>}
 
                         {resasEnCours.length > 0 && <>
-                            <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold)', marginBottom: '0.25rem', marginTop: '0.5rem' }}>En cours</p>
+                            <p style={labelStyle}>En cours</p>
                             {resasEnCours.map(r => <ResaItem key={r._id} resa={r} />)}
                         </>}
 
                         {resasAVenir.length > 0 && <>
-                            <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold)', marginBottom: '0.25rem', marginTop: '0.5rem' }}>À venir</p>
+                            <p style={labelStyle}>À venir</p>
                             {resasAVenir.map(r => <ResaItem key={r._id} resa={r} />)}
                         </>}
 
                         {resasPassees.length > 0 && <>
-                            <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-gold)', marginBottom: '0.25rem', marginTop: '0.5rem' }}>Passées / Annulées</p>
+                            <p style={labelStyle}>Passées / Annulées</p>
                             {resasPassees.map(r => <ResaItem key={r._id} resa={r} />)}
                         </>}
 
@@ -154,7 +165,7 @@ const AdminUserModal = ({ user, onClose }) => {
                         )}
                     </div>
 
-                    {/* Notes internes Laura */}
+                    {/* Notes internes */}
                     <div className="modal-resa-section">
                         <h4>Notes internes</h4>
                         <textarea
@@ -162,14 +173,13 @@ const AdminUserModal = ({ user, onClose }) => {
                             onChange={(e) => setNote(e.target.value)}
                             placeholder="Notes visibles uniquement par Laura..."
                         />
-                        <button onClick={handleSaveNote}>
-                            {noteSaved ? "Enregistré !" : "Enregistrer la note"}
+                        <button onClick={handleSaveNote} disabled={loadingNote}>
+                            {noteSaved ? "Enregistré !" : loadingNote ? "..." : "Enregistrer la note"}
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* DogModal par dessus */}
             {dogSelectionne && (
                 <DogModal
                     dog={dogSelectionne}
@@ -179,7 +189,6 @@ const AdminUserModal = ({ user, onClose }) => {
                 />
             )}
 
-            {/* AdminResaModal par dessus */}
             {resaSelectionnee && (
                 <AdminResaModal
                     resa={resaSelectionnee}

@@ -9,6 +9,13 @@ const ResaModal = ({ resa, onClose }) => {
     const [editNotes, setEditNotes] = useState(false);
     const [dogSelectionne, setDogSelectionne] = useState(null);
 
+    // --- États loading par action ---
+    const [loadingChienId, setLoadingChienId] = useState(null);
+    const [loadingNotes, setLoadingNotes] = useState(false);
+    const [loadingCancel, setLoadingCancel] = useState(false);
+    const [loadingAccepter, setLoadingAccepter] = useState(false);
+    const [loadingRefuser, setLoadingRefuser] = useState(false);
+
     const statutClass = {
         "En attente": "en-attente",
         "Validée": "validee",
@@ -19,7 +26,10 @@ const ResaModal = ({ resa, onClose }) => {
 
     // --- Fetch chien complet au clic ---
     const handleClickChien = async (chien) => {
+        if (loadingChienId) return;
+        setLoadingChienId(chien._id);
         const res = await fetchWithAuth(`${API_URL}/api/user/dogs/${chien._id}`);
+        setLoadingChienId(null);
         if (!res) return;
         const data = await res.json();
         setDogSelectionne(data);
@@ -27,10 +37,13 @@ const ResaModal = ({ resa, onClose }) => {
 
     // --- Sauvegarder les notes ---
     const handleSaveNotes = async () => {
+        if (loadingNotes) return;
+        setLoadingNotes(true);
         const res = await fetchWithAuth(`${API_URL}/api/user/reservations/${resa._id}`, {
-        method: "PUT",
-        body: JSON.stringify({ notes }),
-    });
+            method: "PUT",
+            body: JSON.stringify({ notes }),
+        });
+        setLoadingNotes(false);
         if (!res) return;
         setEditNotes(false);
     };
@@ -38,10 +51,13 @@ const ResaModal = ({ resa, onClose }) => {
     // --- Annuler la réservation ---
     const handleCancel = async () => {
         if (!window.confirm("Annuler cette réservation ?")) return;
+        if (loadingCancel) return;
+        setLoadingCancel(true);
         const res = await fetchWithAuth(`${API_URL}/api/user/reservations/${resa._id}`, {
-        method: "PUT",
-        body: JSON.stringify({ statut: "Annulée" }),
-    });
+            method: "PUT",
+            body: JSON.stringify({ statut: "Annulée" }),
+        });
+        setLoadingCancel(false);
         if (!res) return;
         onClose();
         window.location.reload();
@@ -49,9 +65,12 @@ const ResaModal = ({ resa, onClose }) => {
 
     // --- Accepter la contre-proposition ---
     const handleAccepterContreProposition = async () => {
+        if (loadingAccepter) return;
+        setLoadingAccepter(true);
         const res = await fetchWithAuth(`${API_URL}/api/user/reservations/${resa._id}/contre-proposition/accepter`, {
             method: "PUT",
         });
+        setLoadingAccepter(false);
         if (!res) return;
         onClose();
         window.location.reload();
@@ -59,9 +78,12 @@ const ResaModal = ({ resa, onClose }) => {
 
     // --- Refuser la contre-proposition ---
     const handleRefuserContreProposition = async () => {
+        if (loadingRefuser) return;
+        setLoadingRefuser(true);
         const res = await fetchWithAuth(`${API_URL}/api/user/reservations/${resa._id}/contre-proposition/refuser`, {
             method: "PUT",
         });
+        setLoadingRefuser(false);
         if (!res) return;
         onClose();
         window.location.reload();
@@ -73,7 +95,6 @@ const ResaModal = ({ resa, onClose }) => {
                 <div className="resa-modal" onClick={(e) => e.stopPropagation()}>
                     <button className="resa-modal__close" onClick={onClose}>✕</button>
 
-                    {/* En-tête */}
                     <div className="resa-modal__header">
                         <h3>{resa.type}</h3>
                         <span className={`resa-card__statut ${statutClass}`}>{resa.statut}</span>
@@ -82,7 +103,6 @@ const ResaModal = ({ resa, onClose }) => {
                             {resa.dateFin && resa.type !== "education" && ` au ${new Date(resa.dateFin).toLocaleDateString('fr-FR')}`}
                         </p>
 
-                        {/* Contre-proposition de Laura */}
                         {resa.statut === "Contre-proposition" && resa.contreProposition && (
                             <div className="resa-modal__contre-prop">
                                 <p>Laura vous propose de nouvelles dates :</p>
@@ -92,36 +112,51 @@ const ResaModal = ({ resa, onClose }) => {
                                 </strong></p>
                                 {resa.contreProposition.message && <p>{resa.contreProposition.message}</p>}
                                 <div className="btn-row">
-                                    <button onClick={handleAccepterContreProposition}>Accepter</button>
-                                    <button onClick={handleRefuserContreProposition}>Refuser</button>
+                                    <button onClick={handleAccepterContreProposition} disabled={loadingAccepter || loadingRefuser}>
+                                        {loadingAccepter ? "..." : "Accepter"}
+                                    </button>
+                                    <button onClick={handleRefuserContreProposition} disabled={loadingRefuser || loadingAccepter}>
+                                        {loadingRefuser ? "..." : "Refuser"}
+                                    </button>
                                 </div>
                             </div>
                         )}
                     </div>
 
                     <div className="resa-modal__content">
-
-                        {/* Chiens cliquables */}
                         {resa.dog?.length > 0 && <>
                             <h5 className="section-label">Chiens</h5>
                             <div className="resa-modal__chiens">
                                 {resa.dog.map((chien, i) => (
-                                    <div key={i} className="resa-modal__chien clickable" onClick={() => handleClickChien(chien)}>
-                                        <img src={chien.photo || defaultDog} alt={chien.nom} />
+                                    <div
+                                        key={i}
+                                        className={`resa-modal__chien clickable ${loadingChienId === chien._id ? "loading" : ""}`}
+                                        onClick={() => handleClickChien(chien)}
+                                        style={{ opacity: loadingChienId && loadingChienId !== chien._id ? 0.5 : 1 }}
+                                    >
+                                        <div className="chien-img-wrapper">
+                                            <img src={chien.photo || defaultDog} alt={chien.nom} />
+                                            {loadingChienId === chien._id && (
+                                                <div className="chien-loading-overlay">🐾</div>
+                                            )}
+                                        </div>
                                         <span>{chien.nom}</span>
                                     </div>
                                 ))}
                             </div>
                         </>}
 
-                        {/* Notes utilisateur */}
                         <h5 className="section-label">Vos notes</h5>
                         {editNotes ? (
                             <>
                                 <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Vos remarques, attentes..." />
                                 <div className="btn-row">
-                                    <button onClick={handleSaveNotes}>Enregistrer</button>
-                                    <button onClick={() => setEditNotes(false)}>Annuler</button>
+                                    <button onClick={handleSaveNotes} disabled={loadingNotes}>
+                                        {loadingNotes ? "..." : "Enregistrer"}
+                                    </button>
+                                    <button onClick={() => setEditNotes(false)} disabled={loadingNotes}>
+                                        Annuler
+                                    </button>
                                 </div>
                             </>
                         ) : (
@@ -133,13 +168,11 @@ const ResaModal = ({ resa, onClose }) => {
                             </>
                         )}
 
-                        {/* Bilan de Laura */}
                         {resa.bilanLaura && <>
                             <h5 className="section-label">Bilan de Laura</h5>
                             <p className="notes-text">{resa.bilanLaura}</p>
                         </>}
 
-                        {/* Motif de refus / annulation */}
                         {(resa.statut === "Refusée" || resa.statut === "Annulée") && resa.motifRefus && <>
                             <h5 className="section-label">
                                 {resa.statut === "Annulée" ? "Motif de l'annulation" : "Motif du refus"}
@@ -147,7 +180,6 @@ const ResaModal = ({ resa, onClose }) => {
                             <p className="notes-text">{resa.motifRefus}</p>
                         </>}
 
-                        {/* Événements / comptes rendus */}
                         {resa.evenements?.length > 0 && <>
                             <h5 className="section-label">
                                 {resa.type === "education" ? "Comptes rendus de séances" : "Carnet de bord"}
@@ -171,17 +203,15 @@ const ResaModal = ({ resa, onClose }) => {
                             </div>
                         </>}
 
-                        {/* Bouton annulation (En attente uniquement) */}
                         {resa.statut === "En attente" && (
-                            <button className="btn-danger" onClick={handleCancel}>
-                                Annuler la réservation
+                            <button className="btn-danger" onClick={handleCancel} disabled={loadingCancel}>
+                                {loadingCancel ? "Annulation..." : "Annuler la réservation"}
                             </button>
                         )}
                     </div>
                 </div>
             </div>
 
-            {/* DogModal par dessus */}
             {dogSelectionne && (
                 <DogModal
                     dog={dogSelectionne}

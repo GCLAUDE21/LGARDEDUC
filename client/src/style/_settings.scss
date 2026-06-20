@@ -106,3 +106,51 @@ $font-bold: 700;
         z-index: 0;
     }
 }
+
+// =====================
+// LOADING / FEEDBACK
+// =====================
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 0.25; }
+}
+
+.resa-modal__chien,
+.resa-card__chien,
+.chien-item {
+    transition: opacity 0.2s ease;
+
+    &.loading {
+        animation: pulse 0.8s ease-in-out infinite;
+        cursor: wait;
+    }
+}
+
+.chien-img-wrapper {
+    position: relative;
+
+    img { display: block; width: 100%; border-radius: 50%; }
+
+    .chien-loading-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+        border-radius: 50%;
+        font-size: 1.5rem;
+    }
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+    pointer-events: none;
+}
+
+.clickable-link {
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+}

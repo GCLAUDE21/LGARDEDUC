@@ -101,4 +101,20 @@
       }
     }
   }
+
+  .auth__error {
+      color: #e07070;
+      font-size: 0.85rem;
+      margin: 4px 0 8px;
+      position: relative;
+      z-index: 1;
+  }
+
+  .auth__success {
+      color: #7ec97e;
+      font-size: 0.85rem;
+      margin: 4px 0 8px;
+      position: relative;
+      z-index: 1;
+  }
 }

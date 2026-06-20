@@ -45,6 +45,16 @@ const UserSchema = new mongoose.Schema(
     notes: {
       type: String,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailToken: {
+      type: String,
+    },
+    emailTokenExpires: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );
