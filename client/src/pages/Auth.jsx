@@ -19,40 +19,32 @@ const Auth = () => {
     const [successIn, setSuccessIn] = useState("");
 
     const handleCo = async () => {
-        setErreurCo("");
-        try {
-            const response = await fetch(`/api/auth/signin`, {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                method: "POST",
-                credentials: "include",
-                body: JSON.stringify({ email: mailCo, password: passCo }),
-            });
+    setErreurCo("");
+    try {
+        const response = await fetch(`/api/auth/signin`, {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({ email: mailCo, password: passCo }),
+        });
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (!response.ok) {
-                setErreurCo(data.message || "Erreur de connexion");
-                return;
-            }
-
-            // Fetch immédiat pour mettre à jour le contexte
-            const meRes = await fetch(`/api/auth/me`, {
-                credentials: "include",
-            });
-            if (meRes.ok) {
-                const userData = await meRes.json();
-                setUser(userData);
-            }
-
-            navigate("/profil");
-        } catch (err) {
-            setErreurCo("Une erreur est survenue, réessayez.");
-            console.error("Erreur de connexion", err);
+        if (!response.ok) {
+            setErreurCo(data.message || "Erreur de connexion");
+            return;
         }
-    };
+
+        setUser(data.user);
+        navigate("/profil");
+    } catch (err) {
+        setErreurCo("Une erreur est survenue, réessayez.");
+        console.error("Erreur de connexion", err);
+    }
+};
 
     const handleIn = async () => {
         setErreurIn("");
