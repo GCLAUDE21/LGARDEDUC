@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Auth = () => {
     const API_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
+    const { setUser } = useAuth();
 
     const [mailCo, setMailCo] = useState("");
     const [passCo, setPasseCo] = useState("");
@@ -25,7 +27,7 @@ const Auth = () => {
                     "Content-Type": "application/json",
                 },
                 method: "POST",
-                credentials: "include", // important pour recevoir le cookie
+                credentials: "include",
                 body: JSON.stringify({ email: mailCo, password: passCo }),
             });
 
@@ -34,6 +36,15 @@ const Auth = () => {
             if (!response.ok) {
                 setErreurCo(data.message || "Erreur de connexion");
                 return;
+            }
+
+            // Fetch immédiat pour mettre à jour le contexte
+            const meRes = await fetch(`${API_URL}/api/auth/me`, {
+                credentials: "include",
+            });
+            if (meRes.ok) {
+                const userData = await meRes.json();
+                setUser(userData);
             }
 
             navigate("/profil");
