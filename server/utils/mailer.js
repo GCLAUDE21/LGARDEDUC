@@ -1,13 +1,23 @@
-import * as SibApiV3Sdk from "@getbrevo/brevo";
-
-const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-apiInstance.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
-
 export const sendMail = async ({ to, subject, html }) => {
-  const email = new SibApiV3Sdk.SendSmtpEmail();
-  email.to = [{ email: to }];
-  email.sender = { email: process.env.LAURA_EMAIL, name: "L Gard'Educ" };
-  email.subject = subject;
-  email.htmlContent = html;
-  return apiInstance.sendTransacEmail(email);
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+    },
+    body: JSON.stringify({
+      sender: { email: process.env.LAURA_EMAIL, name: "L Gard'Educ" },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(JSON.stringify(err));
+  }
+
+  return response.json();
 };
