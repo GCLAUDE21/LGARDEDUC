@@ -18,7 +18,7 @@ const Auth = () => {
     const [erreurIn, setErreurIn] = useState("");
     const [successIn, setSuccessIn] = useState("");
 
-    const handleCo = async () => {
+const handleCo = async () => {
     setErreurCo("");
     try {
         const response = await fetch(`/api/auth/signin`, {
@@ -27,7 +27,6 @@ const Auth = () => {
                 "Content-Type": "application/json",
             },
             method: "POST",
-            credentials: "include",
             body: JSON.stringify({ email: mailCo, password: passCo }),
         });
 
@@ -38,7 +37,15 @@ const Auth = () => {
             return;
         }
 
-        setUser(data.user);
+        // Stockage du token
+        localStorage.setItem("token", data.token);
+
+        // Décodage du payload JWT pour récupérer l'user
+        const payload = JSON.parse(atob(data.token.split(".")[1]));
+        const user = { id: payload.id, admin: payload.admin };
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+
         navigate("/profil");
     } catch (err) {
         setErreurCo("Une erreur est survenue, réessayez.");

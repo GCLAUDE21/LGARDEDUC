@@ -1,10 +1,12 @@
 const fetchWithAuth = async (url, options = {}) => {
+  const token = localStorage.getItem("token");
+
   const response = await fetch(url, {
     ...options,
-    credentials: "include", // envoie les cookies automatiquement
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
       ...options.headers,
     },
   });

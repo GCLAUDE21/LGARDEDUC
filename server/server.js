@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
-import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.js";
 import serviceRouter from "./routes/service.js";
 import dogRouter from "./routes/dogs.js";
@@ -19,10 +18,8 @@ app.use(express.json());
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://lgardeduc.vercel.app"],
-    credentials: true,
   }),
 );
-app.use(cookieParser());
 
 mongoDb();
 

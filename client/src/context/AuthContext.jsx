@@ -1,35 +1,14 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const API_URL = import.meta.env.VITE_API_URL;
-    const [user, setUser] = useState(undefined); // undefined = pas encore chargé
+    const storedUser = localStorage.getItem("user");
+    const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
 
-    useEffect(() => {
-        const fetchMe = async () => {
-            try {
-                const res = await fetch(`/api/auth/me`, {
-                    credentials: "include",
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setUser(data);
-                } else {
-                    setUser(null);
-                }
-            } catch {
-                setUser(null);
-            }
-        };
-        fetchMe();
-    }, []);
-
-    const logout = async () => {
-        await fetch(`/api/auth/logout`, {
-            method: "POST",
-            credentials: "include",
-        });
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setUser(null);
     };
 
