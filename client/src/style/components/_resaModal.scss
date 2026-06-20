@@ -147,6 +147,10 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+
+        &:hover { transform: translateY(-2px); }
 
         & img {
             width: 40px;
@@ -176,6 +180,46 @@
         border-color: #f87171;
     }
 }
+}
+
+
+    .resa-modal__contre-prop {
+    background: rgba(99,102,241,0.08);
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    width: 100%;
+
+    p {
+        font-family: $font-body;
+        font-size: 0.83rem;
+        color: rgba(165,180,252,0.9);
+        margin-bottom: 0.25rem;
+    }
+
+    strong { color: #a5b4fc; }
+
+    .btn-row {
+        margin-top: 0.75rem;
+        display: flex;
+        gap: 8px;
+
+        button {
+            &:first-child {
+                background: rgba(34,197,94,0.15);
+                border-color: rgba(34,197,94,0.4);
+                color: #4ade80;
+                &:hover { background: rgba(34,197,94,0.25); }
+            }
+            &:last-child {
+                background: rgba(180,40,40,0.15);
+                border-color: rgba(180,40,40,0.4);
+                color: #e07070;
+                &:hover { background: rgba(180,40,40,0.25); }
+            }
+        }
+    }
 }
 
 .evenement {

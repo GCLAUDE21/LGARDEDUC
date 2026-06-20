@@ -10,6 +10,7 @@ const ResaCard = ({ resa }) => {
         "Validée": "validee",
         "Refusée": "refusee",
         "Annulée": "annulee",
+        "Contre-proposition": "contre-proposition",
     }[resa.statut] || "en-attente";
 
     return (

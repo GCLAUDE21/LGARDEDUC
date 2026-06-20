@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 
 const ResaSchema = new mongoose.Schema(
   {
-    type: { type: String, required: true },
+    type: {
+      type: String,
+      required: true,
+      enum: ["pension", "education", "pet sitting"],
+    },
     dateDebut: { type: Date, required: true },
     dateFin: { type: Date },
     owner: {
@@ -11,7 +15,22 @@ const ResaSchema = new mongoose.Schema(
       required: true,
     },
     dog: [{ type: mongoose.Schema.Types.ObjectId, ref: "Dog", required: true }],
-    statut: { type: String, default: "En attente" },
+    statut: {
+      type: String,
+      default: "En attente",
+      enum: [
+        "En attente",
+        "Validée",
+        "Refusée",
+        "Contre-proposition",
+        "Annulée",
+      ],
+    },
+    contreProposition: {
+      dateDebut: { type: Date },
+      dateFin: { type: Date },
+      message: { type: String },
+    },
     notes: { type: String },
     bilanLaura: { type: String },
     motifRefus: { type: String },

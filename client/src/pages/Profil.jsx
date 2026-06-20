@@ -16,6 +16,7 @@ const Profil = () => {
     const [photoDog, setPhotoDog] = useState("");
     const [loading, setLoading] = useState(true);
     const [enEdition, setEnEdition] = useState(false);
+    const [erreurProfil, setErreurProfil] = useState("");
     const [form, setForm] = useState({
     pseudo: "",
     nom: "",
@@ -51,19 +52,20 @@ const Profil = () => {
     setForm({ ...form, [e.target.name]: e.target.value })}
 
     const handleSaveProfil = async () => {
+        setErreurProfil("");
         fetchWithAuth(API_URL + "/api/user/profil", {
-             method: "PUT",
+            method: "PUT",
             body: JSON.stringify(form),
         }).then(async (res) => {
-            if(!res) return;
+            if (!res) return;
             if (!res.ok) {
-        const data = await res.json();
-        alert(data.message);
-        return;
-        }
-         window.location.reload();
-        })
-    }
+                const data = await res.json();
+                setErreurProfil(data.message);
+                return;
+            }
+            window.location.reload();
+        });
+    };
 
     useEffect( () => {
         const fetchUser = async () => {
@@ -125,20 +127,55 @@ const Profil = () => {
     if (loading) return <Loader />;
     return (
         <section className='profil'>
+            {/* Intro profil */}
+            <div className="profil-intro">
+                <h2>Mon profil</h2>
+                <p>
+                    Bienvenue sur votre espace personnel. Vous pouvez ici gérer vos informations et celles de vos chiens.
+                </p>
+                <div className="profil-intro-notices">
+                    <div className="intro-notice">
+                        <h4>👤 Vos informations</h4>
+                        <p>Un profil complet permet à Laura de mieux vous connaître et de personnaliser ses services. Pensez à renseigner votre adresse et votre numéro de téléphone pour faciliter la prise de contact.</p>
+                    </div>
+                    <div className="intro-notice">
+                        <h4>🐶 Votre chien</h4>
+                        <p>Plus la fiche de votre chien est complète, mieux Laura pourra s'en occuper. Renseignez ses vaccins, son alimentation, son comportement et ses éventuelles particularités pour assurer son bien-être.</p>
+                    </div>
+                </div>
+                <p className="profil-intro-notice">
+                    Ces informations sont <strong>confidentielles</strong> et utilisées uniquement par Laura dans le cadre de la prise en charge de votre chien.
+                </p>
+            </div>
+
             <div className="entete">
                 {enEdition === true && 
                 <div className="editForm">
+                    <label>Pseudo</label>
                     <input placeholder='Pseudo' name="pseudo" value={form.pseudo} onChange={handleChange} />
+                    <label>Nom</label>
                     <input placeholder='Nom' name="nom" value={form.nom} onChange={handleChange} />
+                    <label>Prénom</label>
                     <input placeholder='Prénom' name="prenom" value={form.prenom} onChange={handleChange} />
+                    <label>Email</label>
                     <input placeholder='Email' name="email" value={form.email} onChange={handleChange} />
-                    <input placeholder='XX rue ....' name="rue" value={form.rue} onChange={handleChange} /> 
-                    <input placeholder='30XXX' name="codePostal" value={form.codePostal} onChange={handleChange} /> 
-                    <input placeholder='ville' name="ville" value={form.ville} onChange={handleChange} /> 
+                    <label>Rue</label>
+                    <input placeholder='21 rue de la Paix' name="rue" value={form.rue} onChange={handleChange} />
+                    <label>Code postal</label>
+                    <input placeholder='59000' name="codePostal" value={form.codePostal} onChange={handleChange} />
+                    <label>Ville</label>
+                    <input placeholder='Valenciennes' name="ville" value={form.ville} onChange={handleChange} />
+                    <label>Date de naissance</label>
                     <input type='date' name="dateDeNaissance" value={form.dateDeNaissance} onChange={handleChange} />
+                    <label>Téléphone</label>
                     <input placeholder='06XXXXXXXX' name="telephone" value={form.telephone} onChange={handleChange} />
-                <div className="btn-row">
-                <button onClick={handleSaveProfil}>Enregistrer</button> <button onClick={() => setEnEdition(false)}>Annuler</button></div>
+
+                    {erreurProfil && <p className="erreur-profil">{erreurProfil}</p>}
+
+                    <div className="btn-row">
+                        <button onClick={handleSaveProfil}>Enregistrer</button>
+                        <button onClick={() => { setEnEdition(false); setErreurProfil(""); }}>Annuler</button>
+                    </div>
                 </div>
                 }
 

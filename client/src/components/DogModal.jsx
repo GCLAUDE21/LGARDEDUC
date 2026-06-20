@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import defaultDog from '../assets/img/stylish-black-and-white-dog-illustration-png.webp';
 import fetchWithAuth from '../utils/fetchWithAuth';
+import ResaModal from './ResaModal';
 
 const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -10,6 +11,7 @@ const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
     const anneeNaissance = new Date(dog.dateDeNaissance).getFullYear();
     const anneeActuelle = new Date().getFullYear();
     const age = anneeActuelle - anneeNaissance;
+    const [resaSelectionnee, setResaSelectionnee] = useState(null);
 
     const [form, setForm] = useState({
         nom: dog.nom || "",
@@ -34,6 +36,21 @@ const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
         particularites: dog.particularites || "",
         notesProprietaire: dog.notesProprietaire || "",
     });
+    // State resas liées à ce chien
+    const [resasChien, setResasChien] = useState([]);
+
+    // Fetch resas au montage, filtrées par ce chien
+    useEffect(() => {
+        const fetchResas = async () => {
+            const res = await fetchWithAuth(`${API_URL}/api/user/reservations`);
+            if (!res) return;
+            const data = await res.json();
+            // On garde uniquement les resas qui contiennent ce chien
+            const filtrees = data.filter(r => r.dog?.some(d => d._id === dog._id));
+            setResasChien(filtrees);
+        };
+        fetchResas();
+    }, []);
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
     const handleChangeVeto = (e) => setForm({ ...form, veterinaire: { ...form.veterinaire, [e.target.name]: e.target.value } });
@@ -117,6 +134,21 @@ const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
                             <p className="notes-text">{dog.notesProprietaire}</p>
                         </>}
 
+                        {/* Historique des réservations liées à ce chien */}
+                            {resasChien.length > 0 && <>
+                                <h5 className="section-label">Historique des réservations</h5>
+                                {resasChien.map((r, i) => (
+                                    <div key={i} className="info-row clickable" onClick={() => setResaSelectionnee(r)}>
+                                        <span style={{ textTransform: 'capitalize' }}>{r.type}</span>
+                                        <span>{new Date(r.dateDebut).toLocaleDateString('fr-FR')}{r.dateFin && ` - ${new Date(r.dateFin).toLocaleDateString('fr-FR')}`}</span>
+                                        <span className={`resa-card__statut ${
+                                            { "En attente": "en-attente", "Validée": "validee", "Refusée": "refusee", "Annulée": "refusee", "Contre-proposition": "contre-proposition" }[r.statut]
+                                        }`}>{r.statut}</span>
+                                    </div>
+                                ))}
+                            </>}
+
+
                         <div className="dog-modal__actions">
                             <button onClick={() => setEnEdition(true)}>Modifier</button>
                             <button className="btn-danger" onClick={handleDelete}>Supprimer ce chien</button>
@@ -186,6 +218,12 @@ const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
                     </div>
                 )}
             </div>
+            {resaSelectionnee && (
+                <ResaModal
+                    resa={resaSelectionnee}
+                    onClose={() => setResaSelectionnee(null)}
+                />
+            )}
         </div>
     );
 };

@@ -1,0 +1,44 @@
+@use "../settings" as *;
+
+.service {
+    background: $color-bg-card;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    border-radius: 12px;
+    position: relative;
+
+    img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        object-position: center 20%;
+        display: block;
+    }
+
+    h3 {
+        font-family: $font-title;
+        font-size: 1.4rem;
+        color: $color-gold-light;
+        letter-spacing: 0.06em;
+        padding: 1rem 1.25rem 0.5rem;
+        text-align: center;
+    }
+
+    p {
+        font-family: $font-body;
+        font-size: 0.85rem;
+        color: $color-text-muted;
+        line-height: 1.6;
+        padding: 0 1.25rem 0.75rem;
+    }
+
+    span {
+        display: block;
+        font-family: $font-body;
+        font-size: 0.85rem;
+        color: $color-gold;
+        padding: 0.5rem 1.25rem 1.25rem;
+        font-weight: 500;
+    }
+}

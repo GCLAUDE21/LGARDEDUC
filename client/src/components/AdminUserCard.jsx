@@ -1,75 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import defaultDog from '../assets/img/stylish-black-and-white-dog-illustration-png.webp';
-import fetchWithAuth from '../utils/fetchWithAuth';
 
-const AdminUserCard = ({user}) => {
-    const aujourd_hui = new Date();
-    const API_URL = import.meta.env.VITE_API_URL;
-    const [note, setNote] = useState(user.notes || "");
-
-    const passees = (user.reservations || []).filter(r => aujourd_hui > new Date(r.dateFin));
-    const enCours = (user.reservations || []).filter(r => aujourd_hui > new Date(r.dateDebut) && aujourd_hui < new Date(r.dateFin));
-    const aVenir = (user.reservations || []).filter(r => aujourd_hui < new Date(r.dateDebut));
-
-    const handleSaveNote = async () => {
-        const res = await fetchWithAuth(`${API_URL}/api/admin/users/${user._id}/notes`, {
-            method: "PUT",
-            body: JSON.stringify({ notes: note }),
-        });
-        if (!res) return;
-         alert("Note sauvegardée");
-    };
-
+// Card résumé cliquable — toute la logique est dans AdminUserModal
+const AdminUserCard = ({ user, onClick }) => {
     return (
-        <div className="admin-user-card">
-            <section>
-                <h3>Infos Persos</h3>
-                <span>{user.prenom} {user.nom}</span>
-                <span>{user.pseudo}</span>
-                <span>{user.email}</span>
-                <span>{user.telephone}</span>
-                <span>{user.rue}, {user.codePostal} {user.ville}</span>
-                {user.createdAt && !isNaN(new Date(user.createdAt)) &&
-                    <span>Inscrit le : {new Date(user.createdAt).toLocaleDateString('fr-FR')}</span>
-                }
-            </section>
-            <section>
-                <h3>Réservations</h3>
-                <h4>En cours ({enCours.length})</h4>
-                {enCours.map((r) => (
-                    <div key={r._id} className="resa-item">
-                        <span>{r.type} du {new Date(r.dateDebut).toLocaleDateString('fr-FR')} au {new Date(r.dateFin).toLocaleDateString('fr-FR')}</span>
-                    </div>
-                ))}
-                <h4>A Venir ({aVenir.length})</h4>
-                {aVenir.map((r) => (
-                    <div key={r._id} className="resa-item">
-                        <span>{r.type} du {new Date(r.dateDebut).toLocaleDateString('fr-FR')} au {new Date(r.dateFin).toLocaleDateString('fr-FR')}</span>
-                    </div>
-                ))}
-                <h4>Passées ({passees.length})</h4>
-                {passees.map((r) => (
-                    <div key={r._id} className="resa-item">
-                        <span>{r.type} du {new Date(r.dateDebut).toLocaleDateString('fr-FR')} au {new Date(r.dateFin).toLocaleDateString('fr-FR')}</span>
-                    </div>
-                ))}
-            </section>
-            <section>
-                <h3>Chiens</h3>
-                <div className="chiens-grid">
-                {user.chiens.map((dog) => (
-                    <div key={dog._id} className="chien-item">
-                        <img src={dog.photo || defaultDog} alt={dog.nom} />
-                        <span>{dog.nom}</span>
-                    </div>
-                ))}
+        <div className="admin-user-card" onClick={onClick}>
+            <div className="admin-user-card__header">
+                <div className="admin-user-card__identity">
+                    <span className="admin-user-card__name">{user.prenom} {user.nom}</span>
+                    <span className="admin-user-card__pseudo">@{user.pseudo}</span>
                 </div>
-            </section>
-            <section>
-                <h3>Notes</h3>
-                <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Notes internes sur ce client..." />
-                <button type="button" onClick={handleSaveNote}>Enregistrer la note</button>
-            </section>
+                <span className="admin-user-card__email">{user.email}</span>
+            </div>
+            <div className="admin-user-card__footer">
+                <span>{user.ville || "Ville non renseignée"}</span>
+                <div className="admin-user-card__counts">
+                    <span>🐶 {user.chiens?.length || 0} chien(s)</span>
+                    <span>📅 {user.reservations?.length || 0} résa(s)</span>
+                </div>
+            </div>
         </div>
     );
 };

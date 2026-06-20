@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import authRouter from "./routes/auth.js";
 import serviceRouter from "./routes/service.js";
-import resaRouter from "./routes/reservations.js";
 import dogRouter from "./routes/dogs.js";
 import contactRouter from "./routes/contact.js";
 import userRouter from "./routes/user.js";
@@ -24,7 +23,6 @@ mongoDb();
 
 app.use("/api/auth", authRouter);
 app.use("/api/service", serviceRouter);
-app.use("/api/reservations", resaRouter);
 app.use("/api/dogs", dogRouter);
 app.use("/api/user", userRouter);
 app.use("/api/contact", contactRouter);

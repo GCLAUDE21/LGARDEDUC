@@ -63,6 +63,9 @@
 .presentation {
   background: $color-bg-page;
 
+  // =====================
+  // INTRO LAURA
+  // =====================
   .intro {
     display: grid;
     grid-template-columns: 60% 40%;
@@ -70,8 +73,7 @@
 
     @media (max-width: 570px) {
       grid-template-columns: 1fr;
-
-      .right-part { height: 250px; }
+      .right-part { height: 280px;}
     }
 
     .left-part {
@@ -91,7 +93,6 @@
           color: $color-bg-card;
           margin-bottom: 1rem;
           letter-spacing: 0.03em;
-
           @media (max-width: 570px) { font-size: 1.3rem; }
         }
 
@@ -105,26 +106,27 @@
       }
     }
 
+    // Photo Laura
     .right-part {
-      background: url(../../assets/img/492368621_122228702102074373_5334183638493572639_n.jpg) center/cover;
-      background-position: center 15%;
+      background: url(../../assets/img/492368621_122228702102074373_5334183638493572639_n.jpg) top center/cover no-repeat;
       position: relative;
-
-      @media (min-width: 960px) { background-position: center 15%; }
 
       &::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(to right, $color-bg-page 0%, transparent 35%);
+        background: linear-gradient(to right, $color-bg-page 0%, transparent 40%);
 
         @media (max-width: 570px) {
-          background: linear-gradient(to bottom, transparent 70%, $color-bg-page 100%);
+          background: linear-gradient(to bottom, transparent 60%, $color-bg-page 100%);
         }
       }
     }
   }
 
+  // =====================
+  // MES SERVICES
+  // =====================
   .services {
     display: grid;
     grid-template-columns: 40% 60%;
@@ -132,28 +134,25 @@
 
     @media (max-width: 570px) {
       grid-template-columns: 1fr;
-
-      .left-part {
-        height: 200px;
-        order: 2;
-      }
-
+      .left-part--services { height: 280px; }
       .right-part { order: 1; }
+      .left-part--services { order: 2; }
     }
 
-    .left-part {
-      background: url(../../assets/img/label_france_petsitters_large-300x300.png) center/contain no-repeat;
-      background-color: #ede3d4;
+    // Nouvelle image services
+    .left-part--services {
+      background: url(../../assets/img/470675843_122208043706074373_8403228791221883053_n.jpg) top center/cover no-repeat;
       position: relative;
 
+      // Fondu vers la droite en desktop, vers le bas en mobile
       &::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(to left, $color-bg-page 0%, transparent 35%);
+        background: linear-gradient(to left, $color-bg-page 0%, transparent 40%);
 
         @media (max-width: 570px) {
-          background: linear-gradient(to bottom, transparent 70%, $color-bg-page 100%);
+          background: linear-gradient(to bottom, $color-bg-page 0%, transparent 40%);
         }
       }
     }
@@ -175,7 +174,6 @@
           color: $color-bg-card;
           margin-bottom: 1rem;
           letter-spacing: 0.03em;
-
           @media (max-width: 570px) { font-size: 1.3rem; }
         }
 
@@ -191,6 +189,223 @@
   }
 }
 
+// =====================
+// POURQUOI NOUS CHOISIR
+// =====================
+.pourquoi {
+    padding: 3rem 1.25rem;
+    background: $color-bg-card;
+    text-align: center;
+
+    h2 {
+        font-family: $font-title;
+        font-size: 1.6rem;
+        color: $color-gold-light;
+        letter-spacing: 0.04em;
+        margin-bottom: 2rem;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: $color-gold;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+    }
+
+    .pourquoi-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        max-width: 760px;
+        margin: 0 auto;
+
+        @media (max-width: 570px) { grid-template-columns: 1fr; }
+    }
+
+    .pourquoi-item {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid $color-border;
+        border-radius: 12px;
+        padding: 1.5rem 1.25rem;
+        text-align: left;
+
+        .pourquoi-icon {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        h3 {
+            font-family: $font-title;
+            font-size: 1rem;
+            color: $color-gold-light;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-family: $font-body;
+            font-size: 0.83rem;
+            color: $color-text-muted;
+            line-height: 1.7;
+        }
+    }
+}
+
+// =====================
+// COMMENT ÇA MARCHE
+// =====================
+.comment {
+    padding: 3rem 1.25rem;
+    background: $color-bg-page;
+    text-align: center;
+
+    h2 {
+        font-family: $font-title;
+        font-size: 1.6rem;
+        color: $color-bg-card;
+        letter-spacing: 0.04em;
+        margin-bottom: 2rem;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: $color-gold;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+    }
+
+    .comment-steps {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 0.75rem;
+        max-width: 860px;
+        margin: 0 auto;
+
+        @media (max-width: 570px) {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    .comment-step {
+        flex: 1;
+        background: $color-bg-card;
+        border-radius: 12px;
+        padding: 1.5rem 1.25rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        text-align: left;
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(201,146,42,0.15);
+            border: 1px solid $color-gold;
+            border-radius: 50%;
+            font-family: $font-title;
+            font-size: 0.9rem;
+            color: $color-gold-light;
+            margin-bottom: 0.75rem;
+        }
+
+        h3 {
+            font-family: $font-title;
+            font-size: 1rem;
+            color: $color-gold-light;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-family: $font-body;
+            font-size: 0.83rem;
+            color: $color-text-muted;
+            line-height: 1.7;
+        }
+    }
+
+    .comment-step-arrow {
+        font-size: 1.4rem;
+        color: $color-gold;
+        padding-top: 1.75rem;
+        flex-shrink: 0;
+
+        @media (max-width: 570px) {
+            transform: rotate(90deg);
+            padding-top: 0;
+        }
+    }
+}
+
+// =====================
+// LABEL FRANCE PETSITTERS
+// =====================
+.label-section {
+    padding: 3.5rem 1.25rem;
+    background: $color-bg-card;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+
+    @media (max-width: 570px) {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .label-badge {
+        width: 160px;
+        height: 160px;
+        object-fit: contain;
+        flex-shrink: 0;
+        filter: drop-shadow(0 4px 16px rgba(0,0,0,0.2));
+    }
+
+    .label-text {
+        border-left: 3px solid $color-gold;
+        padding-left: 2rem;
+        max-width: 500px;
+
+        @media (max-width: 570px) {
+            border-left: none;
+            border-top: 3px solid $color-gold;
+            padding-left: 0;
+            padding-top: 1rem;
+        }
+
+        h2 {
+            font-family: $font-title;
+            font-size: 1.6rem;
+            color: $color-gold-light;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            font-family: $font-body;
+            font-size: 0.88rem;
+            line-height: 1.9;
+            color: $color-text-muted;
+
+            strong { color: $color-gold-light; }
+        }
+    }
+}
+
+// =====================
+// AVIS
+// =====================
 .avis {
   padding: 3rem 1.25rem;
   text-align: center;
@@ -203,7 +418,6 @@
     margin-bottom: 2rem;
     letter-spacing: 0.04em;
 
-    // trait décoratif sous le titre
     &::after {
       content: '';
       display: block;
@@ -216,6 +430,9 @@
   }
 }
 
+// =====================
+// CAROUSEL
+// =====================
 .carousel {
   display: flex;
   align-items: center;
@@ -232,7 +449,6 @@
     position: relative;
     overflow: hidden;
 
-    // texture diagonale
     &::before {
       content: '';
       position: absolute;
@@ -242,7 +458,6 @@
       z-index: 0;
     }
 
-    // guillemet décoratif
     &::after {
       content: '"';
       position: absolute;
@@ -290,14 +505,64 @@
     align-items: center;
     justify-content: center;
 
-    &:hover {
-      background: rgba(201,146,42,0.25);
-      border-color: $color-gold;
+    &:hover { background: rgba(201,146,42,0.25); border-color: $color-gold; }
+    &:disabled { opacity: 0.3; cursor: default; }
+  }
+}
+
+// =====================
+// CTA FINAL
+// =====================
+.cta {
+    padding: 3.5rem 1.25rem;
+    background: $color-bg-card;
+    text-align: center;
+
+    h2 {
+        font-family: $font-title;
+        font-size: 1.6rem;
+        color: $color-gold-light;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.75rem;
     }
 
-    &:disabled {
-      opacity: 0.3;
-      cursor: default;
+    p {
+        font-family: $font-body;
+        font-size: 0.88rem;
+        color: $color-text-muted;
+        margin-bottom: 2rem;
+        line-height: 1.6;
     }
-  }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cta-btn {
+        font-family: $font-body;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 12px 28px;
+        border-radius: 6px;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        transition: all 0.2s ease;
+
+        &--primary {
+            background: $color-gold;
+            color: $color-bg-card;
+            border: none;
+            &:hover { background: $color-gold-light; }
+        }
+
+        &--secondary {
+            background: transparent;
+            color: $color-gold-light;
+            border: 1px solid $color-gold;
+            &:hover { background: rgba(201,146,42,0.1); }
+        }
+    }
 }

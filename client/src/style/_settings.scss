@@ -1,5 +1,6 @@
+// =====================
 // COLORS
-
+// =====================
 $color-bg-dark: #1e130a;
 $color-bg-card: #2e1f0a;
 $color-text: #f5e9d0;
@@ -10,8 +11,9 @@ $color-bg-page: #f5ede0;
 $color-border: rgba(201, 146, 42, 0.2);
 $color-border-strong: rgba(201, 146, 42, 0.25);
 
-//FONTS 
-
+// =====================
+// FONTS
+// =====================
 @font-face {
     font-family: 'Playfair';
     src: url('../assets/fonts/Playfair_Display_SC/PlayfairDisplaySC-Bold.ttf');
@@ -24,21 +26,18 @@ $color-border-strong: rgba(201, 146, 42, 0.25);
     font-style: normal;
     font-weight: normal;
 }
-
 @font-face {
     font-family: 'Lato';
     src: url('../assets/fonts/Lato/Lato-Bold.ttf');
     font-style: normal;
     font-weight: bold;
 }
-
 @font-face {
     font-family: 'Lato';
     src: url('../assets/fonts/Lato/Lato-Light.ttf');
     font-style: normal;
     font-weight: normal;
 }
-
 @font-face {
     font-family: 'Lato';
     src: url('../assets/fonts/Lato/Lato-Italic.ttf');
@@ -53,4 +52,57 @@ $font-thin: 300;
 $font-regular: 400;
 $font-bold: 700;
 
+// =====================
+// MIXINS
+// =====================
 
+// Input / textarea standard
+@mixin input-style {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid $color-border;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: $font-body;
+    font-size: 0.85rem;
+    color: $color-text;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    &:focus { border-color: $color-gold; }
+}
+
+// Bouton gold
+@mixin btn-gold {
+    background: rgba(201,146,42,0.15);
+    border: 1px solid $color-gold;
+    border-radius: 6px;
+    font-family: $font-body;
+    color: $color-gold-light;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover { background: rgba(201,146,42,0.25); }
+}
+
+// Bouton danger
+@mixin btn-danger {
+    background: rgba(180,40,40,0.15);
+    border: 1px solid rgba(180,40,40,0.4);
+    border-radius: 6px;
+    font-family: $font-body;
+    color: #e07070;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover { background: rgba(180,40,40,0.25); }
+}
+
+// Texture SVG de fond (cards)
+@mixin texture-bg {
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+    }
+}

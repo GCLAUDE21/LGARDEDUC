@@ -78,8 +78,8 @@ const Header = () => {
                     <Link className={location.pathname === "/" ? "active" : "" } onClick={() => setMenu(false)} to="/"> <AiOutlineHome /> Index</Link>
                     <Link className={location.pathname === "/prestations" ? "active" : "" } onClick={() => setMenu(false)} to="/prestations"> <FiGrid /> Prestations</Link>
                     <Link className={location.pathname === "/contact" ? "active" : "" } onClick={() => setMenu(false)} to="/contact"> <FiMail /> Contact</Link>
-                   { tokenUser && <Link className={location.pathname === "/reservations" ? "active" : "" } onClick={() => setMenu(false)} to="/reservations"> <FiCalendar /> Mes Réservations</Link>}
                    { tokenUser && <Link className={location.pathname === "/profil" ? "active" : "" } onClick={() => setMenu(false)} to="/profil"> <FaDog /> Mon Profil</Link>}
+                   { tokenUser && <Link className={location.pathname === "/reservations" ? "active" : "" } onClick={() => setMenu(false)} to="/reservations"> <FiCalendar /> Mes Réservations</Link>}
                     { !tokenUser && <Link className={location.pathname === "/auth" ? "active" : "" } onClick={() => setMenu(false)} to="/auth"> <FiLogOut /> Authentification</Link>}
                     { isAdmin && (
                     <Link className={location.pathname === "/admin" ? "active" : ""} onClick={() => setMenu(false)} to="/admin">

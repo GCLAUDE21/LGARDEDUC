@@ -9,7 +9,7 @@
   h2 {
     font-family: $font-title;
     font-size: 1.6rem;
-    color: $color-bg-card;
+    color: $color-gold-light;
     letter-spacing: 0.05em;
     margin-bottom: 1.25rem;
     position: relative;
@@ -34,240 +34,245 @@
     margin: 1.25rem 0 0.5rem;
     padding-bottom: 4px;
     border-bottom: 1px solid $color-border-strong;
+
+    // Section contre-proposition : mise en avant
+    &.section-contre-prop {
+      color: #a5b4fc;
+      border-color: rgba(99,102,241,0.3);
+    }
   }
 
-  .mes-reservations {
-    margin-bottom: 2.5rem;
-  }
+  .mes-reservations { margin-bottom: 2.5rem; }
 
-  .new-reservation {
+  // =====================
+  // INTRO
+  // =====================
+  .reservations-intro {
     background: $color-bg-card;
     border-radius: 12px;
-    padding: 1.75rem 1.5rem;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-    position: relative;
-    overflow: hidden;
+    padding: 1.5rem 1.25rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
+    h2 { margin-bottom: 0.75rem; }
+
+    p {
+      font-family: $font-body;
+      font-size: 0.88rem;
+      color: $color-text-muted;
+      line-height: 1.6;
+      margin-bottom: 1rem;
     }
 
-    h2 {
-      color: $color-gold-light;
-      z-index: 1;
-      position: relative;
-      &::after { background: rgba(201,146,42,0.4); }
-    }
-
-    form {
+    .reservations-intro-types {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      position: relative;
-      z-index: 1;
+      gap: 0.75rem;
+      margin: 1rem 0;
+
+      .intro-type {
+        border-left: 2px solid $color-gold;
+        padding-left: 0.85rem;
+
+        h4 {
+          font-family: $font-body;
+          font-size: 0.82rem;
+          color: $color-gold-light;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          margin-bottom: 0.25rem;
+        }
+
+        p { margin-bottom: 0; font-size: 0.83rem; }
+      }
     }
 
-    label {
-      font-family: $font-body;
-      font-size: 0.75rem;
-      color: $color-text-muted;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 0.5rem;
+    .reservations-intro-notice {
+      background: rgba(201,146,42,0.08);
+      border: 1px solid rgba(201,146,42,0.2);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      margin-bottom: 0;
     }
+  }
 
-    input, select, textarea {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid $color-border;
-      border-radius: 6px;
-      padding: 10px 14px;
-      font-family: $font-body;
-      font-size: 0.9rem;
-      color: $color-text;
-      outline: none;
-      transition: border-color 0.2s ease;
-      width: 100%;
+  // =====================
+  // HEADER ONGLETS + BOUTON
+  // =====================
+  .reservations-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
 
-      &::placeholder { color: rgba(245,233,208,0.25); }
-      &:focus { border-color: $color-gold; }
-      option { background: $color-bg-card; color: $color-text; }
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
-      cursor: pointer;
-    }
-
-    textarea { resize: vertical; min-height: 90px; }
-
-    .chiensChoisis {
+    .onglets {
       display: flex;
+      gap: 0.5rem;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
 
-      span {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(201,146,42,0.15);
-        border: 1px solid rgba(201,146,42,0.3);
-        color: $color-gold-light;
-        font-size: 0.8rem;
-        padding: 4px 10px;
-        border-radius: 20px;
+      .onglet {
         font-family: $font-body;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid $color-border;
+        background: $color-bg-card;
+        color: $color-text-muted;
+        cursor: pointer;
+        transition: all 0.2s ease;
 
-        button {
-          background: none;
-          border: none;
-          color: rgba(224,185,106,0.6);
-          cursor: pointer;
-          font-size: 0.9rem;
-          padding: 0;
-          line-height: 1;
-          &:hover { color: $color-gold-light; }
+        &:hover { border-color: $color-gold; color: $color-gold-light; }
+        &.actif {
+          background: rgba(201,146,42,0.15);
+          border-color: rgba(201,146,42,0.4);
+          color: $color-gold-light;
         }
       }
     }
 
-    & > form > button {
-      margin-top: 1rem;
-      background: $color-gold;
-      color: $color-text;
-      border: none;
+    .btn-nouvelle-resa {
+      font-family: $font-body;
+      font-size: 0.82rem;
+      padding: 8px 16px;
       border-radius: 6px;
-      padding: 11px;
-      font-family: $font-body;
-      font-size: 0.9rem;
+      border: none;
+      background: $color-gold;
+      color: $color-bg-card;
       font-weight: 500;
-      letter-spacing: 0.03em;
       cursor: pointer;
+      white-space: nowrap;
       transition: background 0.2s ease;
-      &:hover { background: $color-gold-light; color: $color-bg-card; }
+
+      &:hover { background: $color-gold-light; }
+      &.disabled {
+        background: rgba(201,146,42,0.2);
+        color: rgba(201,146,42,0.4);
+        cursor: not-allowed;
+      }
     }
   }
-}
 
-.resa-card {
-  background: $color-bg-card;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.3);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
+  // =====================
+  // MODALE NOUVELLE RÉSERVATION
+  // =====================
+  .modal-overlay {
+    position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  &__header {
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.25rem 0.75rem;
-    position: relative;
-    z-index: 1;
-    border-bottom: 1px solid rgba(201,146,42,0.15);
-  }
+    justify-content: center;
+    padding: 1.25rem;
 
-  &__type {
-    font-family: $font-title;
-    font-size: 1.1rem;
-    color: $color-gold-light;
-    letter-spacing: 0.04em;
-    text-transform: capitalize;
-  }
+    .modal-content {
+      background: $color-bg-card;
+      border-radius: 12px;
+      padding: 1.75rem 1.5rem;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
 
-  &__statut {
-    font-family: $font-body;
-    font-size: 0.75rem;
-    padding: 3px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
-    border: 1px solid;
+      h2 {
+        color: $color-gold-light;
+        &::after { background: rgba(201,146,42,0.4); }
+      }
 
-    &.en-attente {
-      background: rgba(201,146,42,0.15);
-      color: $color-gold-light;
-      border-color: rgba(201,146,42,0.3);
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        color: $color-text-muted;
+        font-size: 1.4rem;
+        cursor: pointer;
+        line-height: 1;
+        &:hover { color: $color-text; }
+      }
+
+      .new-reservation-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+
+        label {
+          font-family: $font-body;
+          font-size: 0.75rem;
+          color: $color-text-muted;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          margin-top: 0.5rem;
+        }
+
+        input, select, textarea {
+          @include input-style;
+          padding: 10px 14px;
+          font-size: 0.9rem;
+          &::placeholder { color: rgba(245,233,208,0.25); }
+          option { background: $color-bg-card; color: $color-text; }
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+          filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
+          cursor: pointer;
+        }
+
+        textarea { resize: vertical; min-height: 90px; }
+
+        .chiensChoisis {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin-top: 4px;
+
+          span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(201,146,42,0.15);
+            border: 1px solid rgba(201,146,42,0.3);
+            color: $color-gold-light;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-family: $font-body;
+
+            button {
+              background: none;
+              border: none;
+              color: rgba(224,185,106,0.6);
+              cursor: pointer;
+              font-size: 0.9rem;
+              padding: 0;
+              line-height: 1;
+              &:hover { color: $color-gold-light; }
+            }
+          }
+        }
+
+        & > button {
+          margin-top: 1rem;
+          background: $color-gold;
+          color: $color-text;
+          border: none;
+          border-radius: 6px;
+          padding: 11px;
+          font-family: $font-body;
+          font-size: 0.9rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s ease;
+          &:hover { background: $color-gold-light; color: $color-bg-card; }
+        }
+      }
     }
-    &.validee {
-      background: rgba(34,197,94,0.15);
-      color: #4ade80;
-      border-color: rgba(34,197,94,0.3);
-    }
-    &.refusee {
-      background: rgba(239,68,68,0.15);
-      color: #f87171;
-      border-color: rgba(239,68,68,0.3);
-    }
   }
-
-  &__body {
-    padding: 0.85rem 1.25rem;
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  &__dates {
-    font-family: $font-body;
-    font-size: 0.82rem;
-    color: $color-text-muted;
-    letter-spacing: 0.02em;
-  }
-
-  &__chiens {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 6px 0;
-  }
-
-  &__chien {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid $color-gold;
-      box-shadow: 0 0 0 3px rgba(201,146,42,0.15);
-    }
-
-    span {
-      font-family: $font-body;
-      font-size: 0.85rem;
-      color: rgba(245,233,208,0.8);
-    }
-  }
-
-  &.annulee {
-    background: rgba(156,163,175,0.15);
-    color: #9ca3af;
-    border-color: rgba(156,163,175,0.3);
-}
 }

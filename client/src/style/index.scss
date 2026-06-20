@@ -1,16 +1,19 @@
 @use "./_settings" as *;
 @use "./components/_header";
-@use "./components/_service";
 @use "./components/_dogCard";
+@use "./components/resaCard";
 @use "./components/_footer";
-@use "./components/loader";
-@use "./components/dogModal";
-@use "./components/resaModal";
+@use "./components/_loader";
+@use "./components/serviceCard";
+@use "./components/_dogModal";
+@use "./components/_resaModal";
+@use "./components/adminResaModal";
 @use "./pages/index";
 @use "./pages/auth";
 @use "./pages/profil";
 @use "./pages/contact";
 @use "./pages/reservations";
+@use "./pages/prestations";
 @use "./pages/admin";
 
 * {

@@ -1,0 +1,376 @@
+@use "../settings" as *;
+
+// =====================
+// OVERLAY + CONTENU MODALE
+// =====================
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.modal-content {
+  background: $color-bg-card;
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+
+  // Forcer les couleurs sur tous les éléments texte
+  p, label, h4, span { color: $color-text; }
+
+  input, textarea, select {
+    @include input-style;
+    padding: 8px 10px;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
+    cursor: pointer;
+  }
+
+  // Bouton fermeture
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: $color-text-muted;
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+    &:hover { color: $color-text; }
+  }
+}
+
+// =====================
+// EN-TÊTE MODALE RÉSERVATION
+// =====================
+.modal-resa-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+
+  h2 {
+    font-family: $font-title;
+    font-size: 1.2rem;
+    color: $color-gold-light !important;
+    text-transform: capitalize;
+    margin-bottom: 0;
+  }
+}
+
+// =====================
+// SECTIONS MODALE
+// =====================
+.modal-resa-section {
+  border-top: 1px solid $color-border;
+  padding: 0.85rem 0;
+  &:first-of-type { border-top: none; }
+
+  h4 {
+    font-family: $font-body;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $color-gold;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-family: $font-body;
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    line-height: 1.5;
+    margin-bottom: 0.25rem;
+  }
+
+  textarea {
+    @include input-style;
+    padding: 8px 10px;
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  input[type="date"] {
+    @include input-style;
+    padding: 8px 10px;
+    margin-bottom: 0.25rem;
+  }
+
+  // Bouton générique
+  & > button {
+    @include btn-gold;
+    margin-top: 0.5rem;
+    padding: 5px 12px;
+    font-size: 0.78rem;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.5rem;
+
+    button {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-family: $font-body;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      &:first-child { @include btn-gold; padding: 6px 14px; }
+      &:last-child {
+        background: transparent;
+        border: 1px solid $color-border;
+        color: $color-text-muted;
+        &:hover { border-color: $color-gold; color: $color-text; }
+      }
+    }
+  }
+
+  // Contre-proposition mise en avant
+  &--highlight {
+    background: rgba(99,102,241,0.06);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    h4 { color: #a5b4fc; }
+    p { color: rgba(165,180,252,0.8); }
+  }
+
+  // Motif refus / danger
+  &--danger {
+    background: rgba(180,40,40,0.06);
+    border: 1px solid rgba(180,40,40,0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    h4 { color: #e07070; }
+    p { color: rgba(224,112,112,0.8); }
+  }
+
+  .empty { font-style: italic; opacity: 0.4; font-size: 0.82rem; }
+}
+
+// =====================
+// BOUTONS D'ACTION RÉSERVATION
+// =====================
+.resa-card__actions {
+  display: flex;
+  gap: 8px;
+  padding: 0.75rem 0;
+  flex-wrap: wrap;
+
+  .btn-valider {
+    padding: 6px 14px;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.4);
+    border-radius: 6px;
+    font-family: $font-body;
+    font-size: 0.8rem;
+    color: #4ade80;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover { background: rgba(34,197,94,0.25); }
+  }
+
+  .btn-refuser { @include btn-danger; padding: 6px 14px; font-size: 0.8rem; }
+
+  .btn-contre-prop {
+    padding: 6px 14px;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.4);
+    border-radius: 6px;
+    font-family: $font-body;
+    font-size: 0.8rem;
+    color: #a5b4fc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover { background: rgba(99,102,241,0.25); }
+  }
+}
+
+// =====================
+// STATUT CONTRE-PROPOSITION
+// =====================
+.resa-card__statut.contre-proposition {
+  background: rgba(99,102,241,0.15);
+  color: #a5b4fc;
+  border-color: rgba(99,102,241,0.3);
+}
+
+.resa-card__contre-prop-hint {
+  font-family: $font-body;
+  font-size: 0.78rem;
+  color: #a5b4fc;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+// =====================
+// ÉVÉNEMENTS / CARNET DE BORD
+// =====================
+.evenement-admin {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 0.5rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: $color-gold;
+    }
+  }
+
+  p { font-size: 0.82rem; color: $color-text-muted; line-height: 1.4; }
+  strong { color: $color-gold-light; font-size: 0.75rem; }
+  img { width: 100%; border-radius: 6px; object-fit: cover; max-height: 150px; }
+
+  .btn-delete-small {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    &:hover { color: #e74c3c; }
+  }
+}
+
+.evenement-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 0.5rem;
+
+  label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $color-gold-light;
+  }
+
+  input, textarea {
+    @include input-style;
+    padding: 6px 10px;
+    resize: vertical;
+  }
+
+  textarea { min-height: 60px; }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+
+    button {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-family: $font-body;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      &:first-child { @include btn-gold; padding: 5px 12px; }
+      &:last-child {
+        background: transparent;
+        border: 1px solid $color-border;
+        color: $color-text-muted;
+        &:hover { border-color: $color-gold; color: $color-text; }
+      }
+    }
+  }
+}
+
+// =====================
+// PROPRIÉTAIRE CLIQUABLE
+// =====================
+.clickable-link {
+  cursor: pointer;
+  color: $color-gold-light !important;
+  text-decoration: underline;
+  transition: opacity 0.15s ease;
+  &:hover { opacity: 0.7; }
+}
+
+// =====================
+// CHIEN CLIQUABLE
+// =====================
+.resa-card__chien.clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  &:hover { transform: translateY(-2px); }
+}
+
+// =====================
+// FORMULAIRE REFUS / CONTRE-PROPOSITION / ANNULATION
+// =====================
+.resa-card__refus {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 0.75rem;
+
+  label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $color-gold;
+  }
+
+  textarea {
+    @include input-style;
+    padding: 8px 10px;
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  input[type="date"] {
+    @include input-style;
+    padding: 8px 10px;
+    margin-bottom: 0.25rem;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.25rem;
+
+    button {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-family: $font-body;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      &:first-child { @include btn-gold; padding: 6px 14px; }
+      &:last-child {
+        background: transparent;
+        border: 1px solid $color-border;
+        color: $color-text-muted;
+        &:hover { border-color: $color-gold; color: $color-text; }
+      }
+    }
+  }
+}

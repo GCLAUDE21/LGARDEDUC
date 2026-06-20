@@ -20,12 +20,12 @@ const DogCard = ({ dog, onDelete, onUpdate }) => {
 
     return (
         <>
-            <div className="dogcard">
+            <div className="dogcard" onClick={() => setShowModal(true)}>
                 <div className="photo">
                     <img src={dog.photo || defaultDog} alt={dog.nom} />
                 </div>
                 <div className="infodog">
-                    <h4 className="dog-name" onClick={() => setShowModal(true)}>{dog.nom}</h4>
+                    <h4 className="dog-name">{dog.nom}</h4>
                     <label>Race</label>
                     <span>{dog.race}</span>
                     <label>Age</label>

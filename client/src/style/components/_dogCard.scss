@@ -10,15 +10,15 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     overflow: hidden;
     position: relative;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
-        pointer-events: none;
-        z-index: 0;
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(0,0,0,0.4);
     }
+
+    @include texture-bg;
 
     & .photo {
         display: flex;
@@ -65,11 +65,6 @@
             color: $color-gold-light;
             margin-bottom: 8px;
             letter-spacing: 0.04em;
-            cursor: pointer;
-            position: relative;
-            z-index: 2;
-
-            &:hover { text-decoration: underline; }
         }
     }
 
@@ -87,9 +82,6 @@
         transition: color 0.2s;
         z-index: 2;
 
-        &:hover {
-            color: #e74c3c;
-            background: none;
-        }
+        &:hover { color: #e74c3c; }
     }
 }
