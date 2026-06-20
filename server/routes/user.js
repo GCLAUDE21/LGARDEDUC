@@ -3,14 +3,13 @@ import UserModel from "../models/userModel.js";
 import authMiddleware from "../middlewares/auth.js";
 import DogModel from "../models/dogModel.js";
 import ResaModel from "../models/resaModel.js";
-import transporter from "../utils/mailer.js";
+import { sendMail } from "../utils/mailer.js";
 
 const router = express.Router();
 
 router.get("/profil", authMiddleware, async (req, res) => {
   try {
     const infosUser = await UserModel.findById(req.user.id).select("-password");
-
     res.send(infosUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -30,21 +29,21 @@ router.put("/profil", authMiddleware, async (req, res) => {
       codePostal,
       ville,
     } = req.body;
+
     const existingPseudo = await UserModel.findOne({
       pseudo,
       _id: { $ne: req.user.id },
     });
-    if (existingPseudo) {
+    if (existingPseudo)
       return res.status(400).json({ message: "Ce pseudo est déjà pris." });
-    }
 
     const existingEmail = await UserModel.findOne({
       email,
       _id: { $ne: req.user.id },
     });
-    if (existingEmail) {
+    if (existingEmail)
       return res.status(400).json({ message: "Cet email est déjà utilisé." });
-    }
+
     const updatedUser = await UserModel.findByIdAndUpdate(
       req.user.id,
       {
@@ -70,14 +69,12 @@ router.put("/profil", authMiddleware, async (req, res) => {
 router.get("/dogs", authMiddleware, async (req, res) => {
   try {
     const chiensUser = await DogModel.find({ owner: req.user.id });
-
     res.send(chiensUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// Récupérer un chien par son ID
 router.get("/dogs/:id", authMiddleware, async (req, res) => {
   try {
     const chien = await DogModel.findById(req.params.id);
@@ -93,7 +90,6 @@ router.get("/reservations", authMiddleware, async (req, res) => {
     const resasUser = await ResaModel.find({ owner: req.user.id }).populate(
       "dog",
     );
-
     res.send(resasUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -109,20 +105,27 @@ router.post("/reservations", authMiddleware, async (req, res) => {
       "email prenom pseudo",
     );
 
-    // Email à Laura
-    await transporter.sendMail({
-      from: "L'Gard'Educ <guillaumeclaude@icloud.com>",
+    await sendMail({
       to: process.env.LAURA_EMAIL,
       subject: "🐾 Nouvelle demande de réservation",
-      text: `Bonjour Laura,\n\nUne nouvelle demande de réservation vient d'être soumise sur lgardeduc.fr.\n\nDétails :\n- Client : ${user.prenom || user.pseudo} (${user.email})\n- Type : ${resasUser.type}\n- Date : ${new Date(resasUser.dateDebut).toLocaleDateString("fr-FR")}${resasUser.dateFin ? ` au ${new Date(resasUser.dateFin).toLocaleDateString("fr-FR")}` : ""}${resasUser.notes ? `\n- Notes du client : ${resasUser.notes}` : ""}\n\nConnectez-vous sur lgardeduc.fr pour valider, refuser ou faire une contre-proposition.\n\nCordialement,\nL'Gard'Educ`,
+      html: `<p>Bonjour Laura,</p>
+        <p>Une nouvelle demande de réservation vient d'être soumise.</p>
+        <p><strong>Client :</strong> ${user.prenom || user.pseudo} (${user.email})<br>
+        <strong>Type :</strong> ${resasUser.type}<br>
+        <strong>Date :</strong> ${new Date(resasUser.dateDebut).toLocaleDateString("fr-FR")}${resasUser.dateFin ? ` au ${new Date(resasUser.dateFin).toLocaleDateString("fr-FR")}` : ""}
+        ${resasUser.notes ? `<br><strong>Notes :</strong> ${resasUser.notes}` : ""}</p>
+        <p>Connectez-vous sur lgardeduc.fr pour valider, refuser ou faire une contre-proposition.</p>`,
     });
 
-    // Email à l'user
-    await transporter.sendMail({
-      from: "L'Gard'Educ <guillaumeclaude@icloud.com>",
+    await sendMail({
       to: user.email,
       subject: "📋 Demande de réservation reçue",
-      text: `Bonjour ${user.prenom || user.pseudo},\n\nNous avons bien reçu votre demande de réservation. Laura l'examinera dans les meilleurs délais et vous en informera par email.\n\nRécapitulatif de votre demande :\n- Type : ${resasUser.type}\n- Date : ${new Date(resasUser.dateDebut).toLocaleDateString("fr-FR")}${resasUser.dateFin ? ` au ${new Date(resasUser.dateFin).toLocaleDateString("fr-FR")}` : ""}${resasUser.notes ? `\n- Vos notes : ${resasUser.notes}` : ""}\n\nSi vous avez des questions, n'hésitez pas à nous contacter via le formulaire de contact sur lgardeduc.fr.\n\nCordialement,\nLaura\nL'Gard'Educ`,
+      html: `<p>Bonjour ${user.prenom || user.pseudo},</p>
+        <p>Nous avons bien reçu votre demande de réservation. Laura l'examinera dans les meilleurs délais.</p>
+        <p><strong>Type :</strong> ${resasUser.type}<br>
+        <strong>Date :</strong> ${new Date(resasUser.dateDebut).toLocaleDateString("fr-FR")}${resasUser.dateFin ? ` au ${new Date(resasUser.dateFin).toLocaleDateString("fr-FR")}` : ""}
+        ${resasUser.notes ? `<br><strong>Vos notes :</strong> ${resasUser.notes}` : ""}</p>
+        <p>Cordialement,<br>Laura<br>L'Gard'Educ</p>`,
     });
 
     res.send(resasUser);
@@ -132,7 +135,6 @@ router.post("/reservations", authMiddleware, async (req, res) => {
   }
 });
 
-// Accepter la contre-proposition de Laura
 router.put(
   "/reservations/:id/contre-proposition/accepter",
   authMiddleware,
@@ -156,12 +158,14 @@ router.put(
         { new: true },
       );
 
-      // Email à Laura pour la prévenir de l'acceptation
-      await transporter.sendMail({
-        from: "L'Gard'Educ <guillaumeclaude@icloud.com>",
+      await sendMail({
         to: process.env.LAURA_EMAIL,
         subject: "✅ Contre-proposition acceptée",
-        text: `Bonjour Laura,\n\n${resa.owner.prenom || resa.owner.pseudo} a accepté votre contre-proposition.\n\n- Type : ${resa.type}\n- Nouvelle date : ${new Date(resa.contreProposition.dateDebut).toLocaleDateString("fr-FR")}${resa.contreProposition.dateFin ? ` au ${new Date(resa.contreProposition.dateFin).toLocaleDateString("fr-FR")}` : ""}\n\nLa réservation est maintenant confirmée.\n\nCordialement,\nL'Gard'Educ`,
+        html: `<p>Bonjour Laura,</p>
+        <p>${resa.owner.prenom || resa.owner.pseudo} a accepté votre contre-proposition.</p>
+        <p><strong>Type :</strong> ${resa.type}<br>
+        <strong>Nouvelle date :</strong> ${new Date(resa.contreProposition.dateDebut).toLocaleDateString("fr-FR")}${resa.contreProposition.dateFin ? ` au ${new Date(resa.contreProposition.dateFin).toLocaleDateString("fr-FR")}` : ""}</p>
+        <p>La réservation est maintenant confirmée.</p>`,
       });
 
       res.json(updated);
@@ -171,7 +175,6 @@ router.put(
   },
 );
 
-// Refuser la contre-proposition de Laura
 router.put(
   "/reservations/:id/contre-proposition/refuser",
   authMiddleware,
@@ -188,12 +191,14 @@ router.put(
       resa.contreProposition = null;
       await resa.save();
 
-      // Email à Laura pour la prévenir du refus
-      await transporter.sendMail({
-        from: "L'Gard'Educ <guillaumeclaude@icloud.com>",
+      await sendMail({
         to: process.env.LAURA_EMAIL,
         subject: "❌ Contre-proposition refusée",
-        text: `Bonjour Laura,\n\n${resa.owner.prenom || resa.owner.pseudo} a refusé votre contre-proposition pour la réservation suivante :\n\n- Type : ${resa.type}\n- Date initiale : ${new Date(resa.dateDebut).toLocaleDateString("fr-FR")}\n\nLa réservation est passée au statut "Refusée". Vous pouvez contacter ce client directement à l'adresse : ${resa.owner.email}\n\nCordialement,\nL'Gard'Educ`,
+        html: `<p>Bonjour Laura,</p>
+        <p>${resa.owner.prenom || resa.owner.pseudo} a refusé votre contre-proposition.</p>
+        <p><strong>Type :</strong> ${resa.type}<br>
+        <strong>Date initiale :</strong> ${new Date(resa.dateDebut).toLocaleDateString("fr-FR")}</p>
+        <p>Vous pouvez contacter ce client à : ${resa.owner.email}</p>`,
       });
 
       res.json(resa);
@@ -203,7 +208,6 @@ router.put(
   },
 );
 
-// Mettre à jour les notes d'une réservation
 router.put("/reservations/:id", authMiddleware, async (req, res) => {
   try {
     const resa = await ResaModel.findOneAndUpdate(

@@ -2,7 +2,7 @@ import UserModel from "../models/userModel.js";
 import express from "express";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import transporter from "../utils/mailer.js";
+import { sendMail } from "../utils/mailer.js";
 import authMiddleware from "../middlewares/auth.js";
 
 const router = express.Router();
@@ -25,8 +25,7 @@ router.post("/signup", async (req, res) => {
     const confirmUrl = `${process.env.FRONTEND_URL}/confirmer-email?token=${emailToken}`;
 
     try {
-      const info = await transporter.sendMail({
-        from: `"L Gard'Educ" <${process.env.LAURA_EMAIL}>`,
+      await sendMail({
         to: user.email,
         subject: "Confirmez votre inscription",
         html: `
@@ -46,7 +45,7 @@ router.post("/signup", async (req, res) => {
           <p>Si vous n'êtes pas à l'origine de cette inscription, ignorez ce message.</p>
         `,
       });
-      console.log("Mail envoyé :", info.messageId);
+      console.log("Mail envoyé");
     } catch (mailErr) {
       console.error("Erreur envoi mail :", mailErr);
     }
@@ -103,9 +102,11 @@ router.post("/signin", async (req, res) => {
     }
 
     if (!user.isVerified) {
-      return res.status(403).json({
-        message: "Veuillez confirmer votre email avant de vous connecter.",
-      });
+      return res
+        .status(403)
+        .json({
+          message: "Veuillez confirmer votre email avant de vous connecter.",
+        });
     }
 
     const isValid = await user.isValidPassword(req.body.password);
