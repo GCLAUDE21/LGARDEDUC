@@ -16,15 +16,21 @@ const ConfirmerEmail = () => {
 
         const verifier = async () => {
             try {
-                const response = await fetch(`${API_URL}/api/auth/verify-email?token=${token}`);
+                const response = await fetch(`${API_URL}/api/auth/verify-email?token=${token}`, {
+                    signal: AbortSignal.timeout(30000) // attend jusqu'à 30 secondes
+                });
                 if (response.ok) {
                     setStatut("succes");
                     setTimeout(() => navigate("/auth"), 3000);
                 } else {
                     setStatut("erreur");
                 }
-            } catch {
-                setStatut("erreur");
+            } catch (err) {
+                if (err.name === "TimeoutError") {
+                    setStatut("timeout");
+                } else {
+                    setStatut("erreur");
+                }
             }
         };
 
@@ -34,7 +40,13 @@ const ConfirmerEmail = () => {
     return (
         <section className="auth">
             <div className="connexion">
-                {statut === "chargement" && <p>Vérification en cours...</p>}
+                {statut === "chargement" && <p>Vérification en cours, merci de patienter...</p>}
+                {statut === "timeout" && (
+                    <>
+                        <h3>Délai dépassé</h3>
+                        <p>Le serveur met trop de temps à répondre. Réessayez dans quelques secondes.</p>
+                    </>
+                )}
                 {statut === "succes" && (
                     <>
                         <h3>Email confirmé !</h3>

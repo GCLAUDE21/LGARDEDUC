@@ -29,6 +29,9 @@ app.use("/api/dogs", dogRouter);
 app.use("/api/user", userRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/admin", adminRouter);
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
 
 app.listen(PORT, () => {
   console.log("Server is running on port :" + PORT);
