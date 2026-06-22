@@ -20,7 +20,7 @@ const DogCard = ({ dog, onDelete, onUpdate }) => {
 
     return (
         <>
-            <div className="dogcard" onClick={() => setShowModal(true)}>
+            <div className="dogcard" onClick={() => { setShowModal(true); document.body.style.overflow = 'hidden'; }}>
                 <div className="photo">
                     <img src={dog.photo || defaultDog} alt={dog.nom} />
                 </div>
@@ -35,7 +35,7 @@ const DogCard = ({ dog, onDelete, onUpdate }) => {
             {showModal && (
                 <DogModal
                     dog={dog}
-                    onClose={() => setShowModal(false)}
+                    onClose={() => { setShowModal(false); document.body.style.overflow = ''; }}
                     onDelete={onDelete}
                     onUpdate={onUpdate}
                 />

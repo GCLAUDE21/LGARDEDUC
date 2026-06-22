@@ -8,6 +8,7 @@ import dogRouter from "./routes/dogs.js";
 import contactRouter from "./routes/contact.js";
 import userRouter from "./routes/user.js";
 import adminRouter from "./routes/admin.js";
+import availabilityRouter from "./routes/availability.js";
 import { mongoDb } from "./config/db.js";
 
 const PORT = process.env.PORT || 5000;
@@ -29,6 +30,7 @@ app.use("/api/dogs", dogRouter);
 app.use("/api/user", userRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/availability", availabilityRouter);
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });

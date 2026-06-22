@@ -6,6 +6,7 @@ import AdminServiceCard from '../components/AdminServiceCard';
 import Loader from '../components/Loader';
 import fetchWithAuth from '../utils/fetchWithAuth';
 import AdminUserModal from '../components/AdminUserModal';
+import AdminAvailability from '../components/AdminAvailability';
 
 const ONGLETS_RESA = [
     { label: 'Pension', value: 'pension' },
@@ -17,21 +18,17 @@ const ONGLETS_RESA = [
 const Admin = () => {
     const API_URL = import.meta.env.VITE_API_URL;
 
-    // --- State global ---
     const [loading, setLoading] = useState(true);
     const [onglet, setOnglet] = useState('reservations');
 
-    // --- State réservations ---
     const [reservations, setReservations] = useState([]);
     const [ongletResa, setOngletResa] = useState('pension');
     const [resaSelectionnee, setResaSelectionnee] = useState(null);
 
-    // --- State utilisateurs ---
     const [users, setUsers] = useState([]);
     const [userSelectionne, setUserSelectionne] = useState(null);
     const [recherche, setRecherche] = useState("");
 
-    // --- Filtrage utilisateurs par recherche ---
     const usersFiltres = users.filter(u => {
         const q = recherche.toLowerCase();
         return (
@@ -45,14 +42,12 @@ const Admin = () => {
         );
     });
 
-    // --- State prestations ---
     const [services, setServices] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [newService, setNewService] = useState({
         type: "", description: "", prix: "", unite: "", image: "",
     });
 
-    // --- Fetch initial : réservations, utilisateurs, prestations ---
     useEffect(() => {
         const fetchAll = async () => {
             try {
@@ -79,7 +74,6 @@ const Admin = () => {
         fetchAll();
     }, []);
 
-    // --- Fetch utilisateurs séparé (appelé après chaque action sur une resa) ---
     const fetchUsers = async () => {
         const res = await fetchWithAuth(`${API_URL}/api/admin/users`);
         if (!res) return;
@@ -87,9 +81,6 @@ const Admin = () => {
         setUsers(data);
     };
 
-    
-
-    // --- Ajout d'une prestation ---
     const handleChangeNew = (e) => setNewService({ ...newService, [e.target.name]: e.target.value });
 
     const handleAdd = async () => {
@@ -101,24 +92,26 @@ const Admin = () => {
         window.location.reload();
     };
 
-    // --- Suppression d'une resa du state ---
-        const handleDeleteResa = (resaId) => {
-            setReservations(prev => prev.filter(r => r._id !== resaId));
-            setResaSelectionnee(null);
-        };
+    const handleDeleteResa = (resaId) => {
+        setReservations(prev => prev.filter(r => r._id !== resaId));
+        setResaSelectionnee(null);
+        document.body.style.overflow = '';
+    };
 
-    // --- Mise à jour d'une resa dans le state + refresh users ---
     const handleUpdateResa = (resaMaj) => {
         setReservations(prev => prev.map(r => r._id === resaMaj._id ? resaMaj : r));
         setResaSelectionnee(resaMaj);
         fetchUsers();
     };
 
-    // --- Filtrage des réservations par onglet ---
+    // Handler centralisé pour ouvrir/fermer les modales
+    const ouvrirResa = (r) => { setResaSelectionnee(r); document.body.style.overflow = 'hidden'; };
+    const fermerResa = () => { setResaSelectionnee(null); document.body.style.overflow = ''; };
+    const ouvrirUser = (u) => { setUserSelectionne(u); document.body.style.overflow = 'hidden'; };
+    const fermerUser = () => { setUserSelectionne(null); document.body.style.overflow = ''; };
+
     const today = new Date();
 
-    // Archives : validées passées + refusées (tous types)
-    // Autres onglets : filtre par type, exclut archives
     const resasFiltrees = ongletResa === 'archives'
         ? reservations.filter(r =>
             r.statut === "Refusée" ||
@@ -133,7 +126,6 @@ const Admin = () => {
             return true;
         });
 
-    // Sous-sections dans les onglets actifs (hors archives)
     const resasEnAttente = resasFiltrees.filter(r => r.statut === "En attente");
     const resasContreProposition = resasFiltrees.filter(r => r.statut === "Contre-proposition");
     const resasEnCours = resasFiltrees.filter(r =>
@@ -145,7 +137,6 @@ const Admin = () => {
         r.statut === "Validée" && new Date(r.dateDebut) > today
     );
 
-    // Compteur par onglet (affiché sur le bouton)
     const compterOnglet = (value) => {
         if (value === 'archives') {
             return reservations.filter(r =>
@@ -169,18 +160,16 @@ const Admin = () => {
         <div className="admin">
             <h1>Panel Admin</h1>
 
-            {/* Onglets principaux */}
             <div className="admin-tabs">
                 <button className={onglet === 'reservations' ? 'active' : ''} onClick={() => setOnglet('reservations')}>Réservations</button>
                 <button className={onglet === 'users' ? 'active' : ''} onClick={() => setOnglet('users')}>Utilisateurs</button>
                 <button className={onglet === 'prestations' ? 'active' : ''} onClick={() => setOnglet('prestations')}>Prestations</button>
+                <button className={onglet === 'disponibilites' ? 'active' : ''} onClick={() => setOnglet('disponibilites')}>Disponibilités</button>
             </div>
 
             {/* === RÉSERVATIONS === */}
             {onglet === 'reservations' && (
                 <div className="admin-list">
-
-                    {/* Sous-onglets Pension / Éducation / Pet Sitting / Archives */}
                     <div className="admin-resa-tabs">
                         {ONGLETS_RESA.map(o => (
                             <button
@@ -194,34 +183,32 @@ const Admin = () => {
                         ))}
                     </div>
 
-                    {/* Onglets actifs : sous-sections par statut */}
                     {ongletResa !== 'archives' && <>
                         {resasEnAttente.length > 0 && <>
                             <h3 className="admin-section-title">En attente ({resasEnAttente.length})</h3>
-                            {resasEnAttente.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => setResaSelectionnee(r)} />)}
+                            {resasEnAttente.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => ouvrirResa(r)} />)}
                         </>}
                         {resasContreProposition.length > 0 && <>
                             <h3 className="admin-section-title">Contre-proposition envoyée ({resasContreProposition.length})</h3>
-                            {resasContreProposition.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => setResaSelectionnee(r)} />)}
+                            {resasContreProposition.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => ouvrirResa(r)} />)}
                         </>}
                         {resasEnCours.length > 0 && <>
                             <h3 className="admin-section-title">En cours ({resasEnCours.length})</h3>
-                            {resasEnCours.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => setResaSelectionnee(r)} />)}
+                            {resasEnCours.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => ouvrirResa(r)} />)}
                         </>}
                         {resasAVenir.length > 0 && <>
                             <h3 className="admin-section-title">À venir ({resasAVenir.length})</h3>
-                            {resasAVenir.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => setResaSelectionnee(r)} />)}
+                            {resasAVenir.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => ouvrirResa(r)} />)}
                         </>}
                         {resasFiltrees.length === 0 && (
                             <p style={{ opacity: 0.5, fontSize: '0.85rem', marginTop: '1rem' }}>Aucune réservation active.</p>
                         )}
                     </>}
 
-                    {/* Onglet Archives */}
                     {ongletResa === 'archives' && <>
                         {resasFiltrees.length === 0
                             ? <p style={{ opacity: 0.5, fontSize: '0.85rem', marginTop: '1rem' }}>Aucune archive.</p>
-                            : resasFiltrees.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => setResaSelectionnee(r)} />)
+                            : resasFiltrees.map(r => <AdminResaCard key={r._id} resa={r} onClick={() => ouvrirResa(r)} />)
                         }
                     </>}
                 </div>
@@ -231,8 +218,6 @@ const Admin = () => {
             {onglet === 'users' && (
                 <div className="admin-list">
                     <h2>Utilisateurs ({users.length})</h2>
-
-                    {/* Barre de recherche */}
                     <input
                         className="admin-search"
                         type="text"
@@ -240,28 +225,18 @@ const Admin = () => {
                         value={recherche}
                         onChange={(e) => setRecherche(e.target.value)}
                     />
-
                     {usersFiltres.map((user) => (
                         <AdminUserCard
                             key={user._id}
                             user={user}
-                            onClick={() => setUserSelectionne(user)}
+                            onClick={() => ouvrirUser(user)}
                         />
                     ))}
-
                     {usersFiltres.length === 0 && (
                         <p style={{ opacity: 0.5, fontSize: '0.85rem', marginTop: '1rem' }}>Aucun utilisateur trouvé.</p>
                     )}
                 </div>
             )}
-
-            {/* Modale détail utilisateur */}
-            {userSelectionne && (
-                <AdminUserModal
-                    user={userSelectionne}
-                    onClose={() => setUserSelectionne(null)}
-                />
-            )}  
 
             {/* === PRESTATIONS === */}
             {onglet === 'prestations' && (
@@ -287,13 +262,25 @@ const Admin = () => {
                 </div>
             )}
 
-            {/* Modale détail réservation — s'ouvre au clic sur une AdminResaCard */}
+            {/* === DISPONIBILITÉS === */}
+            {onglet === 'disponibilites' && (
+                <AdminAvailability />
+            )}
+
+            {/* Modales */}
             {resaSelectionnee && (
                 <AdminResaModal
                     resa={resaSelectionnee}
-                    onClose={() => setResaSelectionnee(null)}
+                    onClose={fermerResa}
                     onUpdate={handleUpdateResa}
                     onDelete={handleDeleteResa}
+                />
+            )}
+
+            {userSelectionne && (
+                <AdminUserModal
+                    user={userSelectionne}
+                    onClose={fermerUser}
                 />
             )}
         </div>

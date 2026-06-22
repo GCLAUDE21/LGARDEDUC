@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ResaCard from '../components/ResaCard';
 import Loader from '../components/Loader';
 import fetchWithAuth from '../utils/fetchWithAuth';
+import DispoCalendar from '../components/DispoCalendar';
 
 const ONGLETS = [
     { label: 'Pension', value: 'pension' },
@@ -15,6 +16,7 @@ const Reservation = () => {
     const [chiensUser, setChiensUser] = useState([]);
     const [ongletActif, setOngletActif] = useState('pension');
     const [showModal, setShowModal] = useState(false);
+    const [slot, setSlot] = useState("matin");
 
     // états du form
     const [type, setType] = useState('pension');
@@ -85,7 +87,8 @@ const Reservation = () => {
         if (aUneResaEnAttente) return;
         setType(ongletActif);
         setShowModal(true);
-    };
+        document.body.style.overflow = 'hidden';
+    };  
 
     const handleFermerModal = () => {
         setShowModal(false);
@@ -94,6 +97,8 @@ const Reservation = () => {
         setDateDebut("");
         setDateFin("");
         setErreurBilan([]);
+        setSlot("matin");
+        document.body.style.overflow = '';
     };
 
     const handleCreateResa = () => {
@@ -121,7 +126,7 @@ const Reservation = () => {
             try {
                 const response = await fetchWithAuth(`${API_URL}/api/user/reservations`, {
                     method: "post",
-                    body: JSON.stringify({ type, dateDebut, dateFin, notes, dog: dog.map(d => d._id) }),
+                    body: JSON.stringify({ type, dateDebut, dateFin, notes, slot: (type === "education" || type === "pet sitting") ? slot : null, dog: dog.map(d => d._id) }),
                 });
                 if (!response) return;
                 if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
@@ -232,6 +237,7 @@ const Reservation = () => {
                         <button className="modal-close" onClick={handleFermerModal}>×</button>
                         <h2>Nouvelle réservation</h2>
                         <div className="new-reservation-form">
+                            <DispoCalendar type={type} />
                             <label htmlFor='type'>Type de réservation</label>
                             <select id='type' value={type} onChange={(e) => setType(e.target.value)}>
                                 <option value="pension">Pension</option>
@@ -247,6 +253,14 @@ const Reservation = () => {
                                 type="date"
                                 value={dateDebut}
                             />
+
+                            {(type === "education" || type === "pet sitting") && <>
+                                <label htmlFor="slot">Demi-journée</label>
+                                <select id="slot" value={slot} onChange={(e) => setSlot(e.target.value)}>
+                                    <option value="matin">Matin</option>
+                                    <option value="apres-midi">Après-midi</option>
+                                </select>
+                            </>}
 
                             {(type === "pension" || type === "pet sitting") && <>
                                 <label htmlFor="dateFin">Date de fin</label>

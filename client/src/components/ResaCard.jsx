@@ -15,7 +15,7 @@ const ResaCard = ({ resa }) => {
 
     return (
         <>
-            <div className="resa-card" onClick={() => setShowModal(true)}>
+            <div className="resa-card" onClick={() => { setShowModal(true); document.body.style.overflow = 'hidden'; }}>
                 <div className="resa-card__header">
                     <span className="resa-card__type">{resa.type}</span>
                     <span className={`resa-card__statut ${statutClass}`}>{resa.statut}</span>
@@ -38,7 +38,7 @@ const ResaCard = ({ resa }) => {
             {showModal && (
                 <ResaModal
                     resa={resa}
-                    onClose={() => setShowModal(false)}
+                    onClose={() => { setShowModal(false); document.body.style.overflow = ''; }}
                 />
             )}
         </>

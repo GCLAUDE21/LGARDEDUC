@@ -14,6 +14,7 @@ router.post("/signup", async (req, res) => {
 
     const user = new UserModel({
       ...req.body,
+      email: req.body.email.toLowerCase().trim(),
       emailToken,
       emailTokenExpires,
       isVerified: false,
@@ -95,7 +96,8 @@ router.get("/verify-email", async (req, res) => {
 // --- Connexion ---
 router.post("/signin", async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email });
+    const email = req.body.email.toLowerCase().trim();
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "Utilisateur introuvable" });
     }

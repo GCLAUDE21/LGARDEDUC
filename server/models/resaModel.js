@@ -32,6 +32,7 @@ const ResaSchema = new mongoose.Schema(
       message: { type: String },
     },
     notes: { type: String },
+    slot: { type: String, enum: ["matin", "apres-midi"], default: null },
     bilanLaura: { type: String },
     motifRefus: { type: String },
     evenements: [
