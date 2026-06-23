@@ -238,4 +238,40 @@ router.delete("/reservations/:id", async (req, res) => {
   }
 });
 
+// Valider la journée d'essai : passe pensionAutorisee à true sur les chiens liés
+router.put("/reservations/:id/valider-journee-essai", async (req, res) => {
+  try {
+    const resa = await ResaModel.findById(req.params.id);
+    if (!resa)
+      return res.status(404).json({ message: "Réservation introuvable" });
+    if (resa.type !== "journée d'essai")
+      return res.status(400).json({ message: "Type incorrect" });
+
+    await DogModel.updateMany(
+      { _id: { $in: resa.dog } },
+      { $set: { pensionAutorisee: true } },
+    );
+
+    res.json({
+      message:
+        "Journée d'essai validée, pension autorisée pour les chiens concernés",
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Toggle pensionAutorisee sur un chien
+router.put("/dogs/:id/pension-autorisee", async (req, res) => {
+  try {
+    const dog = await DogModel.findById(req.params.id);
+    if (!dog) return res.status(404).json({ message: "Chien introuvable" });
+    dog.pensionAutorisee = req.body.pensionAutorisee;
+    await dog.save();
+    res.json(dog);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default router;

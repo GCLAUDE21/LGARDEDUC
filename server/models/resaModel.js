@@ -5,7 +5,7 @@ const ResaSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ["pension", "education", "pet sitting"],
+      enum: ["pension", "education", "pet sitting", "journée d'essai"],
     },
     dateDebut: { type: Date, required: true },
     dateFin: { type: Date },
@@ -14,6 +14,8 @@ const ResaSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    passagesParJour: { type: Number, default: 1 },
+    heuresPassages: [{ type: String }],
     dog: [{ type: mongoose.Schema.Types.ObjectId, ref: "Dog", required: true }],
     statut: {
       type: String,
@@ -30,6 +32,7 @@ const ResaSchema = new mongoose.Schema(
       dateDebut: { type: Date },
       dateFin: { type: Date },
       message: { type: String },
+      heuresPassages: [{ type: String }], // ← ajout
     },
     notes: { type: String },
     slot: { type: String, enum: ["matin", "apres-midi"], default: null },
@@ -38,6 +41,7 @@ const ResaSchema = new mongoose.Schema(
     evenements: [
       {
         date: { type: Date, required: true },
+        heure: { type: String },
         description: { type: String, required: true },
         photo: { type: String },
         realise: { type: String },

@@ -14,6 +14,7 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
         dateDebut: resa.contreProposition?.dateDebut?.slice(0, 10) || "",
         dateFin: resa.contreProposition?.dateFin?.slice(0, 10) || "",
         message: resa.contreProposition?.message || "",
+        heuresPassages: resa.contreProposition?.heuresPassages || resa.heuresPassages || [],
     });
     const [showAnnulation, setShowAnnulation] = useState(false);
     const [userSelectionne, setUserSelectionne] = useState(null);
@@ -23,7 +24,7 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
     const [evenements, setEvenements] = useState(resa.evenements || []);
     const [showFormEvenement, setShowFormEvenement] = useState(false);
     const [newEvenement, setNewEvenement] = useState({
-        date: "", description: "", photo: "",
+        date: "", heure: "", description: "", photo: "",
         realise: "", aFaire: "", aAmeliorer: "",
     });
 
@@ -38,9 +39,11 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
     const [loadingAddEvenement, setLoadingAddEvenement] = useState(false);
     const [loadingDeleteEvenementId, setLoadingDeleteEvenementId] = useState(null);
     const [loadingSupprimer, setLoadingSupprimer] = useState(false);
+    const [loadingValiderEssai, setLoadingValiderEssai] = useState(false);
+    const [essaiValide, setEssaiValide] = useState(false);  
 
     const formatDate = (date) => new Date(date).toLocaleDateString('fr-FR');
-    const isEducation = resa.type === "education";
+    const isEducation = resa.type === "education" || resa.type === "journée d'essai";
 
     const statutClass = {
         "En attente": "en-attente",
@@ -78,6 +81,17 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
         if (!res) return;
         const data = await res.json();
         onUpdate(data);
+    };
+
+    const handleValiderJourneeEssai = async () => {
+        if (loadingValiderEssai || essaiValide) return;
+        setLoadingValiderEssai(true);
+        const res = await fetchWithAuth(`${API_URL}/api/admin/reservations/${resa._id}/valider-journee-essai`, {
+            method: "PUT",
+        });
+        setLoadingValiderEssai(false);
+        if (!res) return;
+        setEssaiValide(true);
     };
 
     const handleRefuser = async () => {
@@ -145,7 +159,7 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
         if (!res) return;
         const updated = await res.json();
         setEvenements(updated.evenements);
-        setNewEvenement({ date: "", description: "", photo: "", realise: "", aFaire: "", aAmeliorer: "" });
+        setNewEvenement({ date: "", heure: "", description: "", photo: "", realise: "", aFaire: "", aAmeliorer: "" });
         setShowFormEvenement(false);
     };
 
@@ -219,10 +233,21 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
                     )}
 
                     {/* Dates */}
-                    <div className="modal-resa-section">
-                        <h4>Dates demandées</h4>
-                        <p>Du {formatDate(resa.dateDebut)}{resa.dateFin && !isEducation && ` au ${formatDate(resa.dateFin)}`}</p>
-                    </div>
+                        <div className="modal-resa-section">
+                            <h4>Dates demandées</h4>
+                            <p>Du {formatDate(resa.dateDebut)}{resa.dateFin && !isEducation && ` au ${formatDate(resa.dateFin)}`}</p>
+                            {resa.type === "pet sitting" && resa.passagesParJour && (
+                                <p>{resa.passagesParJour} passage{resa.passagesParJour > 1 ? 's' : ''} par jour</p>
+                            )}
+                            {resa.type === "pet sitting" && resa.heuresPassages?.length > 0 && (
+                                <div>
+                                    <p style={{ opacity: 0.6, fontSize: '0.8rem', marginTop: '0.4rem' }}>Heures souhaitées :</p>
+                                    {resa.heuresPassages.map((h, i) => (
+                                        <span key={i} style={{ marginRight: '0.5rem', color: 'var(--color-gold)' }}>🕐 {h}</span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
                     {/* Contre-proposition en cours */}
                     {resa.statut === "Contre-proposition" && resa.contreProposition && (
@@ -231,6 +256,14 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
                             <p>Du {formatDate(resa.contreProposition.dateDebut)}
                                 {resa.contreProposition.dateFin && ` au ${formatDate(resa.contreProposition.dateFin)}`}
                             </p>
+                            {resa.contreProposition.heuresPassages?.length > 0 && (
+                                <div>
+                                    <p style={{ opacity: 0.6, fontSize: '0.8rem' }}>Heures proposées :</p>
+                                    {resa.contreProposition.heuresPassages.map((h, i) => (
+                                        <span key={i} style={{ marginRight: '0.5rem', color: 'var(--color-gold)' }}>🕐 {h}</span>
+                                    ))}
+                                </div>
+                            )}
                             {resa.contreProposition.message && <p>{resa.contreProposition.message}</p>}
                         </div>
                     )}
@@ -288,6 +321,25 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
                                     </>}
                                     <label>Message</label>
                                     <textarea value={contreProposition.message} onChange={(e) => setContreProposition({ ...contreProposition, message: e.target.value })} placeholder="Expliquez la proposition..." />
+                                        {resa.type === "pet sitting" && resa.passagesParJour && (
+                                            <>
+                                                <label>Heures de passage</label>
+                                                {Array.from({ length: resa.passagesParJour }).map((_, i) => (
+                                                    <div key={i}>
+                                                        <label style={{ fontSize: '0.75rem', opacity: 0.7 }}>Passage {i + 1}</label>
+                                                        <input
+                                                            type="time"
+                                                            value={contreProposition.heuresPassages[i] || ""}
+                                                            onChange={(e) => {
+                                                                const maj = [...(contreProposition.heuresPassages || [])];
+                                                                maj[i] = e.target.value;
+                                                                setContreProposition({ ...contreProposition, heuresPassages: maj });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </>
+                                        )}
                                     <div className="btn-row">
                                         <button onClick={handleContreProposition} disabled={loadingContreProposition}>
                                             {loadingContreProposition ? "..." : "Envoyer"}
@@ -307,6 +359,16 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
                                 <button className="btn-contre-prop" onClick={() => { setShowContreProposition(true); setShowAnnulation(false); }}>
                                     Modifier les dates
                                 </button>
+                                {resa.type === "journée d'essai" && (
+                                    <button
+                                        className="btn-valider"
+                                        onClick={handleValiderJourneeEssai}
+                                        disabled={loadingValiderEssai || essaiValide}
+                                        style={{ marginTop: '0.5rem' }}
+                                    >
+                                        {essaiValide ? "Pension débloquée ✓" : loadingValiderEssai ? "..." : "Valider la journée d'essai"}
+                                    </button>
+                                )}
                                 <button className="btn-refuser" onClick={() => { setShowAnnulation(true); setShowContreProposition(false); }}>
                                     Annuler la réservation
                                 </button>
@@ -320,6 +382,25 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
                                         <label>Nouvelle date de fin</label>
                                         <input type="date" value={contreProposition.dateFin} min={contreProposition.dateDebut} onChange={(e) => setContreProposition({ ...contreProposition, dateFin: e.target.value })} />
                                     </>}
+                                    {resa.type === "pet sitting" && resa.passagesParJour && (
+                                        <>
+                                            <label>Heures de passage</label>
+                                            {Array.from({ length: resa.passagesParJour }).map((_, i) => (
+                                                <div key={i}>
+                                                    <label style={{ fontSize: '0.75rem', opacity: 0.7 }}>Passage {i + 1}</label>
+                                                    <input
+                                                        type="time"
+                                                        value={contreProposition.heuresPassages[i] || ""}
+                                                        onChange={(e) => {
+                                                            const maj = [...(contreProposition.heuresPassages || [])];
+                                                            maj[i] = e.target.value;
+                                                            setContreProposition({ ...contreProposition, heuresPassages: maj });
+                                                        }}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </>
+                                    )}
                                     <label>Message</label>
                                     <textarea value={contreProposition.message} onChange={(e) => setContreProposition({ ...contreProposition, message: e.target.value })} placeholder="Expliquez la modification..." />
                                     <div className="btn-row">
@@ -387,7 +468,7 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
                             {evenements.map((e) => (
                                 <div key={e._id} className="evenement-admin">
                                     <div className="evenement-admin__header">
-                                        <span>{formatDate(e.date)}</span>
+                                        <span>{formatDate(e.date)}{e.heure && ` - ${e.heure}`}</span>
                                         <button
                                             className="btn-delete-small"
                                             onClick={() => handleDeleteEvenement(e._id)}
@@ -412,6 +493,12 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
                                 <div className="evenement-form">
                                     <label>Date</label>
                                     <input type="date" value={newEvenement.date} onChange={(e) => setNewEvenement({ ...newEvenement, date: e.target.value })} />
+
+                                    {resa.type === "pet sitting" && <>
+                                        <label>Heure</label>
+                                        <input type="time" value={newEvenement.heure || ""} onChange={(e) => setNewEvenement({ ...newEvenement, heure: e.target.value })} />
+                                    </>}
+
                                     <label>Description</label>
                                     <textarea value={newEvenement.description} onChange={(e) => setNewEvenement({ ...newEvenement, description: e.target.value })} placeholder="Ce qui s'est passé..." />
                                     <label>Photo (URL)</label>

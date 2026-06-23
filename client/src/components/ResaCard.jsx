@@ -25,6 +25,10 @@ const ResaCard = ({ resa }) => {
                         Du {new Date(resa.dateDebut).toLocaleDateString('fr-FR')}
                         {resa.dateFin && ` au ${new Date(resa.dateFin).toLocaleDateString('fr-FR')}`}
                     </p>
+                    {resa.slot && <p className="resa-card__slot">{resa.slot}</p>}
+                    {resa.passagesParJour && resa.type === "pet sitting" && (
+                        <p className="resa-card__slot">{resa.passagesParJour} passage{resa.passagesParJour > 1 ? 's' : ''} par jour</p>
+                    )}
                     <div className="resa-card__chiens">
                         {resa.dog?.map((chien, i) => (
                             <div key={i} className="resa-card__chien">

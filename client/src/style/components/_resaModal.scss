@@ -72,6 +72,12 @@
             text-transform: capitalize;
             margin: 0;
         }
+
+        & span {
+            font-family: $font-body;
+            font-size: 0.85rem;
+            color: $color-text !important;
+        }
     }
 
     &__dates {

@@ -102,6 +102,18 @@ const ResaModal = ({ resa, onClose }) => {
                             Du {new Date(resa.dateDebut).toLocaleDateString('fr-FR')}
                             {resa.dateFin && resa.type !== "education" && ` au ${new Date(resa.dateFin).toLocaleDateString('fr-FR')}`}
                         </p>
+                        {resa.type === "pet sitting" && resa.passagesParJour && (
+                            <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>
+                                {resa.passagesParJour} passage{resa.passagesParJour > 1 ? 's' : ''} par jour
+                            </p>
+                        )}
+                        {resa.type === "pet sitting" && resa.heuresPassages?.length > 0 && (
+                            <div style={{ marginTop: '0.25rem' }}>
+                                {resa.heuresPassages.map((h, i) => (
+                                    <span key={i} style={{ marginRight: '0.5rem', color: 'var(--color-gold)', fontSize: '0.85rem' }}>🕐 {h}</span>
+                                ))}
+                            </div>
+                        )}
 
                         {resa.statut === "Contre-proposition" && resa.contreProposition && (
                             <div className="resa-modal__contre-prop">
@@ -110,6 +122,14 @@ const ResaModal = ({ resa, onClose }) => {
                                     Du {new Date(resa.contreProposition.dateDebut).toLocaleDateString('fr-FR')}
                                     {resa.contreProposition.dateFin && ` au ${new Date(resa.contreProposition.dateFin).toLocaleDateString('fr-FR')}`}
                                 </strong></p>
+                                {resa.contreProposition.heuresPassages?.length > 0 && (
+                                    <div style={{ margin: '0.25rem 0' }}>
+                                        <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>Heures proposées :</p>
+                                        {resa.contreProposition.heuresPassages.map((h, i) => (
+                                            <span key={i} style={{ marginRight: '0.5rem', color: 'var(--color-gold)', fontSize: '0.85rem' }}>🕐 {h}</span>
+                                        ))}
+                                    </div>
+                                )}
                                 {resa.contreProposition.message && <p>{resa.contreProposition.message}</p>}
                                 <div className="btn-row">
                                     <button onClick={handleAccepterContreProposition} disabled={loadingAccepter || loadingRefuser}>
@@ -189,7 +209,9 @@ const ResaModal = ({ resa, onClose }) => {
                                     .sort((a, b) => new Date(a.date) - new Date(b.date))
                                     .map((e, i) => (
                                         <div key={i} className="evenement">
-                                            <span className="evenement__date">{new Date(e.date).toLocaleDateString('fr-FR')}</span>
+                                            <span className="evenement__date">
+                                                {new Date(e.date).toLocaleDateString('fr-FR')}{e.heure && ` - ${e.heure}`}
+                                            </span>
                                             {e.photo && <img src={e.photo} alt="photo" className="evenement__photo" />}
                                             <p className="evenement__desc">{e.description}</p>
                                             {resa.type === "education" && <>

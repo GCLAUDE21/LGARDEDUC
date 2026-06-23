@@ -162,3 +162,10 @@ button:disabled {
     transition: opacity 0.2s ease;
     cursor: pointer;
 }
+
+///// Fix Couleur Inputs Date et Heures /////
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
+    cursor: pointer;
+}

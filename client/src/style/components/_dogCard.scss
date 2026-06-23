@@ -66,6 +66,27 @@
             margin-bottom: 8px;
             letter-spacing: 0.04em;
         }
+
+                .dog-pension-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-family: $font-body;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 0.25rem;
+
+            &.autorisee {
+                background: rgba(91,138,110,0.2);
+                border: 1px solid rgba(91,138,110,0.4);
+                color: #5b8a6e;
+            }
+
+            &.non-autorisee {
+                background: rgba(201,146,42,0.1);
+                border: 1px solid rgba(201,146,42,0.2);
+                color: $color-gold;
+            }
+        }
     }
 
     .btn-delete {

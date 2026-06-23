@@ -15,6 +15,7 @@ const AdminUserModal = ({ user, onClose }) => {
 
     // --- États loading ---
     const [loadingNote, setLoadingNote] = useState(false);
+    const [loadingPensionId, setLoadingPensionId] = useState(null);
 
     const today = new Date();
 
@@ -61,6 +62,19 @@ const AdminUserModal = ({ user, onClose }) => {
     const handleDeleteDog = (dogId) => {
         setChiens(prev => prev.filter(d => d._id !== dogId));
         setDogSelectionne(null);
+    };
+
+    const handleTogglePensionAutorisee = async (dog) => {
+        if (loadingPensionId) return;
+        setLoadingPensionId(dog._id);
+        const res = await fetchWithAuth(`${API_URL}/api/admin/dogs/${dog._id}/pension-autorisee`, {
+            method: "PUT",
+            body: JSON.stringify({ pensionAutorisee: !dog.pensionAutorisee }),
+        });
+        setLoadingPensionId(null);
+        if (!res) return;
+        const updated = await res.json();
+        setChiens(prev => prev.map(d => d._id === updated._id ? updated : d));
     };
 
     const formatDate = (date) => new Date(date).toLocaleDateString('fr-FR');
@@ -129,6 +143,15 @@ const AdminUserModal = ({ user, onClose }) => {
                                         >
                                             <img src={dog.photo || defaultDog} alt={dog.nom} />
                                             <span>{dog.nom}</span>
+                                            <button
+                                                type="button"
+                                                className={`btn-pension-autorisee ${dog.pensionAutorisee ? 'active' : ''}`}
+                                                onClick={(e) => { e.stopPropagation(); handleTogglePensionAutorisee(dog); }}
+                                                disabled={loadingPensionId === dog._id}
+                                                title={dog.pensionAutorisee ? "Pension autorisée, cliquer pour révoquer" : "Autoriser la pension"}
+                                            >
+                                                {loadingPensionId === dog._id ? '...' : dog.pensionAutorisee ? '🏠 ✓' : '🏠 ?'}
+                                            </button>
                                         </div>
                                     ))}
                                 </div>

@@ -11,6 +11,7 @@ const DogSchema = new mongoose.Schema({
   // Laura uniquement
   notes: { type: String },
   bilan: { type: Boolean, default: false },
+  pensionAutorisee: { type: Boolean, default: false },
 
   // Santé
   sterilise: { type: Boolean, default: false },

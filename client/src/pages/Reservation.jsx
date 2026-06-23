@@ -5,6 +5,7 @@ import fetchWithAuth from '../utils/fetchWithAuth';
 import DispoCalendar from '../components/DispoCalendar';
 
 const ONGLETS = [
+    { label: 'Toutes', value: 'toutes' },
     { label: 'Pension', value: 'pension' },
     { label: 'Éducation', value: 'education' },
     { label: 'Pet Sitting', value: 'pet sitting' },
@@ -14,11 +15,10 @@ const Reservation = () => {
     const API_URL = import.meta.env.VITE_API_URL;
     const [resasUser, setResasUser] = useState([]);
     const [chiensUser, setChiensUser] = useState([]);
-    const [ongletActif, setOngletActif] = useState('pension');
+    const [ongletActif, setOngletActif] = useState('toutes');
     const [showModal, setShowModal] = useState(false);
     const [slot, setSlot] = useState("matin");
 
-    // états du form
     const [type, setType] = useState('pension');
     const [dateDebut, setDateDebut] = useState("");
     const [dateFin, setDateFin] = useState("");
@@ -26,6 +26,8 @@ const Reservation = () => {
     const [dog, setDog] = useState([]);
     const [erreurBilan, setErreurBilan] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [passagesParJour, setPassagesParJour] = useState(1);
+    const [heuresPassages, setHeuresPassages] = useState([""]);
 
     useEffect(() => {
         const resaUserFetch = async () => {
@@ -59,36 +61,46 @@ const Reservation = () => {
 
     const today = new Date();
 
-    // réservations filtrées par onglet
-    const resasFiltrees = resasUser.filter(r => r.type === ongletActif);
+    const resasFiltrees = ongletActif === 'toutes'
+        ? resasUser
+        : ongletActif === 'pension'
+            ? resasUser.filter(r => r.type === 'pension' || r.type === "journée d'essai")
+            : resasUser.filter(r => r.type === ongletActif);
 
-    const resasEnAttente = resasFiltrees.filter(r => r.statut === "En attente");
-    // Contre-proposition : Laura a proposé de nouvelles dates, l'user doit répondre
-    const resasContreProposition = resasFiltrees.filter(r => r.statut === "Contre-proposition");
+    const resasAVenir = resasFiltrees.filter(r =>
+        r.statut === "Validée" && new Date(r.dateDebut) > today
+    );
     const resasEnCours = resasFiltrees.filter(r =>
         r.statut === "Validée" &&
         new Date(r.dateDebut) <= today &&
         new Date(r.dateFin || r.dateDebut) >= today
     );
-    const resasAVenir = resasFiltrees.filter(r =>
-        r.statut === "Validée" && new Date(r.dateDebut) > today
-    );
+    const resasEnAttente = resasFiltrees.filter(r => r.statut === "En attente");
+    const resasContreProposition = resasFiltrees.filter(r => r.statut === "Contre-proposition");
     const resasPassees = resasFiltrees.filter(r =>
-        r.statut === "Refusée" || r.statut === "Annulée" ||
-        (r.statut === "Validée" && new Date(r.dateFin || r.dateDebut) < today)
+        r.statut === "Validée" && new Date(r.dateFin || r.dateDebut) < today
+    );
+    const resasRefusees = resasFiltrees.filter(r =>
+        r.statut === "Refusée" || r.statut === "Annulée"
     );
 
-    // bloquer si une resa en attente ou contre-proposition existe
     const aUneResaEnAttente = resasUser.some(r =>
         r.statut === "En attente" || r.statut === "Contre-proposition"
     );
 
+    // Chiens autorisés pension
+    const chiensPensionOk = chiensUser.filter(c => c.pensionAutorisee);
+    // Chiens sans journée d'essai validée (pas encore pensionAutorisee)
+    const chiensEssaiDispo = chiensUser.filter(c => !c.pensionAutorisee);
+
     const handleOuvrirModal = () => {
         if (aUneResaEnAttente) return;
-        setType(ongletActif);
+        const t = ongletActif === 'toutes' ? 'pension' : ongletActif;
+        setType(t);
+        setHeuresPassages(t === 'pet sitting' ? [""] : []);
         setShowModal(true);
         document.body.style.overflow = 'hidden';
-    };  
+    };
 
     const handleFermerModal = () => {
         setShowModal(false);
@@ -99,34 +111,62 @@ const Reservation = () => {
         setErreurBilan([]);
         setSlot("matin");
         document.body.style.overflow = '';
+        setPassagesParJour(1);
+        setHeuresPassages([]);
     };
 
+    // Quand passagesParJour change, adapter le tableau :
+        const handlePassagesChange = (nb) => {
+            setPassagesParJour(nb);
+            setHeuresPassages(Array(nb).fill(""));
+        };
+
+
     const handleCreateResa = () => {
-        if ((type === "pension" || type === "education") && dog.length === 0) {
-            setErreurBilan(["Vous devez séléctionner au moins un chien"]);
-            return;
-        }
-        if (!dateDebut) {
-            setErreurBilan(["Merci de selectionner une date"]);
-            return;
-        }
-        if ((type === "pension" || type === "pet sitting") && !dateFin) {
-            setErreurBilan(["Merci de selectionner une date de fin"]);
-            return;
-        }
+        setErreurBilan([]);
+
         if (type === "pension") {
-            const sansBilan = dog.filter(d => !d.bilan);
-            if (sansBilan.length > 0) {
-                setErreurBilan(sansBilan.map(d => d.nom + " doit faire un bilan comportemental."));
+            if (dog.length === 0) { setErreurBilan(["Vous devez sélectionner au moins un chien"]); return; }
+            const nonAutorises = dog.filter(d => !d.pensionAutorisee);
+            if (nonAutorises.length > 0) {
+                setErreurBilan(nonAutorises.map(d => `${d.nom} n'a pas encore fait sa journée d'essai validée.`));
                 return;
             }
         }
+
+        if (type === "education") {
+            if (dog.length === 0) { setErreurBilan(["Vous devez sélectionner au moins un chien"]); return; }
+        }
+
+        if (type === "journée d'essai") {
+            if (dog.length === 0) { setErreurBilan(["Vous devez sélectionner au moins un chien"]); return; }
+            const dejaAutorises = dog.filter(d => d.pensionAutorisee);
+            if (dejaAutorises.length > 0) {
+                setErreurBilan(dejaAutorises.map(d => `${d.nom} est déjà autorisé en pension.`));
+                return;
+            }
+        }
+
+        if (!dateDebut) { setErreurBilan(["Merci de sélectionner une date"]); return; }
+        if (type === "pension" && !dateFin) {
+        setErreurBilan(["Merci de sélectionner une date de fin"]);
+        return;
+    }
 
         const resaCreateFetch = async () => {
             try {
                 const response = await fetchWithAuth(`${API_URL}/api/user/reservations`, {
                     method: "post",
-                    body: JSON.stringify({ type, dateDebut, dateFin, notes, slot: (type === "education" || type === "pet sitting") ? slot : null, dog: dog.map(d => d._id) }),
+                    body: JSON.stringify({
+                        type,
+                        dateDebut,
+                        dateFin,
+                        notes,
+                        slot: type === "education"  ? slot : null,
+                        dog: dog.map(d => d._id),
+                        passagesParJour: type === "pet sitting" ? passagesParJour : null,
+                        heuresPassages: type === "pet sitting" && heuresPassages.some(h => h) ? heuresPassages.filter(h => h) : [],
+                    }),
                 });
                 if (!response) return;
                 if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
@@ -140,6 +180,13 @@ const Reservation = () => {
         resaCreateFetch();
     };
 
+    // Chiens à afficher selon le type sélectionné dans le form
+    const chiensDisposPourType = () => {
+        if (type === "pension") return chiensPensionOk;
+        if (type === "journée d'essai") return chiensEssaiDispo;
+        return chiensUser;
+    };
+
     if (loading) return <Loader />;
 
     return (
@@ -147,7 +194,7 @@ const Reservation = () => {
             <div className="reservations-intro">
                 <h2>Mes réservations</h2>
                 <p>
-                    Bienvenue sur votre espace réservations. Vous pouvez ici suivre l'historique de vos reservations et en créer de nouvelles selon vos besoins.
+                    Bienvenue sur votre espace réservations. Vous pouvez ici suivre l'historique de vos réservations et en créer de nouvelles selon vos besoins.
                 </p>
                 <div className="reservations-intro-types">
                     <div className="intro-type">
@@ -162,17 +209,18 @@ const Reservation = () => {
                         <h4>🐾 Pet Sitting</h4>
                         <p>Laura se déplace à votre domicile pour s'occuper de vos animaux pendant votre absence.</p>
                     </div>
+                    <div className="intro-type">
+                        <h4>🐶 Journée d'essai</h4>
+                        <p>Une journée pour évaluer votre chien avant toute pension. Obligatoire pour accéder à la pension.</p>
+                    </div>
                 </div>
                 <p className="reservations-intro-notice">
                     Toute demande est examinée par Laura, qui peut la <strong>confirmer</strong>, la <strong>refuser</strong>,
-                    ou vous faire une <strong>contre-proposition</strong> avec par exemple un horaire ou une date différente.
-                    Dans ce cas, vous recevrez une notification et devrez accepter ou refuser la nouvelle proposition
-                    pour finaliser votre réservation. Veuillez noter qu'<strong>une seule demande en attente est autorisée
-                    à la fois</strong> : vous pourrez en soumettre une nouvelle une fois votre demande traitée par Laura.
+                    ou vous faire une <strong>contre-proposition</strong>. Veuillez noter qu'<strong>une seule demande en attente est autorisée
+                    à la fois</strong>.
                 </p>
             </div>
 
-            {/* Header avec onglets et bouton */}
             <div className="reservations-header">
                 <div className="onglets">
                     {ONGLETS.map(o => (
@@ -194,55 +242,63 @@ const Reservation = () => {
                 </button>
             </div>
 
-            {/* Liste des réservations filtrées */}
             <div className="mes-reservations">
-
-                {/* Contre-proposition : action requise de l'user */}
                 {resasContreProposition.length > 0 && <>
-                    <h3 className="section-contre-prop">⚡ Action requise</h3>
+                    <h3 className="section-contre-prop">⚡ Action requise ({resasContreProposition.length})</h3>
                     {resasContreProposition.map(r => <ResaCard key={r._id} resa={r} />)}
                 </>}
 
-                {resasEnAttente.length > 0 && <>
-                    <h3>En attente</h3>
-                    {resasEnAttente.map(r => <ResaCard key={r._id} resa={r} />)}
-                </>}
-
-                {resasEnCours.length > 0 && <>
-                    <h3>En cours</h3>
-                    {resasEnCours.map(r => <ResaCard key={r._id} resa={r} />)}
-                </>}
-
                 {resasAVenir.length > 0 && <>
-                    <h3>À venir</h3>
+                    <h3>À venir ({resasAVenir.length})</h3>
                     {resasAVenir.map(r => <ResaCard key={r._id} resa={r} />)}
                 </>}
 
+                {resasEnCours.length > 0 && <>
+                    <h3>En cours ({resasEnCours.length})</h3>
+                    {resasEnCours.map(r => <ResaCard key={r._id} resa={r} />)}
+                </>}
+
+                {resasEnAttente.length > 0 && <>
+                    <h3>En attente ({resasEnAttente.length})</h3>
+                    {resasEnAttente.map(r => <ResaCard key={r._id} resa={r} />)}
+                </>}
+
                 {resasPassees.length > 0 && <>
-                    <h3>Passées / Refusées</h3>
+                    <h3>Passées ({resasPassees.length})</h3>
                     {resasPassees.map(r => <ResaCard key={r._id} resa={r} />)}
                 </>}
 
+                {resasRefusees.length > 0 && <>
+                    <h3>Annulées / Refusées ({resasRefusees.length})</h3>
+                    {resasRefusees.map(r => <ResaCard key={r._id} resa={r} />)}
+                </>}
+
                 {resasFiltrees.length === 0 && (
-                    <p style={{ opacity: 0.5, fontSize: '0.85rem' }}>
-                        Aucune réservation pour le moment.
-                    </p>
+                    <p style={{ opacity: 0.5, fontSize: '0.85rem' }}>Aucune réservation pour le moment.</p>
                 )}
             </div>
 
-            {/* Modale nouvelle réservation */}
             {showModal && (
                 <div className="modal-overlay" onClick={handleFermerModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="modal-close" onClick={handleFermerModal}>×</button>
                         <h2>Nouvelle réservation</h2>
                         <div className="new-reservation-form">
-                            <DispoCalendar type={type} />
+                            {type !== "pet sitting" && (
+                                <DispoCalendar type={type === "journée d'essai" ? "pension" : type} />
+                            )}
+
                             <label htmlFor='type'>Type de réservation</label>
-                            <select id='type' value={type} onChange={(e) => setType(e.target.value)}>
+                            <select id='type' value={type} onChange={(e) => {const t = e.target.value;
+                                                                            setType(t);
+                                                                            setDog([]);
+                                                                            setErreurBilan([]);
+                                                                            setHeuresPassages(t === 'pet sitting' ? [""] : []);
+                                                                        }}>
                                 <option value="pension">Pension</option>
+                                <option value="education">Éducation</option>
                                 <option value="pet sitting">Pet Sitting</option>
-                                <option value="education">Education</option>
+                                <option value="journée d'essai">Journée d'essai</option>
                             </select>
 
                             <label htmlFor="dateDebut">Date</label>
@@ -254,7 +310,7 @@ const Reservation = () => {
                                 value={dateDebut}
                             />
 
-                            {(type === "education" || type === "pet sitting") && <>
+                            {(type === "education") && <>
                                 <label htmlFor="slot">Demi-journée</label>
                                 <select id="slot" value={slot} onChange={(e) => setSlot(e.target.value)}>
                                     <option value="matin">Matin</option>
@@ -263,9 +319,11 @@ const Reservation = () => {
                             </>}
 
                             {(type === "pension" || type === "pet sitting") && <>
-                                <label htmlFor="dateFin">Date de fin</label>
+                                <label htmlFor="dateFin">
+                                    Date de fin {type === "pet sitting" && <span style={{ opacity: 0.5, fontSize: '0.75rem' }}>(optionnelle)</span>}
+                                </label>
                                 <input
-                                    style={{ borderColor: !dateFin ? "darkred" : "green" }}
+                                    style={{ borderColor: !dateFin && type !== "pet sitting" ? "darkred" : dateFin ? "green" : "" }}
                                     onChange={(e) => setDateFin(e.target.value)}
                                     id='dateFin'
                                     type="date"
@@ -274,15 +332,52 @@ const Reservation = () => {
                                 />
                             </>}
 
-                            {(type === "pension" || type === "education") && <>
-                                <label htmlFor="dog">Pour</label>
+                            {type === "pet sitting" && <>
+                                <label htmlFor="passages">Passages par jour</label>
+                                <select id="passages" value={passagesParJour} onChange={(e) => handlePassagesChange(Number(e.target.value))}>
+                                    <option value={1}>1 passage</option>
+                                    <option value={2}>2 passages</option>
+                                    <option value={3}>3 passages</option>
+                                </select>
+
+                                {heuresPassages.map((h, i) => (
+                                    <div key={i}>
+                                        <label>Heure passage {i + 1} (optionnel)</label>
+                                        <input
+                                            type="time"
+                                            value={h}
+                                            onChange={(e) => {
+                                                const maj = [...heuresPassages];
+                                                maj[i] = e.target.value;
+                                                setHeuresPassages(maj);
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                            </>}
+
+                            {(type === "pension" || type === "education" || type === "journée d'essai") && <>
+                                <label htmlFor="dog">
+                                    {type === "pension" && "Chien(s) autorisés en pension"}
+                                    {type === "education" && "Pour quel chien"}
+                                    {type === "journée d'essai" && "Chien à évaluer"}
+                                </label>
                                 <div className="chiensResa">
                                     <select value="" onChange={(e) => {
-                                        const chienChoisi = chiensUser.find(c => c._id === e.target.value);
+                                        const chienChoisi = chiensDisposPourType().find(c => c._id === e.target.value);
                                         if (chienChoisi && !dog.find(d => d._id === chienChoisi._id)) setDog([...dog, chienChoisi]);
                                     }} id="dog">
-                                        <option value="" disabled>Choisissez au moins un chien</option>
-                                        {chiensUser.map(d => <option key={d._id} value={d._id}>{d.nom}</option>)}
+                                        <option value="" disabled>
+                                            {chiensDisposPourType().length === 0
+                                                ? type === "pension"
+                                                    ? "Aucun chien autorisé en pension"
+                                                    : "Aucun chien disponible"
+                                                : "Choisissez un chien"
+                                            }
+                                        </option>
+                                        {chiensDisposPourType().map(d => (
+                                            <option key={d._id} value={d._id}>{d.nom}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div className="chiensChoisis">
@@ -293,6 +388,11 @@ const Reservation = () => {
                                         </span>
                                     ))}
                                 </div>
+                                {type === "pension" && chiensPensionOk.length === 0 && (
+                                    <p style={{ fontSize: '0.8rem', color: '#c9922a', marginTop: '0.25rem' }}>
+                                        Aucun de vos chiens n'a encore effectué sa journée d'essai. Commencez par réserver une journée d'essai.
+                                    </p>
+                                )}
                             </>}
 
                             <label htmlFor="notes">Notes</label>

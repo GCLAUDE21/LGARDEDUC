@@ -96,6 +96,12 @@
     margin-bottom: 0.25rem;
   }
 
+  span {
+        color: $color-text !important;
+        font-family: $font-body;
+        font-size: 0.85rem;
+    }
+
   textarea {
     @include input-style;
     padding: 8px 10px;

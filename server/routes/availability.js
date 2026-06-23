@@ -19,16 +19,23 @@ router.get("/", async (req, res) => {
     const capaciteMaxPension = settings?.capaciteMaxPension || 4;
 
     // Resas validées uniquement
-    const resasValidees = await ResaModel.find({ statut: "Validée" });
+    const resasValidees = await ResaModel.find({ statut: "Validée" })
+      .populate("owner", "pseudo email prenom")
+      .populate("dog", "nom photo");
 
     res.json({
       blocages,
       capaciteMaxPension,
       resasValidees: resasValidees.map((r) => ({
+        _id: r._id,
         type: r.type,
         dateDebut: r.dateDebut,
         dateFin: r.dateFin,
         slot: r.slot,
+        passagesParJour: r.passagesParJour,
+        heuresPassages: r.heuresPassages,
+        owner: r.owner,
+        dog: r.dog,
       })),
     });
   } catch (err) {

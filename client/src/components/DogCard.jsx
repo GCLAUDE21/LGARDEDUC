@@ -25,12 +25,15 @@ const DogCard = ({ dog, onDelete, onUpdate }) => {
                     <img src={dog.photo || defaultDog} alt={dog.nom} />
                 </div>
                 <div className="infodog">
-                    <h4 className="dog-name">{dog.nom}</h4>
-                    <label>Race</label>
-                    <span>{dog.race}</span>
-                    <label>Age</label>
-                    <span>{age} ans</span>
-                </div>
+                <h4 className="dog-name">{dog.nom}</h4>
+                <label>Race</label>
+                <span>{dog.race}</span>
+                <label>Age</label>
+                <span>{age} ans</span>
+                <span className={`dog-pension-badge ${dog.pensionAutorisee ? 'autorisee' : 'non-autorisee'}`}>
+                    {dog.pensionAutorisee ? '🏠 Pension OK' : '⏳ Journée d\'essai requise'}
+                </span>
+            </div>
             </div>
             {showModal && (
                 <DogModal

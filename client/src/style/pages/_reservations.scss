@@ -102,10 +102,9 @@
   // =====================
   .reservations-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
+    flex-direction: column;
     gap: 1rem;
+    margin-bottom: 1.5rem;
 
     .onglets {
       display: flex;
@@ -136,6 +135,7 @@
 
     .btn-nouvelle-resa {
       font-family: $font-body;
+      align-self: flex-start; // ← ici, pas align-items
       font-size: 0.82rem;
       padding: 8px 16px;
       border-radius: 6px;
@@ -149,10 +149,15 @@
 
       &:hover { background: $color-gold-light; }
       &.disabled {
-        background: rgba(201,146,42,0.2);
-        color: rgba(201,146,42,0.4);
-        cursor: not-allowed;
+          background: rgba(201,146,42,0.2);
+          color: rgba(201,146,42,0.4);
+          cursor: not-allowed;
       }
+  }
+    @media (min-width: 600px) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
     }
   }
 

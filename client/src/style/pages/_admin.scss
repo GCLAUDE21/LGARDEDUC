@@ -41,29 +41,35 @@
   // =====================
   // ONGLETS PRINCIPAUX
   // =====================
-  .admin-tabs {
+    .admin-tabs {
     display: flex;
     gap: 0.5rem;
     margin: 1.5rem 0;
     justify-content: center;
+    flex-wrap: wrap;
 
     button {
-      background: $color-bg-card;
-      border: 1px solid $color-border;
-      color: $color-text-muted;
-      padding: 8px 20px;
-      border-radius: 6px;
-      font-family: $font-body;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
+        background: $color-bg-card;
+        border: 1px solid $color-border;
+        color: $color-text-muted;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-family: $font-body;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
 
-      &:hover { border-color: $color-gold; color: $color-text; }
-      &.active {
-        background: rgba(201,146,42,0.15);
-        border-color: $color-gold;
-        color: $color-gold-light;
-      }
+        @media (max-width: 480px) {
+            padding: 6px 12px;
+            font-size: 0.78rem;
+        }
+
+        &:hover { border-color: $color-gold; color: $color-text; }
+        &.active {
+            background: rgba(201,146,42,0.15);
+            border-color: $color-gold;
+            color: $color-gold-light;
+        }
     }
   }
 
@@ -238,29 +244,48 @@
     flex-wrap: wrap;
 
     .chien-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-      cursor: pointer;
-      transition: transform 0.15s ease;
-      &:hover { transform: translateY(-2px); }
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+        &:hover { transform: translateY(-2px); }
 
-      img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid $color-gold;
-      }
+        img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid $color-gold;
+        }
 
-      span {
-        font-size: 0.75rem;
-        color: $color-text-muted;
-        font-family: $font-body;
-      }
+        span {
+            font-size: 0.75rem;
+            color: $color-text-muted;
+            font-family: $font-body;
+        }
+
+        .btn-pension-autorisee {
+            background: rgba(192,57,43,0.15);
+            border: 1px solid rgba(192,57,43,0.3);
+            border-radius: 10px;
+            color: $color-text-muted;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &.active {
+                background: rgba(91,138,110,0.2);
+                border-color: rgba(91,138,110,0.4);
+                color: #5b8a6e;
+            }
+
+            &:disabled { opacity: 0.5; cursor: not-allowed; }
+        }
     }
-  }
+}
 
   // =====================
   // CARTE PRESTATION
@@ -423,135 +448,6 @@
     }
   }
 
-  // --- Calendrier ---
-  .availability-calendar {
-    background: $color-bg-card;
-    border-radius: 12px;
-    padding: 1.25rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-
-    .calendar-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-
-      h3 {
-        font-family: $font-title;
-        font-size: 1rem;
-        color: $color-gold-light;
-        letter-spacing: 0.06em;
-      }
-
-      button {
-        @include btn-gold;
-        padding: 4px 12px;
-        font-size: 1.1rem;
-      }
-    }
-
-    .calendar-legend {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-
-      span {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-family: $font-body;
-        font-size: 0.75rem;
-        color: $color-text-muted;
-      }
-
-      .legend-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-      }
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-    }
-
-    .calendar-header-cell {
-      font-family: $font-body;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: $color-gold;
-      text-align: center;
-      padding: 4px 0;
-    }
-
-    .calendar-cell {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid $color-border;
-      border-radius: 8px;
-      padding: 6px 4px;
-      min-height: 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      position: relative;
-
-      &.empty { background: transparent; border-color: transparent; }
-
-      &.today {
-        border-color: $color-gold;
-        background: rgba(201,146,42,0.08);
-      }
-
-      &.past { opacity: 0.35; }
-
-      &.blocked-all {
-        background: rgba(192,57,43,0.1);
-        border-color: rgba(192,57,43,0.3);
-      }
-
-      .calendar-day-number {
-        font-family: $font-body;
-        font-size: 0.75rem;
-        color: $color-text-muted;
-        font-weight: bold;
-        margin-bottom: 2px;
-      }
-
-      .calendar-tag {
-        display: inline-block;
-        font-size: 0.65rem;
-        font-family: $font-body;
-        color: #fff;
-        padding: 2px 5px;
-        border-radius: 4px;
-        white-space: nowrap;
-      }
-
-      .calendar-tag-slots {
-        display: flex;
-        align-items: center;
-        gap: 2px;
-        font-size: 0.65rem;
-        font-family: $font-body;
-        color: $color-text-muted;
-
-        span {
-          color: #fff;
-          padding: 1px 4px;
-          border-radius: 3px;
-          font-size: 0.6rem;
-          font-weight: bold;
-        }
-      }
-    }
-  }
-
-  // --- Formulaire blocage ---
   .availability-form {
     background: $color-bg-card;
     border-radius: 12px;
@@ -562,92 +458,248 @@
     gap: 0.6rem;
 
     h3 {
-      font-family: $font-title;
-      font-size: 1rem;
-      color: $color-gold-light;
-      margin-bottom: 0.25rem;
+        font-family: $font-title;
+        font-size: 1rem;
+        color: $color-gold-light;
+        margin-bottom: 0.25rem;
     }
 
     label {
-      font-family: $font-body;
-      font-size: 0.78rem;
-      color: $color-gold;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+        font-family: $font-body;
+        font-size: 0.78rem;
+        color: $color-gold;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
     }
 
-    input, select { @include input-style; }
+    input, select {
+        @include input-style;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
     button {
-      @include btn-gold;
-      align-self: flex-start;
-      padding: 8px 20px;
-      font-size: 0.85rem;
-      margin-top: 0.25rem;
-    }
-  }
+        @include btn-gold;
+        align-self: flex-start;
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
 
-  // --- Liste blocages ---
-  .availability-list {
+        @media (max-width: 480px) {
+            align-self: stretch;
+        }
+    }
+}
+
+  // --- Calendrier ---
+.availability-calendar {
     background: $color-bg-card;
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 
-    h3 {
-      font-family: $font-title;
-      font-size: 1rem;
-      color: $color-gold-light;
-      margin-bottom: 1rem;
-    }
-  }
+    .calendar-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
 
-  .availability-card {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    padding: 0.75rem 1rem;
+        h3 {
+            font-family: $font-title;
+            font-size: 1rem;
+            color: $color-gold-light;
+            letter-spacing: 0.06em;
+        }
+
+        button {
+            @include btn-gold;
+            padding: 4px 12px;
+            font-size: 1.1rem;
+        }
+    }
+
+    .calendar-legend {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: $font-body;
+            font-size: 0.75rem;
+            color: $color-text-muted;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 3px;
+    }
+
+    .calendar-header-cell {
+        font-family: $font-body;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $color-gold;
+        text-align: center;
+        padding: 3px 0;
+
+        .cal-jour-mobile { display: none; }
+        .cal-jour-desktop { display: inline; }
+
+        @media (max-width: 480px) {
+            .cal-jour-mobile { display: inline; }
+            .cal-jour-desktop { display: none; }
+        }
+    }
+
+    .calendar-cell {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid $color-border;
+        border-radius: 6px;
+        padding: 4px 3px;
+        min-height: 62px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        overflow: hidden;
+
+        @media (max-width: 480px) {
+            min-height: 52px;
+        }
+
+        &.empty { background: transparent; border-color: transparent; }
+        &.today {
+            border-color: $color-gold;
+            background: rgba(201,146,42,0.08);
+        }
+        &.past { opacity: 0.3; }
+        &.blocked-all {
+            background: rgba(192,57,43,0.1);
+            border-color: rgba(192,57,43,0.3);
+        }
+    }
+
+    .calendar-day-number {
+        font-family: $font-body;
+        font-size: 0.7rem;
+        color: $color-text-muted;
+        font-weight: bold;
+    }
+
+    .calendar-tag {
+        font-family: $font-body;
+        font-size: 0.65rem;
+        font-weight: bold;
+        color: #fff;
+        padding: 1px 4px;
+        border-radius: 4px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .calendar-tag-slots {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        align-items: center;
+        width: 100%;
+
+        span {
+            font-size: 0.52rem;
+            padding: 1px 3px;
+            border-radius: 3px;
+            color: #fff;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .calendar-cell {
+    &.selected {
+        border-color: #4a6fa5;
+        background: rgba(74,111,165,0.1);
+    }
+}
+
+.calendar-day-detail {
+    margin-top: 1rem;
+    background: rgba(255,255,255,0.04);
     border: 1px solid $color-border;
     border-radius: 8px;
-    margin-bottom: 0.5rem;
+    padding: 1rem;
 
-    .availability-type {
-      font-family: $font-body;
-      font-size: 0.82rem;
-      color: $color-text;
-      font-weight: bold;
-      min-width: 110px;
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+
+        h4 {
+            font-family: $font-title;
+            font-size: 0.9rem;
+            color: $color-gold-light;
+            letter-spacing: 0.04em;
+            text-transform: capitalize;
+        }
+
+        button {
+            background: none;
+            border: none;
+            color: $color-text-muted;
+            font-size: 1rem;
+            cursor: pointer;
+            &:hover { color: $color-text; }
+        }
     }
 
-    .availability-dates {
-      font-family: $font-body;
-      font-size: 0.82rem;
-      color: $color-text-muted;
-      flex: 1;
+    &__section {
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid $color-border;
+
+        &:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     }
 
-    .availability-slot {
-      font-family: $font-body;
-      font-size: 0.75rem;
-      color: $color-gold;
-      background: rgba(201,146,42,0.1);
-      padding: 2px 8px;
-      border-radius: 10px;
+    &__label {
+        font-family: $font-body;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: $color-gold;
+        margin-bottom: 0.4rem;
     }
 
-    .availability-motif {
-      font-family: $font-body;
-      font-size: 0.75rem;
-      color: $color-text-muted;
-      font-style: italic;
+    &__item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: $font-body;
+        font-size: 0.82rem;
+        color: $color-text;
+        gap: 0.5rem;
     }
 
-    button {
-      @include btn-danger;
-      padding: 4px 12px;
-      font-size: 0.78rem;
-      margin-left: auto;
+    &__heures {
+        color: #4a6fa5;
+        font-weight: bold;
+        font-size: 0.82rem;
     }
-  }
+}
+}
 }
