@@ -7,6 +7,7 @@ import Loader from '../components/Loader';
 import fetchWithAuth from '../utils/fetchWithAuth';
 import AdminUserModal from '../components/AdminUserModal';
 import AdminAvailability from '../components/AdminAvailability';
+import useUpload from '../utils/useUpload';
 
 const ONGLETS_RESA = [
     { label: 'Pension', value: 'pension' },
@@ -28,6 +29,8 @@ const Admin = () => {
     const [users, setUsers] = useState([]);
     const [userSelectionne, setUserSelectionne] = useState(null);
     const [recherche, setRecherche] = useState("");
+    const { upload: uploadPresta, uploading: uploadingPresta } = useUpload('prestations');
+    const [previewPresta, setPreviewPresta] = useState("");
 
     const usersFiltres = users.filter(u => {
         const q = recherche.toLowerCase();
@@ -253,8 +256,23 @@ const Admin = () => {
                             <input id='prix' name='prix' type="text" value={newService.prix} onChange={handleChangeNew} />
                             <label htmlFor="unite">Unité</label>
                             <input id='unite' name='unite' type="text" value={newService.unite} onChange={handleChangeNew} />
-                            <label htmlFor="image">Image</label>
-                            <input id='image' name='image' type="text" value={newService.image} onChange={handleChangeNew} />
+                            <label>Image</label>
+                            {(previewPresta || newService.image) && (
+                                <img src={previewPresta || newService.image} alt="preview" style={{ width: '100%', maxHeight: 120, objectFit: 'cover', borderRadius: 8, marginBottom: '0.5rem' }} />
+                            )}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                    const url = await upload(e.target.files[0]);
+                                    if (url) {
+                                        setNewService({ ...newService, image: url });
+                                        setPreviewPresta(url);
+                                    }
+                                }}
+                                disabled={uploadingPresta}
+                            />
+                            {uploadingPresta && <p style={{ opacity: 0.5, fontSize: '0.8rem' }}>Upload en cours...</p>}
                             <button type='button' onClick={handleAdd}>Enregistrer</button>
                         </form>
                     )}

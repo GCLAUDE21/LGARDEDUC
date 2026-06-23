@@ -3,6 +3,7 @@ import defaultDog from '../assets/img/stylish-black-and-white-dog-illustration-p
 import fetchWithAuth from '../utils/fetchWithAuth';
 import DogModal from './DogModal';
 import AdminUserModal from './AdminUserModal';
+import useUpload from '../utils/useUpload';
 
 const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -27,6 +28,7 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
         date: "", heure: "", description: "", photo: "",
         realise: "", aFaire: "", aAmeliorer: "",
     });
+    const { upload: uploadEvt, uploading: uploadingEvt } = useUpload('evenements');
 
     // --- États loading ---
     const [loadingProprietaire, setLoadingProprietaire] = useState(false);
@@ -501,8 +503,18 @@ const AdminResaModal = ({ resa, onClose, onUpdate, onDelete }) => {
 
                                     <label>Description</label>
                                     <textarea value={newEvenement.description} onChange={(e) => setNewEvenement({ ...newEvenement, description: e.target.value })} placeholder="Ce qui s'est passé..." />
-                                    <label>Photo (URL)</label>
-                                    <input value={newEvenement.photo} onChange={(e) => setNewEvenement({ ...newEvenement, photo: e.target.value })} placeholder="URL photo" />
+                                    <label>Photo</label>
+                                    {newEvenement.photo && <img src={newEvenement.photo} alt="preview" style={{ width: '100%', maxHeight: 120, objectFit: 'cover', borderRadius: 8, marginBottom: '0.5rem' }} />}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={async (e) => {
+                                            const url = await uploadEvt(e.target.files[0]);
+                                            if (url) setNewEvenement({ ...newEvenement, photo: url });
+                                        }}
+                                        disabled={uploadingEvt}
+                                    />
+                                    {uploadingEvt && <p style={{ opacity: 0.5, fontSize: '0.8rem' }}>Upload en cours...</p>}
                                     {isEducation && <>
                                         <label>Réalisé</label>
                                         <textarea value={newEvenement.realise} onChange={(e) => setNewEvenement({ ...newEvenement, realise: e.target.value })} />

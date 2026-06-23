@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import defaultDog from '../assets/img/stylish-black-and-white-dog-illustration-png.webp';
 import fetchWithAuth from '../utils/fetchWithAuth';
 import ResaModal from './ResaModal';
+import useUpload from '../utils/useUpload';
 
 const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -12,6 +13,7 @@ const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
     const anneeActuelle = new Date().getFullYear();
     const age = anneeActuelle - anneeNaissance;
     const [resaSelectionnee, setResaSelectionnee] = useState(null);
+    const { upload, uploading } = useUpload('chiens');
 
     const [form, setForm] = useState({
         nom: dog.nom || "",
@@ -163,8 +165,18 @@ const DogModal = ({ dog, onClose, onDelete, onUpdate }) => {
                         <input name="race" value={form.race} onChange={handleChange} />
                         <label>Date de naissance</label>
                         <input name="dateDeNaissance" type="date" value={form.dateDeNaissance} onChange={handleChange} />
-                        <label>Photo (URL)</label>
-                        <input name="photo" value={form.photo} onChange={handleChange} />
+                        <label>Photo</label>
+                            {form.photo && <img src={form.photo} alt="preview" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', marginBottom: '0.5rem' }} />}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                    const url = await upload(e.target.files[0]);
+                                    if (url) setForm({ ...form, photo: url });
+                                }}
+                                disabled={uploading}
+                            />
+                            {uploading && <p style={{ opacity: 0.5, fontSize: '0.8rem' }}>Upload en cours...</p>}
 
                         <h5 className="section-label">Vaccins</h5>
                         {form.vaccins.map((v, i) => (
